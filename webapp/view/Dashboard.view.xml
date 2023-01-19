@@ -1,0 +1,10 @@
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <Label text="Erste AUsgabe" />
+
+     
+
+        </content>
+    </Page>
+</mvc:View>
