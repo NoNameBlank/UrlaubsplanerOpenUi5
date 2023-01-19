@@ -1,30 +1,34 @@
-<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core">
-    <Page id="page" title="{i18n>title}">
-        <content>
-            <Panel>
-            <VBox>
-            <Label text="Guten Tag userName" />
-            <Label text = "Gesamt Urlaubstage x" />
-            <Label text = "Davon sind x Tage aus dem Vorjahr" />
-            <Label text = "Es wurden bereits x Tage beantragt" />
-            
-            </VBox>
-            </Panel>
-            
-
-            <Panel>
-            <Label text ="Hier kommt der Team Calender hin"/>
-            <VBox class="sapUiSmallMargin">
+<mvc:View
+	controllerName="sap.m.sample.PlanningCalendar.Page"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:unified="sap.ui.unified"
+	xmlns="sap.m">
+	<VBox class="sapUiSmallMargin">
 		<PlanningCalendar
 			id="PC1"
+			startDate="{path: '/startDate'}"
 			rows="{path: '/people'}"
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
 			showWeekNumbers="true">
 			<toolbarContent>
-				<Title text="Urlaub planen" titleStyle="H4"/>
-                <OverflowToolbarButton icon="sap-icon://add" type="Reject" tooltip="Buchen" press="onOpenDialog"/>
+				<Title text="Title" titleStyle="H4"/>
+				<Select change="onCalendarTypeSelect">
+					<core:Item key="Gregorian" text="Gregorian" />
+					<core:Item key="Islamic" text="Islamic" />
+					<core:Item key="Japanese" text="Japanese" />
+					<core:Item key="Persian" text="Persian" />
+					<core:Item key="Buddhist" text="Buddhist" />
+				</Select>
+				<Select change="onCalendarSecondaryTypeSelect">
+					<core:Item key="Gregorian" text="Gregorian" />
+					<core:Item key="Islamic" text="Islamic" />
+					<core:Item key="Japanese" text="Japanese" />
+					<core:Item key="Persian" text="Persian" />
+					<core:Item key="Buddhist" text="Buddhist" />
+				</Select>
 			</toolbarContent>
 			<rows>
 				<PlanningCalendarRow
@@ -73,10 +77,4 @@
 			</items>
 		</MultiComboBox>
 	</VBox>
-            
-            </Panel>
-
-
-        </content>
-    </Page>
 </mvc:View>
