@@ -63,18 +63,6 @@
 				</PlanningCalendarRow>
 			</rows>
 		</PlanningCalendar>
-		<Label text="Add available built-in views to the example:"/>
-		<MultiComboBox
-				selectionFinish="handleSelectionFinish"
-				width="230px"
-				placeholder="Choose built-in views">
-			<items>
-				<core:Item key="Hour" text="Hour" />
-				<core:Item key="Day" text="Day" />
-				<core:Item key="Month" text="Month" />
-				<core:Item key="Week" text="1 week" />
-				<core:Item key="One Month" text="1 month" />
-			</items>
-		</MultiComboBox>
+
 	</VBox>
 </mvc:View>

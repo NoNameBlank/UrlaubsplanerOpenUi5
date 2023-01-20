@@ -1,19 +1,36 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page" showHeader="false">
         <content>
             <Panel>
-            <VBox>
-            <Label text="Guten Tag userName" />
-            <Label text = "Gesamt Urlaubstage x" />
-            <Label text = "Davon sind x Tage aus dem Vorjahr" />
-            <Label text = "Es wurden bereits x Tage beantragt" />
-            
-            </VBox>
-            </Panel>
-            
+			<headerToolbar>
+				<OverflowToolbar>
+					<Title text="Nutzerdaten"/>
+				</OverflowToolbar>
+			</headerToolbar>
+			<HBox>
+				<VBox class="sapUiSmallMargin">
+					<Avatar icon="sap-icon://person-placeholder"/>
+				</VBox>
+				<VBox class="sapUiSmallMargin">
+
+					<Label text="Guten Tag {VacationModel>/User/Username}" />
+					<Label text = "{VacationModel>/User/VacationLeft} Urlaubstage Verbleibend" />
+					<Label text = "Davon sind {VacationModel>/User/VacationLastYear} Tage aus dem Vorjahr" />
+					<Label text = "Es wurden bereits {VacationModel>/User/VacationPlaned} Tage beantragt" />
+					
+				</VBox>
+			</HBox>
+            </Panel >
+            <Label />
+
+			
 
             <Panel>
-            <Label text ="Hier kommt der Team Calender hin"/>
+				<headerToolbar>
+					<OverflowToolbar>
+						<Title text="Urlaubsplanung"/>
+					</OverflowToolbar>
+				</headerToolbar>
             <VBox class="sapUiSmallMargin">
 		<PlanningCalendar
 			id="PC1"
@@ -21,11 +38,35 @@
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
-			showWeekNumbers="true">
+			viewKey="D"
+			showWeekNumbers="true"
+			visible="{= ${VacationModel>/User/Role} === 'Teamleiter' ? true : false}">
 			<toolbarContent>
 				<Title text="Urlaub planen" titleStyle="H4"/>
-                <OverflowToolbarButton icon="sap-icon://add" type="Reject" tooltip="Buchen" press="onOpenDialog"/>
+                <OverflowToolbarButton icon="sap-icon://add" tooltip="Buchen" press="onOpenDialog"/>
 			</toolbarContent>
+			<views>
+				<PlanningCalendarView
+					key="D"
+					intervalType="Day"  
+					startDate="{VacationModel>/FirstDay}"
+					description="Wochenansicht"
+					intervalsS="1"
+					intervalsM="3"
+					intervalsL="7"
+					showSubIntervals="false">
+				</PlanningCalendarView>
+				<PlanningCalendarView
+					key="M"
+					intervalType="Month"  
+					startDate="{VacationModel>/FirstDay}"
+					description="Jahresansicht"
+					intervalsS="12"
+					intervalsM="12"
+					intervalsL="12"
+					showSubIntervals="false">
+				</PlanningCalendarView>
+			</views>
 			<rows>
 				<PlanningCalendarRow
 					icon="{pic}"
@@ -59,19 +100,6 @@
 				</PlanningCalendarRow>
 			</rows>
 		</PlanningCalendar>
-		<Label text="Add available built-in views to the example:"/>
-		<MultiComboBox
-				selectionFinish="handleSelectionFinish"
-				width="230px"
-				placeholder="Choose built-in views">
-			<items>
-				<core:Item key="Hour" text="Hour" />
-				<core:Item key="Day" text="Day" />
-				<core:Item key="Month" text="Month" />
-				<core:Item key="Week" text="1 week" />
-				<core:Item key="One Month" text="1 month" />
-			</items>
-		</MultiComboBox>
 	</VBox>
             
             </Panel>

@@ -4,10 +4,19 @@
 
     <Dialog id="vacationPickerDialog" title="Hallo Philipp">
 
+
+        <content>
+
+        <DatePicker id="datePicker" placeholder="Erster Urlaubstag" locale="de-DE" displayFormat="dd.MM.yyyy"/>
+        <DatePicker id="datePicker2" placeholder="Letzter Urlaubstag" locale="de-DE" displayFormat="dd.MM.yyyy"/>
+
+        </content>
+        <endButton>
+            <Button text="Beantragen" press=".sendVacation" tooltip="Drücke hier um deinen Urlaubsantrag abzusenden" type="Accept"/>
+        </endButton>
+
         <beginButton>
-
-            <Button text="Ok" press=".closeDialog"/>
-
+        <Button text="Abbrechen" press=".closeDialog" tooltip="Drücke hier um abzubrechen" type="Reject"/>
         </beginButton>
 
     </Dialog>
