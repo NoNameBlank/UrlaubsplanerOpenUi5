@@ -5,26 +5,31 @@
 			<headerToolbar>
 				<OverflowToolbar>
 					<Title text="Nutzerdaten"/>
+					<ToolbarSpacer/>
+					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsanträge Verwalten" visible="{= ${VacationModel>/User/Role} === 'Teamleiter' || ${VacationModel>/User/Role} === 'Backoffice' ? true : false}"/>
+					<OverflowToolbarButton icon="sap-icon://activity-individual" tooltip="Urlaub von Mitarbeitern bearbeiten" visible="{= ${VacationModel>/User/Role} === 'Teamleiter' || ${VacationModel>/User/Role} === 'Backoffice' ? true : false}"/>
+					<OverflowToolbarButton icon="sap-icon://add-employee" tooltip="Mitarbeiter anlegen" visible="{= ${VacationModel>/User/Role} === 'Teamleiter' || ${VacationModel>/User/Role} === 'Backoffice' ? true : false}"/>
+					<OverflowToolbarButton icon="sap-icon://user-edit" tooltip="Mitarbeiter bearbeiten" visible="{= ${VacationModel>/User/Role} === 'Teamleiter' || ${VacationModel>/User/Role} === 'Backoffice' ? true : false}"/>
 				</OverflowToolbar>
 			</headerToolbar>
-			<HBox>
+			<HBox class="container">
 				<VBox class="sapUiSmallMargin">
 					<Avatar icon="sap-icon://person-placeholder"/>
 				</VBox>
 				<VBox class="sapUiSmallMargin">
 
-					<Label text="Guten Tag {VacationModel>/User/Username}" />
+					<Label text="Guten Tag {VacationModel>/User/Username}," />
+					<Label text="Du besitzt erweiterte Berechtigungen" visible="{= ${VacationModel>/User/Role} === 'Teamleiter' || ${VacationModel>/User/Role} === 'Backoffice' ? true : false}"/>
 					<Label text = "{VacationModel>/User/VacationLeft} Urlaubstage Verbleibend" />
 					<Label text = "Davon sind {VacationModel>/User/VacationLastYear} Tage aus dem Vorjahr" />
 					<Label text = "Es wurden bereits {VacationModel>/User/VacationPlaned} Tage beantragt" />
 					
 				</VBox>
+				<VBox>
+				</VBox>
 			</HBox>
             </Panel >
-            <Label />
-
-			
-
+			<Label />
             <Panel>
 				<headerToolbar>
 					<OverflowToolbar>
@@ -32,77 +37,26 @@
 					</OverflowToolbar>
 				</headerToolbar>
             <VBox class="sapUiSmallMargin">
-		<PlanningCalendar
-			id="PC1"
-			rows="{path: '/people'}"
-			appointmentsVisualization="Filled"
-			appointmentSelect="handleAppointmentSelect"
-			showEmptyIntervalHeaders="false"
-			viewKey="D"
-			showWeekNumbers="true"
-			visible="{= ${VacationModel>/User/Role} === 'Teamleiter' ? true : false}">
-			<toolbarContent>
-				<Title text="Urlaub planen" titleStyle="H4"/>
-                <OverflowToolbarButton icon="sap-icon://add" tooltip="Buchen" press="onOpenDialog"/>
-			</toolbarContent>
-			<views>
-				<PlanningCalendarView
-					key="D"
-					intervalType="Day"  
-					startDate="{VacationModel>/FirstDay}"
-					description="Wochenansicht"
-					intervalsS="1"
-					intervalsM="3"
-					intervalsL="7"
-					showSubIntervals="false">
-				</PlanningCalendarView>
-				<PlanningCalendarView
-					key="M"
-					intervalType="Month"  
-					startDate="{VacationModel>/FirstDay}"
-					description="Jahresansicht"
-					intervalsS="12"
-					intervalsM="12"
-					intervalsL="12"
-					showSubIntervals="false">
-				</PlanningCalendarView>
-			</views>
-			<rows>
-				<PlanningCalendarRow
-					icon="{pic}"
-					title="{name}"
-					text="{role}"
-					appointments="{path : 'appointments', templateShareable: false}"
-					intervalHeaders="{path: 'headers', templateShareable: false}">
-					<customData>
-						<core:CustomData key="emp-name" value="{name}" writeToDom="true"/>
-					</customData>
-					<appointments>
-						<unified:CalendarAppointment
-							startDate="{start}"
-							endDate="{end}"
-							icon="{pic}"
-							title="{title}"
-							text="{info}"
-							type="{type}"
-							tentative="{tentative}">
-						</unified:CalendarAppointment>
-					</appointments>
-					<intervalHeaders>
-						<unified:CalendarAppointment
-							startDate="{start}"
-							endDate="{end}"
-							icon="{pic}"
-							title="{title}"
-							type="{type}">
-						</unified:CalendarAppointment>
-					</intervalHeaders>
-				</PlanningCalendarRow>
-			</rows>
-		</PlanningCalendar>
-	</VBox>
+			<IconTabBar
+				expandable="false"
+				visible="{= ${VacationModel>/User/Role} === 'Teamleiter' || ${VacationModel>/User/Role} === 'Backoffice' ? true : false}"
+				id="idIconTabBarNoIcons"
+				class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter text="Urlaub" key="info">
+						<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.OwnVacationPC" type="XML"/>
+					</IconTabFilter>
+						<IconTabFilter text="Mitarbeiter" key="attachments">
+							<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.TeamVacationPC" type="XML"/>
+						</IconTabFilter>
+					</items>
+				</IconTabBar>
+				<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.EmployeeVacationPC" type="XML"/>
+					
+				</VBox>
             
             </Panel>
+			
 
 
         </content>

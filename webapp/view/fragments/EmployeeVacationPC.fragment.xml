@@ -1,0 +1,76 @@
+
+<core:FragmentDefinition 
+    controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified">
+    <PlanningCalendar
+            visible="{= ${VacationModel>/User/Role} === 'Mitarbeiter'  ? true : false }"
+            id="EmployeePC"
+            rows="{path: 'oOwnModel>/people'}"
+            appointmentsVisualization="Filled"
+            appointmentSelect="handleAppointmentSelect"
+            showEmptyIntervalHeaders="false"
+            viewKey="D"
+            showWeekNumbers="true">
+        <toolbarContent>
+            <Title text="Urlaub planen" titleStyle="H4"/>
+            <OverflowToolbarButton icon="sap-icon://add" tooltip="Buchen" press="onOpenDialog"/>
+        </toolbarContent>
+        <views>
+            <PlanningCalendarView
+                key="D"
+                intervalType="Day"  
+                startDate="{VacationModel>/FirstDay}"
+                description="Wochenansicht"
+                intervalsS="1"
+                intervalsM="3"
+                intervalsL="7"
+                showSubIntervals="false">
+            </PlanningCalendarView>
+            <PlanningCalendarView
+                key="M"
+                intervalType="Month"  
+                startDate="{VacationModel>/FirstDay}"
+                description="Jahresansicht"
+                intervalsS="12"
+                intervalsM="12"
+                intervalsL="12"
+                showSubIntervals="false">
+            </PlanningCalendarView>
+        </views>
+        <rows>
+            <PlanningCalendarRow
+                icon="{oOwnModel>pic}"
+                title="{oOwnModel>name}"
+                text="{oOwnModel>role}"
+                appointments="{path : 'oOwnModel>appointments', templateShareable: false}"
+                intervalHeaders="{path: 'oOwnModel>headers', templateShareable: false}">
+                <customData>
+                    <core:CustomData key="emp-name" value="{oOwnModel>name}" writeToDom="true"/>
+                </customData>
+                <appointments>
+                    <unified:CalendarAppointment
+                        startDate="{oOwnModel>start}"
+                        endDate="{oOwnModel>end}"
+                        icon="{oOwnModel>pic}"
+                        title="{oOwnModel>title}"
+                        text="{oOwnModel>info}"
+                        type="{oOwnModel>type}"
+                        tentative="{oOwnModel>tentative}">
+                    </unified:CalendarAppointment>
+                </appointments>
+                <intervalHeaders>
+                    <unified:CalendarAppointment
+                        startDate="{oOwnModel>start}"
+                        endDate="{oOwnModel>end}"
+                        icon="{oOwnModel>pic}"
+                        title="{oOwnModel>title}"
+                        type="{oOwnModel>type}">
+                    </unified:CalendarAppointment>
+                </intervalHeaders>
+            </PlanningCalendarRow>
+        </rows>
+    </PlanningCalendar>
+
+</core:FragmentDefinition>

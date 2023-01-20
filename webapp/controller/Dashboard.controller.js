@@ -31,9 +31,7 @@ sap.ui.define([
                
             },
             onRouteMatched: function(oEvent){
-                var Date =  this.getfirstDayOfWeek();
-                var oKalender = this.byId("PC1");
-                oKalender.setStartDate(Date);
+               this.setFirstDay();
                 // this.getView().getModel("VacationModel").setProperty("/FirstDay", Date);
                 
 
@@ -45,7 +43,7 @@ sap.ui.define([
 					people: [{
 						pic: "",
 						name: "Luca Schöpke",
-						role: "Azubi",
+						role: "Teamleiter",
 						freeDays: [5, 6],
 						freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
                         appointments: [{
@@ -56,16 +54,61 @@ sap.ui.define([
                             type: "Type03",
 							tentative: true
                         }]
-					},{
-                        pic: "",
-                        name: "Philipp Marek",
-                        role: "Azubi",
-                        freeDays: [5, 6],
-                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                    }
+					},
                 ]
 				});
-				this.getView().setModel(oModel);
+				this.getView().setModel(oModel, "oOwnModel");
+                // MOCK-Data Team
+                var oTeamModel = new sap.ui.model.json.JSONModel();
+				oTeamModel.setData({
+					people: [{
+						pic: "",
+						name: "Katharina Meyer",
+						role: "Backoffice",
+						freeDays: [5, 6],
+						freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+                        appointments: [{
+                            pic: "",
+                            title: "Urlaub",
+                            start: new Date(2023, 1, 1, 11, 30),
+                            end: new Date(2023, 2, 3, 11, 30),
+                            type: "Type03",
+							tentative: true
+                        }],  
+					},
+                    {
+						pic: "",
+						name: "Tjerk Helbig",
+						role: "Teamleiter",
+						freeDays: [5, 6],
+						freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+                        appointments: [{
+                            pic: "",
+                            title: "Urlaub",
+                            start: new Date(2023, 1, 1, 11, 30),
+                            end: new Date(2023, 2, 3, 11, 30),
+                            type: "Type03",
+							tentative: true
+                        }],  
+					},
+                    {
+						pic: "",
+						name: "Philipp Marek",
+						role: "Mitarbeiter",
+						freeDays: [5, 6],
+						freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+                        appointments: [{
+                            pic: "",
+                            title: "Urlaub",
+                            start: new Date(2023, 1, 1, 11, 30),
+                            end: new Date(2023, 2, 3, 11, 30),
+                            type: "Type03",
+							tentative: true
+                        }],  
+					},
+                ]
+				});
+				this.getView().setModel(oTeamModel, "oTeamModel");
             },
 
             onClick: function() {
@@ -121,6 +164,19 @@ sap.ui.define([
                 this.closeDialog();
                 MessageToast.show(`Hallo ${this.getView().getModel("VacationModel").getProperty("/User/Username")}, du hast deinen Urlaubsantrag vom ${sUrlaubStart.toLocaleDateString()} bis zum ${sUrlaubEnde.toLocaleDateString()} abgeschickt`)
 
+
+            },
+
+
+            setFirstDay: function () {
+                var Date =  this.getfirstDayOfWeek();
+                var oKalender = [];
+                oKalender.push(this.byId("EmployeePC"));
+                oKalender.push(this.byId("OwnPC"));
+                oKalender.push(this.byId("TeamPC"));
+                oKalender.forEach(element => {
+                    element.setStartDate(Date);
+                });
 
             }
 
