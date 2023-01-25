@@ -321,7 +321,8 @@ sap.ui.define([
                     tentative: true
                 })
                 console.log(aAppointments);
-                aAppointments.push(this.byId("OwnPC"));
+                //aAppointments.push(this.byId("OwnPC"));
+                //TESSSSST KOMMENTAR
                 debugger;
                 //this.byId("OwnPC").getModel("UserModel").setProperty("appointments", aAppointments);
             }
