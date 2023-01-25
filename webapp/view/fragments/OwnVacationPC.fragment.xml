@@ -6,7 +6,7 @@
     xmlns:unified="sap.ui.unified">
     <PlanningCalendar
             id="OwnPC"
-            rows="{path: 'oOwnModel>/people'}"
+            rows="{path: 'UserModel>/people'}"
             appointmentsVisualization="Filled"
             appointmentSelect="handleAppointmentSelect"
             showEmptyIntervalHeaders="false"
@@ -20,7 +20,7 @@
             <PlanningCalendarView
                 key="D"
                 intervalType="Day"  
-                startDate="{VacationModel>/FirstDay}"
+                startDate="{UserModel>/FirstDay}"
                 description="Wochenansicht"
                 intervalsS="1"
                 intervalsM="3"
@@ -30,7 +30,7 @@
             <PlanningCalendarView
                 key="M"
                 intervalType="Month"  
-                startDate="{VacationModel>/FirstDay}"
+                startDate="{UserModel>/FirstDay}"
                 description="Jahresansicht"
                 intervalsS="12"
                 intervalsM="12"
@@ -40,32 +40,32 @@
         </views>
         <rows>
             <PlanningCalendarRow
-                icon="{oOwnModel>pic}"
-                title="{oOwnModel>name}"
-                text="{oOwnModel>role}"
-                appointments="{path : 'oOwnModel>appointments', templateShareable: false}"
-                intervalHeaders="{path: 'oOwnModel>headers', templateShareable: false}">
+                icon="{UserModel>pic}"
+                title="{UserModel>name}"
+                text="{UserModel>role}"
+                appointments="{path : 'UserModel>appointments', templateShareable: false}"
+                intervalHeaders="{path: 'UserModel>headers', templateShareable: false}">
                 <customData>
-                    <core:CustomData key="emp-name" value="{oOwnModel>name}" writeToDom="true"/>
+                    <core:CustomData key="emp-name" value="{UserModel>name}" writeToDom="true"/>
                 </customData>
                 <appointments>
                     <unified:CalendarAppointment
-                        startDate="{oOwnModel>start}"
-                        endDate="{oOwnModel>end}"
-                        icon="{oOwnModel>pic}"
-                        title="{oOwnModel>title}"
-                        text="{oOwnModel>info}"
-                        type="{oOwnModel>type}"
-                        tentative="{oOwnModel>tentative}">
+                        startDate="{UserModel>start}"
+                        endDate="{UserModel>end}"
+                        icon="{UserModel>pic}"
+                        title="{UserModel>title}"
+                        text="{UserModel>info}"
+                        type="{UserModel>type}"
+                        tentative="{UserModel>tentative}">
                     </unified:CalendarAppointment>
                 </appointments>
                 <intervalHeaders>
                     <unified:CalendarAppointment
-                        startDate="{oOwnModel>start}"
-                        endDate="{oOwnModel>end}"
-                        icon="{oOwnModel>pic}"
-                        title="{oOwnModel>title}"
-                        type="{oOwnModel>type}">
+                        startDate="{UserModel>start}"
+                        endDate="{UserModel>end}"
+                        icon="{UserModel>pic}"
+                        title="{UserModel>title}"
+                        type="{UserModel>type}">
                     </unified:CalendarAppointment>
                 </intervalHeaders>
             </PlanningCalendarRow>
