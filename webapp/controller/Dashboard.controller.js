@@ -34,17 +34,17 @@ sap.ui.define([
 
 
 
-                
+
 
 
             },
             onRouteMatched: function (oEvent) {
-                debugger;
+
                 var userId = oEvent.getParameter("arguments").userId;
                 //  console.warn(userId);
 
                 this.loadDataIntoUser(userId);
-           
+
                 /*
                 var login = oEvent.getParameter("arguments");
                 var sBenutzerLogin = login.sBenutzerLogin;
@@ -102,7 +102,7 @@ sap.ui.define([
 
                 //userModel
 
-                
+
 
 
 
@@ -174,9 +174,9 @@ sap.ui.define([
                         passwort: "123",
                         role: "Teamleiter",
                         vacation: 31,
-                        vacationLeft: 5,
-                        vacationPlaned: 20,
-                        vacationLastYear: 10,
+                        vacationLeft: 0,
+                        vacationPlaned: 0,
+                        vacationLastYear: 0,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
                         appointments: [{
@@ -187,7 +187,7 @@ sap.ui.define([
                             type: "Type01",
                             tentative: true
                         }]
-                        
+
                     },
                     {
                         id: 2,
@@ -196,12 +196,12 @@ sap.ui.define([
                         passwort: "321",
                         role: "Mitarbeiter",
                         vacation: 31,
-                        vacationLeft: 5,
-                        vacationPlaned: 20,
-                        vacationLastYear: 10,
+                        vacationLeft: 0,
+                        vacationPlaned: 0,
+                        vacationLastYear: 0,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                       //Die appointments Sind für den Kalender sie beschreiben sozusagen den Urlaub
+                        //Die appointments Sind für den Kalender sie beschreiben sozusagen den Urlaub
                         appointments: [{
                             pic: "",
                             title: "Urlaub",
@@ -216,14 +216,14 @@ sap.ui.define([
                 // oUserModel.setProperty("/User", User);
                 // this.getView().setModel(oUserModel, "UserModel");
                 var aEntries = oUserModel.getProperty("/people");
-                debugger;
+
                 var oUser = aEntries.find(function (oUser) {
                     return oUser.id === parseInt(userId);
                 })
-                 oUserModel.setProperty("/User", oUser);
+                oUserModel.setProperty("/User", oUser);
 
                 this.getView().setModel(oUserModel, "UserModel");
-                
+
                 //oUser.appointmants.push new date z.b.
 
 
@@ -231,12 +231,12 @@ sap.ui.define([
             },
 
 
-            onClick: function () {
+            // onClick: function () {
 
 
-                var oKalender = this.byId("PC1");
-                oKalender.setStartDate(firstDayOfWeek);
-            },
+            //     var oKalender = this.byId("PC1");
+            //     oKalender.setStartDate(firstDayOfWeek);
+            // },
 
 
             getfirstDayOfWeek: function () {
@@ -271,6 +271,7 @@ sap.ui.define([
                 this.byId("vacationPickerDialog").close();
                 this.byId("datePicker").setValue(null);
                 this.byId("datePicker2").setValue(null);
+                //this.byId("InputGrundRequired").setValue(null);
 
             },
 
@@ -278,12 +279,19 @@ sap.ui.define([
             sendVacation: function () {
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+                //User bei ID getten? 
+                var oUser = this.getView().getModel("UserModel").getProperty("/User");
+                console.log(oUser);
 
+                // var sUrlaubsGrund = this.byId("InputGrundRequired").getValue();
 
 
                 this.closeDialog();
-                MessageToast.show(`Hallo ${this.getView().getModel("UserModel").getProperty("/User/Username")}, du hast deinen Urlaubsantrag vom ${sUrlaubStart.toLocaleDateString()} bis zum ${sUrlaubEnde.toLocaleDateString()} abgeschickt`)
+                //MessageToast.show(`Hallo ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast deinen Urlaubsantrag vom ${sUrlaubStart.toLocaleDateString()} bis zum ${sUrlaubEnde.toLocaleDateString()} abgeschickt`)
 
+                this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
+
+                debugger;
 
             },
 
@@ -299,6 +307,29 @@ sap.ui.define([
                 });
 
             },
+
+            urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
+
+
+                var aAppointments = oUser.appointments;
+                console.log(aAppointments);
+                aAppointments.push({
+                    pic: "",
+                    title: "Urlaub",
+                    start: new Date(sUrlaubStart),
+                    end: new Date(sUrlaubsEnde),
+                    type: "Type03",
+                    tentative: true
+                })
+                console.log(aAppointments);
+                
+                this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
+
+
+                
+               
+               
+            }
 
 
 
