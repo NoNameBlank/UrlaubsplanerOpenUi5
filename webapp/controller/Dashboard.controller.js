@@ -174,9 +174,9 @@ sap.ui.define([
                         passwort: "123",
                         role: "Teamleiter",
                         vacation: 31,
-                        vacationLeft: 0,
-                        vacationPlaned: 0,
-                        vacationLastYear: 0,
+                        vacationLeft: 7,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
                         appointments: [{
@@ -279,6 +279,11 @@ sap.ui.define([
             sendVacation: function () {
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+                var diffTage = sUrlaubEnde.getTime() - sUrlaubStart.getTime();
+                var days =Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
+                console.log(days);
+                debugger;
+
                 //User bei ID getten? 
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
                 console.log(oUser);
@@ -310,19 +315,17 @@ sap.ui.define([
 
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
 
-
                 var aAppointments = oUser.appointments;
-                console.log(aAppointments);
+                
                 aAppointments.push({
                     pic: "",
                     title: "Urlaub",
                     start: new Date(sUrlaubStart),
                     end: new Date(sUrlaubsEnde),
-                    type: "Type03",
+                    type: "Type05",
                     tentative: true
                 })
-                console.log(aAppointments);
-                
+               
                 this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
 
 
