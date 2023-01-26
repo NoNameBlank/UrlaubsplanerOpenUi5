@@ -174,9 +174,9 @@ sap.ui.define([
                         passwort: "123",
                         role: "Teamleiter",
                         vacation: 31,
-                        vacationLeft: 0,
-                        vacationPlaned: 0,
-                        vacationLastYear: 0,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
                         appointments: [{
@@ -279,12 +279,21 @@ sap.ui.define([
 
 
             sendVacation: function () {
-                var today = new Date();
-                var day = today.getDay();
-                var sUrlaubStart = this.byId("datePicker").getDateValue();
-                var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+
+                
+               
+                
+                
+                //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
                 //User bei ID getten? 
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
+                var sUrlaubStart = this.byId("datePicker").getDateValue();
+                var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+                var today = new Date();
+                var day = today.getDay();
+
+               
+
 
 
                 if (sUrlaubStart < today) {
@@ -296,26 +305,68 @@ sap.ui.define([
                 else if (sUrlaubEnde < sUrlaubStart) {
 
                         MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!"); }
-                else {
-
-
-                // var sUrlaubsGrund = this.byId("InputGrundRequired").getValue();
-
-                //Today
-                //If eingabe <= Today mache Fehler
-                //else das allen von unten
 
 
 
-                this.closeDialog();
-                //MessageToast.show(`Hallo ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast deinen Urlaubsantrag vom ${sUrlaubStart.toLocaleDateString()} bis zum ${sUrlaubEnde.toLocaleDateString()} abgeschickt`)
 
-                this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
 
+
+                
+                //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
+                var diffTage = sUrlaubEnde.getTime() - sUrlaubStart.getTime();
+                //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
+                var iTage =Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
+                
+               
+
+
+                //Hole dir verbleibende und breitsgeplante Tage
+                var iUserRestTage = this.getView().getModel("UserModel").getProperty("/User/vacationLeft");
+                var iUserBeantragt = this.getView().getModel("UserModel").getProperty("/User/vacationPlaned");
+                
+                //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
+                if(iTage <= iUserRestTage){
+                     //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
+                    console.log("Jap, du hast genug Urlaubstage!");
+                    this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
+                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
+                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage );
+
+                     
+                /*
+                    Theoretisch könnte man das auch über updateData realisieren oder ?  ------------------------------------------------------------------------------------------------------------!
+
+                
+                        var updatedData = {
+                        vacationLeft: iUserRestTage - iTage,
+                        vacationPlaned: iUserbeantragt + iTage
+                    };
+                    this.byId("OwnPC").getModel("UserModel").setData(updateData);
+
+                */
+
+
+
+                } else {
+                   //Gebe Fehler Meldung mit Grund aus
+                    console.log("Error zu wenig UrlaubsTage");
+                    MessageToast.show(`Fehler ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast nur ${iUserRestTage} Tage zur Verfügung und hast versucht ${iTage} Tage zubeantragen. `)
+                    
                 }
 
-            },
+                
+                
+                
+                
 
+                debugger;
+
+              
+
+
+
+            },
+           
 
             setFirstDay: function () {
                 var Date = this.getfirstDayOfWeek();
@@ -331,19 +382,17 @@ sap.ui.define([
 
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
 
-
                 var aAppointments = oUser.appointments;
-                console.log(aAppointments);
+                
                 aAppointments.push({
                     pic: "",
                     title: "Urlaub",
                     start: new Date(sUrlaubStart),
                     end: new Date(sUrlaubsEnde),
-                    type: "Type03",
+                    type: "Type05",
                     tentative: true
                 })
-                console.log(aAppointments);
-                
+               
                 this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
 
 
