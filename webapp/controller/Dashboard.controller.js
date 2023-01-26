@@ -112,7 +112,7 @@ sap.ui.define([
                     people: [{
                         id: 3,
                         pic: "",
-                        name: "3",
+                        name: "Kernfred",
                         role: "Backoffice",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -128,7 +128,7 @@ sap.ui.define([
                     {
                         id: 4,
                         pic: "",
-                        name: "4",
+                        name: "Ulla",
                         role: "Teamleiter",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -144,7 +144,7 @@ sap.ui.define([
                     {
                         id: 5,
                         pic: "",
-                        name: "5",
+                        name: "Jens",
                         role: "Mitarbeiter",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -170,7 +170,7 @@ sap.ui.define([
                     people: [{
                         id: 1,
                         pic: "",
-                        name: "11",
+                        name: "Ulla",
                         passwort: "123",
                         role: "Teamleiter",
                         vacation: 31,
@@ -192,7 +192,7 @@ sap.ui.define([
                     {
                         id: 2,
                         pic: "",
-                        name: "12",
+                        name: "Jens",
                         passwort: "321",
                         role: "Mitarbeiter",
                         vacation: 31,
