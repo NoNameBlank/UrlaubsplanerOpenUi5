@@ -277,17 +277,41 @@ sap.ui.define([
 
 
             sendVacation: function () {
+                
+               
+                
+                
                 //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
                 //User bei ID getten? 
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+                var today = new Date();
+                var day = today.getDay();
+
+                if (sUrlaubStart < today) {
+
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!"); }
+                else if (sUrlaubEnde < today) {
+
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!"); }
+                else if (sUrlaubEnde < sUrlaubStart) {
+
+                        MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!"); }
+
+
+
+
+
                 
                 //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
                 var diffTage = sUrlaubEnde.getTime() - sUrlaubStart.getTime();
                 //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
                 var iTage =Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
                 
+               
+
+
                 //Hole dir verbleibende und breitsgeplante Tage
                 var iUserRestTage = this.getView().getModel("UserModel").getProperty("/User/vacationLeft");
                 var iUserBeantragt = this.getView().getModel("UserModel").getProperty("/User/vacationPlaned");
@@ -299,6 +323,22 @@ sap.ui.define([
                     this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage );
+
+                     
+                /*
+                    Theoretisch könnte man das auch über updateData realisieren oder ?  ------------------------------------------------------------------------------------------------------------!
+
+                
+                        var updatedData = {
+                        vacationLeft: iUserRestTage - iTage,
+                        vacationPlaned: iUserbeantragt + iTage
+                    };
+                    this.byId("OwnPC").getModel("UserModel").setData(updateData);
+
+                */
+
+
+
                 } else {
                    //Gebe Fehler Meldung mit Grund aus
                     console.log("Error zu wenig UrlaubsTage");
