@@ -112,7 +112,7 @@ sap.ui.define([
                     people: [{
                         id: 3,
                         pic: "",
-                        name: "Kernfred",
+                        name: "3",
                         role: "Backoffice",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -128,7 +128,7 @@ sap.ui.define([
                     {
                         id: 4,
                         pic: "",
-                        name: "Ulla",
+                        name: "4",
                         role: "Teamleiter",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -144,7 +144,7 @@ sap.ui.define([
                     {
                         id: 5,
                         pic: "",
-                        name: "Jens",
+                        name: "5",
                         role: "Mitarbeiter",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -170,7 +170,7 @@ sap.ui.define([
                     people: [{
                         id: 1,
                         pic: "",
-                        name: "Ulla",
+                        name: "11",
                         passwort: "123",
                         role: "Teamleiter",
                         vacation: 31,
@@ -192,11 +192,11 @@ sap.ui.define([
                     {
                         id: 2,
                         pic: "",
-                        name: "Jens",
+                        name: "12",
                         passwort: "321",
                         role: "Mitarbeiter",
                         vacation: 31,
-                        vacationLeft: 0,
+                        vacationLeft: 10,
                         vacationPlaned: 0,
                         vacationLastYear: 0,
                         freeDays: [5, 6],
@@ -248,9 +248,7 @@ sap.ui.define([
             },
 
             onOpenDialog: function () {
-
                 var oView = this.getView();
-                
                 // create dialog lazily
                 if (!this.byId("vacationPickerDialog")) {
                     // load asynchronous XML fragment
@@ -280,10 +278,9 @@ sap.ui.define([
 
             sendVacation: function () {
 
-                
-               
-                
-                
+
+
+
                 //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
                 //User bei ID getten? 
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
@@ -292,10 +289,7 @@ sap.ui.define([
                 var today = new Date();
                 var day = today.getDay();
 
-               
-
-
-
+                /*
                 if (sUrlaubStart < today) {
 
                     MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!"); }
@@ -305,68 +299,90 @@ sap.ui.define([
                 else if (sUrlaubEnde < sUrlaubStart) {
 
                         MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!"); }
+                */
 
 
 
 
 
-
-                
                 //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
                 var diffTage = sUrlaubEnde.getTime() - sUrlaubStart.getTime();
                 //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
-                var iTage =Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
-                
-               
+                var iTage = Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
+
+
 
 
                 //Hole dir verbleibende und breitsgeplante Tage
                 var iUserRestTage = this.getView().getModel("UserModel").getProperty("/User/vacationLeft");
                 var iUserBeantragt = this.getView().getModel("UserModel").getProperty("/User/vacationPlaned");
-                
+
+
                 //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
-                if(iTage <= iUserRestTage){
-                     //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
+                if (sUrlaubStart < today) {
+
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
+                }
+                else if (sUrlaubEnde < today) {
+
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
+                }
+                else if (sUrlaubEnde < sUrlaubStart) {
+
+                    MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!");
+                }
+                else if (iTage <= iUserRestTage) {
+
+                    //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
                     console.log("Jap, du hast genug Urlaubstage!");
                     this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
-                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage );
+                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
 
-                     
-                /*
-                    Theoretisch könnte man das auch über updateData realisieren oder ?  ------------------------------------------------------------------------------------------------------------!
 
-                
-                        var updatedData = {
-                        vacationLeft: iUserRestTage - iTage,
-                        vacationPlaned: iUserbeantragt + iTage
-                    };
-                    this.byId("OwnPC").getModel("UserModel").setData(updateData);
-
-                */
+                    /*
+                        Theoretisch könnte man das auch über updateData realisieren oder ?  ------------------------------------------------------------------------------------------------------------!
+    
+                    
+                            var updatedData = {
+                            vacationLeft: iUserRestTage - iTage,
+                            vacationPlaned: iUserbeantragt + iTage
+                        };
+                        this.byId("OwnPC").getModel("UserModel").setData(updateData);
+    
+                    */
 
 
 
                 } else {
-                   //Gebe Fehler Meldung mit Grund aus
+                    //Gebe Fehler Meldung mit Grund aus
                     console.log("Error zu wenig UrlaubsTage");
                     MessageToast.show(`Fehler ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast nur ${iUserRestTage} Tage zur Verfügung und hast versucht ${iTage} Tage zubeantragen. `)
-                    
+
                 }
 
-                
-                
-                
-                
+
+
+
+
 
                 debugger;
 
-              
+
+                // var sUrlaubsGrund = this.byId("InputGrundRequired").getValue();
 
 
+                this.closeDialog();
+                //MessageToast.show(`Hallo ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast deinen Urlaubsantrag vom ${sUrlaubStart.toLocaleDateString()} bis zum ${sUrlaubEnde.toLocaleDateString()} abgeschickt`)
+
+                //Beantragter Urlaub wird in
+                //this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
+
+
+                debugger;
 
             },
-           
+
 
             setFirstDay: function () {
                 var Date = this.getfirstDayOfWeek();
@@ -383,7 +399,7 @@ sap.ui.define([
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
 
                 var aAppointments = oUser.appointments;
-                
+
                 aAppointments.push({
                     pic: "",
                     title: "Urlaub",
@@ -392,13 +408,13 @@ sap.ui.define([
                     type: "Type05",
                     tentative: true
                 })
-               
+
                 this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
 
 
-                
-               
-               
+
+
+
             }
 
 
