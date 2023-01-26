@@ -279,6 +279,7 @@ sap.ui.define([
             sendVacation: function () {
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+                //User bei ID getten? 
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
                 console.log(oUser);
 
@@ -321,10 +322,13 @@ sap.ui.define([
                     tentative: true
                 })
                 console.log(aAppointments);
-                //aAppointments.push(this.byId("OwnPC"));
-                //TESSSSST KOMMENTAR
-                debugger;
-                //this.byId("OwnPC").getModel("UserModel").setProperty("appointments", aAppointments);
+                
+                this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
+
+
+                
+               
+               
             }
 
 

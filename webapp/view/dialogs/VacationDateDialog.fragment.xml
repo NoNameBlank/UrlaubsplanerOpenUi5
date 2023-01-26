@@ -9,9 +9,8 @@
 
         <DatePicker id="datePicker" placeholder="Erster Urlaubstag" locale="de-DE" displayFormat="dd.MM.yyyy"/>
         <DatePicker id="datePicker2" placeholder="Letzter Urlaubstag" locale="de-DE" displayFormat="dd.MM.yyyy"/>
-        <!-- <Label id="InputRequiredLabel" text="Required" labelFor="InputRequired" required="true"/> -->
-			<Input
-				id="InputRequired"
+        <Input
+				id="InputGrundRequired"
                 placeholder="Grund"
                 tooltip="Grund für Urlaub z.B. Sonderurlaub, Regulärer Urlaub, Überstundenabbau"
 				type="Text"
