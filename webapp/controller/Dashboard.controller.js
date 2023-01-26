@@ -248,7 +248,9 @@ sap.ui.define([
             },
 
             onOpenDialog: function () {
+
                 var oView = this.getView();
+                
                 // create dialog lazily
                 if (!this.byId("vacationPickerDialog")) {
                     // load asynchronous XML fragment
@@ -277,13 +279,32 @@ sap.ui.define([
 
 
             sendVacation: function () {
+                var today = new Date();
+                var day = today.getDay();
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
                 //User bei ID getten? 
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
-                console.log(oUser);
+
+
+                if (sUrlaubStart < today) {
+
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!"); }
+                else if (sUrlaubEnde < today) {
+
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!"); }
+                else if (sUrlaubEnde < sUrlaubStart) {
+
+                        MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!"); }
+                else {
+
 
                 // var sUrlaubsGrund = this.byId("InputGrundRequired").getValue();
+
+                //Today
+                //If eingabe <= Today mache Fehler
+                //else das allen von unten
+
 
 
                 this.closeDialog();
@@ -291,7 +312,7 @@ sap.ui.define([
 
                 this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
 
-                debugger;
+                }
 
             },
 
