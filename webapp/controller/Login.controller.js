@@ -14,6 +14,7 @@ sap.ui.define([
             handleClick: function () {
                 //  var oRouter = sap.ui.core.UIComponent.getRouter();
                 //         oRouter.navTo("RouteDashboard");
+                //Test Kommentar für Push
 
                 this.loadData();//
                 var sBenutzerLogin = this.byId("benutzerInput").getValue();
