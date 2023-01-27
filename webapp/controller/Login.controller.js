@@ -78,7 +78,7 @@ sap.ui.define([
                     people: [{
                         id: 1,
                         pic: "",
-                        name: "11",
+                        name: "Ulla",
                         passwort: "123",
                         role: "Teamleiter",
                         // vacation: 31,
@@ -91,7 +91,7 @@ sap.ui.define([
                     {
                         id: 2,
                         pic: "",
-                        name: "12",
+                        name: "Albert",
                         passwort: "321",
                         role: "Mitarbeiter",
                         // vacation: 31,

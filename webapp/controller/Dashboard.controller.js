@@ -112,7 +112,7 @@ sap.ui.define([
                     people: [{
                         id: 3,
                         pic: "",
-                        name: "3",
+                        name: "Jens",
                         role: "Backoffice",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -128,7 +128,7 @@ sap.ui.define([
                     {
                         id: 4,
                         pic: "",
-                        name: "4",
+                        name: "Ulla",
                         role: "Teamleiter",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -144,7 +144,7 @@ sap.ui.define([
                     {
                         id: 5,
                         pic: "",
-                        name: "5",
+                        name: "Albert",
                         role: "Mitarbeiter",
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
@@ -170,7 +170,7 @@ sap.ui.define([
                     people: [{
                         id: 1,
                         pic: "",
-                        name: "11",
+                        name: "Ulla",
                         passwort: "123",
                         role: "Teamleiter",
                         vacation: 31,
@@ -192,7 +192,7 @@ sap.ui.define([
                     {
                         id: 2,
                         pic: "",
-                        name: "12",
+                        name: "Albert",
                         passwort: "321",
                         role: "Mitarbeiter",
                         vacation: 31,
@@ -334,7 +334,7 @@ sap.ui.define([
                 else if (iTage <= iUserRestTage) {
 
                     //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
-                    console.log("Jap, du hast genug Urlaubstage!");
+                    console.log("Du hast genug Urlaubstage!");
                     this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
@@ -364,11 +364,6 @@ sap.ui.define([
 
 
 
-
-
-                debugger;
-
-
                 // var sUrlaubsGrund = this.byId("InputGrundRequired").getValue();
 
 
@@ -378,8 +373,6 @@ sap.ui.define([
                 //Beantragter Urlaub wird in
                 //this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
 
-
-                debugger;
 
             },
 
