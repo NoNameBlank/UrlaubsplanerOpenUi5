@@ -26,10 +26,7 @@
 							tooltip="Benutzer bearbeiten"
 							press="clearAllSortings"/>
 						
-						<m:Button
-							icon="sap-icon://sorting-ranking"
-							tooltip="Sort ascending across Categories and Name"
-							press="sortCategoriesAndName"/>
+						
 						<m:Button
 							icon="sap-icon://sort"
 							tooltip="Sort Categories in addition to current sorting"
@@ -50,10 +47,10 @@
 					<Column
 						id="name"
 						width="auto"
-						sortProperty="Name">
+						sortProperty="name">
 						<m:Label text="Mitarbeiter" />
 						<template>
-							<m:Text text="{Name}" wrapping="false" />
+							<m:Text text="{oTeamModel>name}" wrapping="false" />
 						</template>
 					</Column>
 					<Column

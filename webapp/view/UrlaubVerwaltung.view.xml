@@ -43,7 +43,7 @@
 						sortProperty="Name">
 						<m:Label text="Mitarbeitername" />
 						<template>
-							<m:Text text="{Name}" wrapping="false" />
+							<m:Text text="Test" wrapping="false" />
 						</template>
 					</Column>
 					<Column
@@ -53,7 +53,7 @@
 						sortProperty="Category">
 						<m:Label text="Urlaub Von:" />
 						<template>
-							<m:Text text="{Category}" wrapping="false" />
+							<m:Text text="Testo" wrapping="false" />
 						</template>
 					</Column>
 					<Column width="9rem">

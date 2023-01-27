@@ -16,62 +16,77 @@ sap.ui.define([
 	return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Dashboard", {
 
 		onInit : function() {
-			// set explored app's demo model on this sample
-			var oJSONModel = this.initSampleDataModel();
-			var oView = this.getView();
-			oView.setModel(oJSONModel);
+			
+			this.loadData();
 
-			//Initial sorting
-			var oProductNameColumn = oView.byId("name");
-			oView.byId("table").sort(oProductNameColumn, SortOrder.Ascending);
-
-			sap.ui.require(["sap/ui/table/sample/TableExampleUtils"], function(TableExampleUtils) {
-				var oTb = oView.byId("infobar");
-				oTb.addContent(new ToolbarSpacer());
-				oTb.addContent(TableExampleUtils.createInfoButton("sap/ui/table/sample/Sorting"));
-			}, function(oError){/*ignore*/});
 		},
 
-		initSampleDataModel : function() {
-			var oModel = new JSONModel();
+		onRouteMatched: function (oEvent) {
 
-			var oDateFormat = DateFormat.getDateInstance({source: {pattern: "timestamp"}, pattern: "dd/MM/yyyy"});
+			var userId = oEvent.getParameter("arguments").userId;
 
-			jQuery.ajax(sap.ui.require.toUrl("sap/ui/demo/mock/products.json"), {
-				dataType: "json",
-				success: function(oData) {
-					var aTemp1 = [];
-					var aTemp2 = [];
-					var aSuppliersData = [];
-					var aCategoryData = [];
-					for (var i = 0; i < oData.ProductCollection.length; i++) {
-						var oProduct = oData.ProductCollection[i];
-						if (oProduct.SupplierName && aTemp1.indexOf(oProduct.SupplierName) < 0) {
-							aTemp1.push(oProduct.SupplierName);
-							aSuppliersData.push({Name: oProduct.SupplierName});
-						}
-						if (oProduct.Category && aTemp2.indexOf(oProduct.Category) < 0) {
-							aTemp2.push(oProduct.Category);
-							aCategoryData.push({Name: oProduct.Category});
-						}
-						oProduct.DeliveryDate = (new Date()).getTime() - (i % 10 * 4 * 24 * 60 * 60 * 1000);
-						oProduct.DeliveryDateStr = oDateFormat.format(new Date(oProduct.DeliveryDate));
-						oProduct.Heavy = oProduct.WeightMeasure > 1000 ? "true" : "false";
-						oProduct.Available = oProduct.Status == "Available" ? true : false;
-					}
+			
 
-					oData.Suppliers = aSuppliersData;
-					oData.Categories = aCategoryData;
 
-					oModel.setData(oData);
+		},
+		loadData: function () {
+
+			// MOCK-Data Team
+			var oTeamModel = new sap.ui.model.json.JSONModel();
+			oTeamModel.setData({
+				people: [{
+					id: 3,
+					pic: "",
+					name: "Jens",
+					role: "Backoffice",
+					freeDays: [5, 6],
+					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+					appointments: [{
+						pic: "",
+						title: "Urlaub",
+						start: new Date(2023, 1, 1, 11, 30),
+						end: new Date(2023, 2, 3, 11, 30),
+						type: "Type03",
+						tentative: true
+					}],
 				},
-				error: function() {
-					Log.error("failed to load json");
-				}
+				{
+					id: 4,
+					pic: "",
+					name: "Ulla",
+					role: "Teamleiter",
+					freeDays: [5, 6],
+					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+					appointments: [{
+						pic: "",
+						title: "Urlaub",
+						start: new Date(2023, 1, 1, 11, 30),
+						end: new Date(2023, 2, 3, 11, 30),
+						type: "Type03",
+						tentative: true
+					}],
+				},
+				{
+					id: 5,
+					pic: "",
+					name: "Albert",
+					role: "Mitarbeiter",
+					freeDays: [5, 6],
+					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+					appointments: [{
+						pic: "",
+						title: "Urlaub",
+						start: new Date(2023, 1, 1, 11, 30),
+						end: new Date(2023, 2, 3, 11, 30),
+						type: "Type03",
+						tentative: true
+					}],
+				},
+				]
 			});
-
-			return oModel;
+			this.getView().setModel(oTeamModel, "oTeamModel");
 		},
+
 
 		clearAllSortings : function(oEvent) {
 			var oTable = this.byId("table");
