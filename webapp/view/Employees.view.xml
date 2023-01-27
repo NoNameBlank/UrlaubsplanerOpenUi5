@@ -1,0 +1,108 @@
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Employees" 
+	xmlns="sap.ui.table"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:u="sap.ui.unified"
+	xmlns:c="sap.ui.core"
+	xmlns:m="sap.m"
+	height="100%">
+	<m:Page
+		showHeader="false"
+		enableScrolling="false"
+		class="sapUiContentPadding">
+		<m:content>
+			<Table
+				id="table"
+				selectionMode="MultiToggle"
+				rows="{oTeamModel>/people}"
+				visibleRowCount="7"
+				sort="sortDeliveryDate"
+				ariaLabelledBy="title">
+				<extension>
+					<m:OverflowToolbar style="Clear">
+						<m:Title id="title" text="Mitarbeiter Verwaltung"/>
+						<m:ToolbarSpacer/>
+						<m:Button
+							icon="sap-icon://user-edit"
+							tooltip="Benutzer bearbeiten"
+							press="clearAllSortings"/>
+						
+						<m:Button
+							icon="sap-icon://sorting-ranking"
+							tooltip="Sort ascending across Categories and Name"
+							press="sortCategoriesAndName"/>
+						<m:Button
+							icon="sap-icon://sort"
+							tooltip="Sort Categories in addition to current sorting"
+							press="sortCategories"/>
+						<m:Button
+							icon="sap-icon://decline"
+							tooltip="Clear all sortings"
+							press="clearAllSortings"/>
+					</m:OverflowToolbar>
+				</extension>
+				<columns>
+					<Column width="auto">
+						<m:Label text="ID" />
+						<template>
+							<m:Link text="Show Image" href="{ProductPicUrl}" target="_blank"/>
+						</template>
+					</Column>
+					<Column
+						id="name"
+						width="auto"
+						sortProperty="Name">
+						<m:Label text="Mitarbeiter" />
+						<template>
+							<m:Text text="{Name}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						id="categories"
+						width="auto"
+						showSortMenuEntry="false"
+						sortProperty="Category">
+						<m:Label text="Position" />
+						<template>
+							<m:Text text="{Category}" wrapping="false" />
+						</template>
+					</Column>
+					<Column width="auto">
+						<m:Label text="Gesamt Urlaub" />
+						<template>
+							<m:Link text="Show Image" href="{ProductPicUrl}" target="_blank"/>
+						</template>
+					</Column>
+					<Column
+						id="quantity"
+						width="auto"
+						
+						sortProperty="Quantity">
+						<m:Label text="Rest Jahr Urlaub" />
+						<template>
+							<m:Label text="{
+								path: 'Quantity',
+								type: 'sap.ui.model.type.Integer'
+							}" />
+						</template>
+					</Column>
+					<Column
+						id="deliverydate"
+						width="auto"
+						sortProperty="DeliveryDateStr">
+						<m:Label text="Notiz" />
+						<template>
+							<m:Text text="{
+								path: 'DeliveryDateStr',
+								type: 'sap.ui.model.type.Date',
+								formatOptions: {source: {pattern: 'dd/MM/yyyy'}, style: 'long'}
+							}" wrapping="false" />
+						</template>
+					</Column>
+				</columns>
+				<footer>
+					<m:OverflowToolbar id="infobar"></m:OverflowToolbar>
+				</footer>
+			</Table>
+		</m:content>
+	</m:Page>
+</mvc:View>

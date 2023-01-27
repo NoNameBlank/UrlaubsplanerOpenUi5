@@ -107,6 +107,13 @@
           "target": [
             "TargetDashboard"
           ]
+        },
+        {
+          "name": "RouteEmployees",
+          "pattern": "RouteEmployees",
+          "target": [
+            "TargetEmployees"
+          ]
         }
       ],
       "targets": {
@@ -117,10 +124,15 @@
           "viewId": "Login",
           "viewName": "Login"
         },
-        "TargetDashboard":{
+        "TargetDashboard": {
           "viewType": "XML",
           "viewId": "Dashboard",
           "viewName": "Dashboard"
+        },
+        "TargetEmployees": {
+          "viewType": "XML",
+          "viewId": "Employees",
+          "viewName": "Employees"
         }
       }
     },

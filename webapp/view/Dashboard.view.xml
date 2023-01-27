@@ -6,10 +6,8 @@
 				<OverflowToolbar>
 					<Title text="Nutzerdaten"/>
 					<ToolbarSpacer/>
-					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsanträge Verwalten" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
-					<OverflowToolbarButton icon="sap-icon://activity-individual" tooltip="Urlaub von Mitarbeitern bearbeiten" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
-					<OverflowToolbarButton icon="sap-icon://add-employee" tooltip="Mitarbeiter anlegen" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
-					<OverflowToolbarButton icon="sap-icon://user-edit" tooltip="Mitarbeiter bearbeiten" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
+					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsverwalten" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
+					<OverflowToolbarButton icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
 				</OverflowToolbar>
 			</headerToolbar>
 			<HBox class="container">

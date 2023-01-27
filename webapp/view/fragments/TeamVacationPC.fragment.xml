@@ -20,7 +20,6 @@
             <PlanningCalendarView
                 key="D"
                 intervalType="Day"  
-                
                 description="Wochenansicht"
                 intervalsS="1"
                 intervalsM="3"
@@ -30,7 +29,6 @@
             <PlanningCalendarView
                 key="M"
                 intervalType="Month"  
-                
                 description="Jahresansicht"
                 intervalsS="12"
                 intervalsM="12"

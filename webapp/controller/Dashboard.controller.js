@@ -230,6 +230,13 @@ sap.ui.define([
 
             },
 
+            employeeHandleClick: function () {
+                
+                                  
+
+                    this.getOwnerComponent().getRouter().navTo("RouteEmployees");                       
+                    },
+
 
             // onClick: function () {
 
