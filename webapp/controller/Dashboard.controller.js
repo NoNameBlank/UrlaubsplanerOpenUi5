@@ -340,18 +340,7 @@ sap.ui.define([
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
 
 
-                    /*
-                        Theoretisch könnte man das auch über updateData realisieren oder ?  ------------------------------------------------------------------------------------------------------------!
-    
                     
-                            var updatedData = {
-                            vacationLeft: iUserRestTage - iTage,
-                            vacationPlaned: iUserbeantragt + iTage
-                        };
-                        this.byId("OwnPC").getModel("UserModel").setData(updateData);
-    
-                    */
-
 
 
                 } else {
@@ -392,7 +381,10 @@ sap.ui.define([
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
 
                 var aAppointments = oUser.appointments;
-
+                //Wichtig für Anzeige im Kalender
+                sUrlaubsEnde.setHours(23,59);
+                
+                console.log(sUrlaubsEnde);
                 aAppointments.push({
                     pic: "",
                     title: "Urlaub",

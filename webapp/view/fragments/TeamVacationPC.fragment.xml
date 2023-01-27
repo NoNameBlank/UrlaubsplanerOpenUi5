@@ -20,7 +20,7 @@
             <PlanningCalendarView
                 key="D"
                 intervalType="Day"  
-                startDate="{UserModel>/FirstDay}"
+                
                 description="Wochenansicht"
                 intervalsS="1"
                 intervalsM="3"
@@ -30,7 +30,7 @@
             <PlanningCalendarView
                 key="M"
                 intervalType="Month"  
-                startDate="{UserModel>/FirstDay}"
+                
                 description="Jahresansicht"
                 intervalsS="12"
                 intervalsM="12"
