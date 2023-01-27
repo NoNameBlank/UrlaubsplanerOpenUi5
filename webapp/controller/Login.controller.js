@@ -92,7 +92,7 @@ sap.ui.define([
                     {
                         id: 2,
                         pic: "",
-                        name: "Jens",
+                        name: "Albert",
                         passwort: "321",
                         role: "Mitarbeiter",
                         // vacation: 31,
