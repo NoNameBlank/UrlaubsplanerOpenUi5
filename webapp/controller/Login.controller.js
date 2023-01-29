@@ -79,27 +79,65 @@ sap.ui.define([
                     people: [{
                         id: 1,
                         pic: "",
-                        name: "Ulla",
+                        name: "Jens",
                         passwort: "123",
                         role: "Teamleiter",
-                        // vacation: 31,
-                        // vacationLeft: 5,
-                        // vacationPlaned: 20,
-                        // vacationLastYear: 10,
-                        
-                        
+                        vacation: 31,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
+                        freeDays: [5, 6],
+                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+                        appointments: [{
+                            pic: "",
+                            title: "Urlaub",
+                            start: new Date(2023, 1, 1, 11, 30),
+                            end: new Date(2023, 2, 3, 11, 30),
+                            type: "Type03",
+                            tentative: true
+                        }],
                     },
                     {
                         id: 2,
                         pic: "",
-                        name: "Albert",
+                        name: "Ulla",
                         passwort: "321",
                         role: "Mitarbeiter",
-                        // vacation: 31,
-                        // vacationLeft: 5,
-                        // vacationPlaned: 20,
-                        // vacationLastYear: 10,
-                        
+                        vacation: 31,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
+                        freeDays: [5, 6],
+                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+                        appointments: [{
+                            pic: "",
+                            title: "Urlaub",
+                            start: new Date(2023, 1, 1, 11, 30),
+                            end: new Date(2023, 2, 3, 11, 30),
+                            type: "Type03",
+                            tentative: true
+                        }],
+                    },
+                    {
+                        id: 3,
+                        pic: "",
+                        name: "Albert",
+                        passwort: "111",
+                        role: "Mitarbeiter",
+                        vacation: 31,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
+                        freeDays: [5, 6],
+                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+                        appointments: [{
+                            pic: "",
+                            title: "Urlaub",
+                            start: new Date(2023, 1, 1, 11, 30),
+                            end: new Date(2023, 2, 3, 11, 30),
+                            type: "Type03",
+                            tentative: true
+                        }],
                     },
                     ]
                 });

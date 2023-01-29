@@ -110,10 +110,14 @@ sap.ui.define([
                 var oTeamModel = new sap.ui.model.json.JSONModel();
                 oTeamModel.setData({
                     people: [{
-                        id: 3,
+                        id: 1,
                         pic: "",
                         name: "Jens",
-                        role: "Backoffice",
+                        role: "Teamleiter",
+                        vacation: 31,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
                         appointments: [{
@@ -126,10 +130,14 @@ sap.ui.define([
                         }],
                     },
                     {
-                        id: 4,
+                        id: 2,
                         pic: "",
                         name: "Ulla",
-                        role: "Teamleiter",
+                        role: "Mitarbeiter",
+                        vacation: 31,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
                         appointments: [{
@@ -142,10 +150,14 @@ sap.ui.define([
                         }],
                     },
                     {
-                        id: 5,
+                        id: 3,
                         pic: "",
                         name: "Albert",
                         role: "Mitarbeiter",
+                        vacation: 31,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
                         appointments: [{
@@ -159,7 +171,16 @@ sap.ui.define([
                     },
                     ]
                 });
+                
+
+               
+
+                
+                var aEntries = oTeamModel.getProperty("/peopleTeam");
+                oTeamModel.setProperty("/Team", aEntries);
+            
                 this.getView().setModel(oTeamModel, "oTeamModel");
+                debugger;
             },
 
 
@@ -170,9 +191,28 @@ sap.ui.define([
                     people: [{
                         id: 1,
                         pic: "",
-                        name: "Ulla",
-                        passwort: "123",
+                        name: "Jens",
                         role: "Teamleiter",
+                        vacation: 20,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
+                        freeDays: [5, 6],
+                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+                        appointments: [{
+                            pic: "",
+                            title: "Urlaub",
+                            start: new Date(2023, 1, 1, 11, 30),
+                            end: new Date(2023, 2, 3, 11, 30),
+                            type: "Type03",
+                            tentative: true
+                        }],
+                    },
+                    {
+                        id: 2,
+                        pic: "",
+                        name: "Ulla",
+                        role: "Mitarbeiter",
                         vacation: 31,
                         vacationLeft: 4,
                         vacationPlaned: 3,
@@ -184,24 +224,21 @@ sap.ui.define([
                             title: "Urlaub",
                             start: new Date(2023, 1, 1, 11, 30),
                             end: new Date(2023, 2, 3, 11, 30),
-                            type: "Type01",
+                            type: "Type03",
                             tentative: true
-                        }]
-
+                        }],
                     },
                     {
-                        id: 2,
+                        id: 3,
                         pic: "",
                         name: "Albert",
-                        passwort: "321",
                         role: "Mitarbeiter",
                         vacation: 31,
-                        vacationLeft: 10,
-                        vacationPlaned: 0,
-                        vacationLastYear: 0,
+                        vacationLeft: 4,
+                        vacationPlaned: 3,
+                        vacationLastYear: 10,
                         freeDays: [5, 6],
                         freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                        //Die appointments Sind für den Kalender sie beschreiben sozusagen den Urlaub
                         appointments: [{
                             pic: "",
                             title: "Urlaub",
@@ -231,20 +268,32 @@ sap.ui.define([
             },
 
             employeeHandleClick: function () {
+
+
+
+                this.getOwnerComponent().getRouter().navTo("RouteEmployees");
+               
+            },
+
+
+            urlaubsVerwaltungHandleClick: function () {
+
+                this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung");
                 
-                                  
-
-                    this.getOwnerComponent().getRouter().navTo("RouteEmployees");                       
-                    },
+            },
 
 
-            // onClick: function () {
 
 
-            //     var oKalender = this.byId("PC1");
-            //     oKalender.setStartDate(firstDayOfWeek);
-            // },
 
+            /*
+            onClick: function () {
+
+
+                var oKalender = this.byId("PC1");
+                oKalender.setStartDate(firstDayOfWeek);
+            },
+            */
 
             getfirstDayOfWeek: function () {
 
@@ -343,11 +392,14 @@ sap.ui.define([
                     //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
                     console.log("Du hast genug Urlaubstage!");
                     this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
-                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
+                    this.byId("OwnPC").getModel("UserModel").getProperty("/User/vacationLeft");
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
-
-
-                    
+                            //Bekomme mehrere User vll in array laden und dann übergeben?`-----------------------------------------------------------------------------------------------
+                    // this.byId("TeamPC").getModel("oTeamModel").getProperty("/User/vacationLeft");
+                    // var iTest = parseInt(this.byId("TeamPC").getModel("UserModel").getProperty("/User/vacationPlaned", iUserBeantragt + iTage));
+                    // var iTest = parseInt(this.byId("TeamPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage));
+                    // console.log("Beantragete UraualbsTage AKtuell: 20 und nach dem Buchen - 2 = 18" + iTest);
+                    // debugger;
 
 
                 } else {
@@ -389,8 +441,8 @@ sap.ui.define([
 
                 var aAppointments = oUser.appointments;
                 //Wichtig für Anzeige im Kalender
-                sUrlaubsEnde.setHours(23,59);
-                
+                sUrlaubsEnde.setHours(23, 59);
+
                 console.log(sUrlaubsEnde);
                 aAppointments.push({
                     pic: "",
@@ -402,8 +454,10 @@ sap.ui.define([
                 })
 
                 this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
+                //Damit die Jahresansicht den Beantragen Uraub auch Anzeigt
+               
 
-
+                 //this.byId("TeamPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
 
 
 

@@ -6,7 +6,7 @@
 				<OverflowToolbar>
 					<Title text="Nutzerdaten"/>
 					<ToolbarSpacer/>
-					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsverwalten" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
+					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsverwalten" press="urlaubsVerwaltungHandleClick" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
 					<OverflowToolbarButton icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
 				</OverflowToolbar>
 			</headerToolbar>

@@ -114,6 +114,13 @@
           "target": [
             "TargetEmployees"
           ]
+        },
+        {
+          "name": "RouteUrlaubsVerwaltung",
+          "pattern": "RouteUrlaubsVerwaltung",
+          "target": [
+            "TargetUrlaubsVerwaltung"
+          ]
         }
       ],
       "targets": {
@@ -133,6 +140,11 @@
           "viewType": "XML",
           "viewId": "Employees",
           "viewName": "Employees"
+        },
+        "TargetUrlaubsVerwaltung": {
+          "viewType": "XML",
+          "viewId": "UrlaubsVerwaltung",
+          "viewName": "UrlaubsVerwaltung"
         }
       }
     },
