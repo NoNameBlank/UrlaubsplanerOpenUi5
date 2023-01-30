@@ -39,7 +39,7 @@ sap.ui.define([
 					pic: "",
 					name: "Jens",
 					role: "Teamleiter",
-					vacation: 31,
+					vacation: 30,
 					vacationLeft: 4,
 					vacationPlaned: 3,
 					vacationLastYear: 10,
@@ -47,7 +47,7 @@ sap.ui.define([
 					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
 					appointments: [{
 						pic: "",
-						title: "Urlaub",
+						title: "Urlaub Jens",
 						start: new Date(2023, 1, 1, 11, 30),
 						end: new Date(2023, 2, 3, 11, 30),
 						type: "Type03",
@@ -59,7 +59,7 @@ sap.ui.define([
 					pic: "",
 					name: "Ulla",
 					role: "Mitarbeiter",
-					vacation: 31,
+					vacation: 15,
 					vacationLeft: 4,
 					vacationPlaned: 3,
 					vacationLastYear: 10,
@@ -67,7 +67,7 @@ sap.ui.define([
 					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
 					appointments: [{
 						pic: "",
-						title: "Urlaub",
+						title: "Urlaub Ulla",
 						start: new Date(2023, 1, 1, 11, 30),
 						end: new Date(2023, 2, 3, 11, 30),
 						type: "Type03",
@@ -79,7 +79,7 @@ sap.ui.define([
 					pic: "",
 					name: "Albert",
 					role: "Mitarbeiter",
-					vacation: 31,
+					vacation: 10,
 					vacationLeft: 4,
 					vacationPlaned: 3,
 					vacationLastYear: 10,
@@ -87,7 +87,7 @@ sap.ui.define([
 					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
 					appointments: [{
 						pic: "",
-						title: "Urlaub",
+						title: "Urlaub Albert",
 						start: new Date(2023, 1, 1, 11, 30),
 						end: new Date(2023, 2, 3, 11, 30),
 						type: "Type03",
@@ -96,78 +96,81 @@ sap.ui.define([
 				},
 				]
 			});
+			
+			var aEntries = oTeamModel.getProperty("/peopleTeam");
+             oTeamModel.setProperty("/Team", aEntries);
 			this.getView().setModel(oTeamModel, "oTeamModel");
 		},
 
 
-		loadDataIntoUser: function (userId) {
+		// loadDataIntoUser: function (userId) {
 
-			var oUserModel = new sap.ui.model.json.JSONModel();
-			oUserModel.setData({
-				people: [{
-					id: 1,
-					pic: "",
-					name: "Jens",
-					role: "Teamleiter",
-					vacation: 31,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
-					freeDays: [5, 6],
-					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-					appointments: [{
-						pic: "",
-						title: "Urlaub",
-						start: new Date(2023, 1, 1, 11, 30),
-						end: new Date(2023, 2, 3, 11, 30),
-						type: "Type03",
-						tentative: true
-					}],
-				},
-				{
-					id: 2,
-					pic: "",
-					name: "Ulla",
-					role: "Mitarbeiter",
-					vacation: 31,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
-					freeDays: [5, 6],
-					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-					appointments: [{
-						pic: "",
-						title: "Urlaub",
-						start: new Date(2023, 1, 1, 11, 30),
-						end: new Date(2023, 2, 3, 11, 30),
-						type: "Type03",
-						tentative: true
-					}],
-				},
-				{
-					id: 3,
-					pic: "",
-					name: "Albert",
-					role: "Mitarbeiter",
-					vacation: 31,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
-					freeDays: [5, 6],
-					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-					appointments: [{
-						pic: "",
-						title: "Urlaub",
-						start: new Date(2023, 1, 1, 11, 30),
-						end: new Date(2023, 2, 3, 11, 30),
-						type: "Type03",
-						tentative: true
-					}],
-				},
-				]
-			});
-			this.getView().setModel(oTeamModel, "oTeamModel");
-		},
+		// 	var oUserModel = new sap.ui.model.json.JSONModel();
+		// 	oUserModel.setData({
+		// 		people: [{
+		// 			id: 1,
+		// 			pic: "",
+		// 			name: "Jens",
+		// 			role: "Teamleiter",
+		// 			vacation: 31,
+		// 			vacationLeft: 4,
+		// 			vacationPlaned: 3,
+		// 			vacationLastYear: 10,
+		// 			freeDays: [5, 6],
+		// 			freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+		// 			appointments: [{
+		// 				pic: "",
+		// 				title: "Urlaub",
+		// 				start: new Date(2023, 1, 1, 11, 30),
+		// 				end: new Date(2023, 2, 3, 11, 30),
+		// 				type: "Type03",
+		// 				tentative: true
+		// 			}],
+		// 		},
+		// 		{
+		// 			id: 2,
+		// 			pic: "",
+		// 			name: "Ulla",
+		// 			role: "Mitarbeiter",
+		// 			vacation: 31,
+		// 			vacationLeft: 4,
+		// 			vacationPlaned: 3,
+		// 			vacationLastYear: 10,
+		// 			freeDays: [5, 6],
+		// 			freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+		// 			appointments: [{
+		// 				pic: "",
+		// 				title: "Urlaub",
+		// 				start: new Date(2023, 1, 1, 11, 30),
+		// 				end: new Date(2023, 2, 3, 11, 30),
+		// 				type: "Type03",
+		// 				tentative: true
+		// 			}],
+		// 		},
+		// 		{
+		// 			id: 3,
+		// 			pic: "",
+		// 			name: "Albert",
+		// 			role: "Mitarbeiter",
+		// 			vacation: 31,
+		// 			vacationLeft: 4,
+		// 			vacationPlaned: 3,
+		// 			vacationLastYear: 10,
+		// 			freeDays: [5, 6],
+		// 			freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
+		// 			appointments: [{
+		// 				pic: "",
+		// 				title: "Urlaub",
+		// 				start: new Date(2023, 1, 1, 11, 30),
+		// 				end: new Date(2023, 2, 3, 11, 30),
+		// 				type: "Type03",
+		// 				tentative: true
+		// 			}],
+		// 		},
+		// 		]
+		// 	});
+		// 	this.getView().setModel(oTeamModel, "oTeamModel");
+		// },
 
 
 		clearAllSortings : function(oEvent) {

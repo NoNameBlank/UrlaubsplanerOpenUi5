@@ -180,7 +180,7 @@ sap.ui.define([
                 oTeamModel.setProperty("/Team", aEntries);
             
                 this.getView().setModel(oTeamModel, "oTeamModel");
-                debugger;
+                
             },
 
 
@@ -440,6 +440,7 @@ sap.ui.define([
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
 
                 var aAppointments = oUser.appointments;
+                
                 //Wichtig für Anzeige im Kalender
                 sUrlaubsEnde.setHours(23, 59);
 
@@ -454,11 +455,13 @@ sap.ui.define([
                 })
 
                 this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
+                this.byId("TeamPC").getModel("oTeamModel").setProperty("/Team/appointments", aAppointments);
+                debugger;
+
                 //Damit die Jahresansicht den Beantragen Uraub auch Anzeigt
                
 
-                 //this.byId("TeamPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
-
+                 
 
 
             }

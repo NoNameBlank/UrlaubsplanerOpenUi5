@@ -13,7 +13,8 @@
 			<Table
 				id="table"
 				selectionMode="MultiToggle"
-				rows="{oTeamModel>/people}"
+				rows="{path: 'oTeamModel>/people'}"
+				
 				visibleRowCount="7"
 				sort="sortDeliveryDate"
 				ariaLabelledBy="title">
@@ -50,7 +51,8 @@
 						sortProperty="name">
 						<m:Label text="Urlaubs Start:" />
 						<template>
-							<m:Text text="{oTeamModel/appointments>title}" wrapping="false" />
+							<!-- <m:Text text="{oTeamModel>/appointments/title}" wrapping="false" /> -->
+							<m:Text text="{oTeamModel>/people/0/appointments/0/title}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
@@ -76,10 +78,7 @@
 						sortProperty="Quantity">
 						<m:Label text="Rest Jahr Urlaub" />
 						<template>
-							<m:Label text="{
-								path: 'Quantity',
-								type: 'sap.ui.model.type.Integer'
-							}" />
+							<m:Text text="{oTeamModel>vacationLeft}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
