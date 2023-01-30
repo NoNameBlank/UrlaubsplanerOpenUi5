@@ -13,7 +13,7 @@
 			<Table
 				id="table"
 				selectionMode="MultiToggle"
-				rows="{path: 'oTeamModel>/peopleTeam'}"
+				rows="{path: 'oVacationModel>/urlaubsantraege'}"
 				
 				visibleRowCount="7"
 				sort="sortDeliveryDate"
@@ -42,7 +42,7 @@
 					<Column width="auto">
 						<m:Label text="Mitarbeiter" />
 						<template>
-							<m:Link text="{oTeamModel>name}"/>
+							<m:Link text="{oVacationModel>name}"/>
 						</template>
 					</Column>
 					<Column
@@ -52,7 +52,7 @@
 						<m:Label text="Urlaubs Start:" />
 						<template>
 							<!-- <m:Text text="{oTeamModel>/appointments/title}" wrapping="false" /> -->
-							<m:Text text="{oTeamModel>/peopleTeam/0/appointments/0/start}" wrapping="false" />
+							<m:Text text="{oVacationModel>start}" wrapping="false" />
 							<!-- <m:Text text="{= ${sDatumFormatiert}}" wrapping="false"/> -->
 						</template>
 					</Column>
@@ -63,13 +63,13 @@
 						sortProperty="Category">
 						<m:Label text="Urlaub Bis:" />
 						<template>
-							<m:Text text="{oTeamModel>/peopleTeam/0/appointments/0/end}" wrapping="false" />
+							<m:Text text="{oVacationModel>end}" wrapping="false" />
 						</template>
 					</Column>
 					<Column width="auto">
 						<m:Label text="Gesamt Urlaub" />
 						<template>
-							<m:Text text="{oTeamModel>vacation}" wrapping="false" />
+							<m:Text text="{oVacationModel>vacation}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
@@ -79,7 +79,7 @@
 						sortProperty="Quantity">
 						<m:Label text="Rest Jahr Urlaub" />
 						<template>
-							<m:Text text="{oTeamModel>vacationLeft}" wrapping="false" />
+							<m:Text text="{oVacationModel>vacationLeft}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
@@ -88,7 +88,7 @@
 						sortProperty="DeliveryDateStr">
 						<m:Label text="Beantrage Tage" />
 						<template>
-							<m:Text text="{oTeamModel>vacationPlaned}" wrapping="false" />
+							<m:Text text="{oVacationModel>vacationPlaned}" wrapping="false" />
 						</template>
 					</Column>
 					<!-- <Column width="auto">

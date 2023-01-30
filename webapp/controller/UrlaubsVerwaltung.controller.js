@@ -32,74 +32,56 @@ sap.ui.define([
 		loadData: function () {
 
 			// MOCK-Data Team
-			var oTeamModel = new sap.ui.model.json.JSONModel();
-			oTeamModel.setData({
-				peopleTeam: [{
-					id: 1,
+			var oVacationModel = new sap.ui.model.json.JSONModel();
+			oVacationModel.setData({
+				urlaubsantraege: [{
+					urlaubsid: 1,
+					userid:1,
 					pic: "",
 					name: "Jens",
-					role: "Teamleiter",
-					vacation: 30,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
-					freeDays: [5, 6],
-					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-					appointments: [{
-						pic: "",
-						title: "Urlaub Jens",
-						start: new Date(2023, 2, 15, 11, 30),
-						end: new Date(2023, 2, 18, 11, 30),
-						type: "Type03",
-						tentative: true
-					}],
-				},
-				{
-					id: 2,
-					pic: "",
-					name: "Ulla",
-					role: "Mitarbeiter",
 					vacation: 15,
 					vacationLeft: 4,
 					vacationPlaned: 3,
 					vacationLastYear: 10,
-					freeDays: [5, 6],
-					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-					appointments: [{
-						pic: "",
-						title: "Urlaub Ulla",
-						start: new Date(2023, 1, 1, 11, 30),
-						end: new Date(2023, 2, 3, 11, 30),
-						type: "Type03",
-						tentative: true
-					}],
-				},
+					title: "Urlaub Ulla",
+							start: new Date(2023, 2, 1, 11, 30),
+							end: new Date(2023, 2, 3, 11, 30),
+					
+					},
+				
 				{
-					id: 3,
+					urlaubsid: 2,
+					userid:2,
 					pic: "",
-					name: "Albert",
-					role: "Mitarbeiter",
-					vacation: 10,
+					name: "Ulla",
+					vacation: 15,
 					vacationLeft: 4,
 					vacationPlaned: 3,
 					vacationLastYear: 10,
-					freeDays: [5, 6],
-					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-					appointments: [{
-						pic: "",
-						title: "Urlaub Albert",
-						start: new Date(2023, 1, 1, 11, 30),
-						end: new Date(2023, 2, 3, 11, 30),
-						type: "Type03",
-						tentative: true
-					}],
+					title: "Urlaub Ulla",
+							start: new Date(2023, 2, 3, 11, 30),
+							end: new Date(2023, 2, 5, 11, 30),
+					
 				},
-				]
-			});
+				{
+					urlaubsid: 3,
+					userid:3,
+					pic: "",
+					name: "Albert",
+					vacation: 15,
+					vacationLeft: 4,
+					vacationPlaned: 3,
+					vacationLastYear: 10,
+					title: "Urlaub Ulla",
+							start: new Date(2023, 2, 8, 11, 30),
+							end: new Date(2023, 2, 10, 11, 30),
+					
+				},
+			]});
 			
-			var aEntries = oTeamModel.getProperty("/peopleTeam");
-            oTeamModel.setProperty("/Team", aEntries);
-			this.getView().setModel(oTeamModel, "oTeamModel");
+			
+			
+			this.getView().setModel(oVacationModel, "oVacationModel");
 			
 
 			/*  Datum Formatieren für Ausgabe in Urlaubsverwaltung
