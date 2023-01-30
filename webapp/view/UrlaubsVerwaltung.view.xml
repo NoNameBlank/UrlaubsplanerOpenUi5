@@ -13,7 +13,7 @@
 			<Table
 				id="table"
 				selectionMode="MultiToggle"
-				rows="{path: 'oTeamModel>/people'}"
+				rows="{path: 'oTeamModel>/peopleTeam'}"
 				
 				visibleRowCount="7"
 				sort="sortDeliveryDate"
@@ -52,7 +52,8 @@
 						<m:Label text="Urlaubs Start:" />
 						<template>
 							<!-- <m:Text text="{oTeamModel>/appointments/title}" wrapping="false" /> -->
-							<m:Text text="{oTeamModel>/people/0/appointments/0/title}" wrapping="false" />
+							<m:Text text="{oTeamModel>/peopleTeam/0/appointments/0/start}" wrapping="false" />
+							<!-- <m:Text text="{= ${sDatumFormatiert}}" wrapping="false"/> -->
 						</template>
 					</Column>
 					<Column
@@ -60,9 +61,9 @@
 						width="auto"
 						showSortMenuEntry="false"
 						sortProperty="Category">
-						<m:Label text="Position" />
+						<m:Label text="Urlaub Bis:" />
 						<template>
-							<m:Text text="{oTeamModel>role}" wrapping="false" />
+							<m:Text text="{oTeamModel>/peopleTeam/0/appointments/0/end}" wrapping="false" />
 						</template>
 					</Column>
 					<Column width="auto">
@@ -85,21 +86,17 @@
 						id="deliverydate"
 						width="auto"
 						sortProperty="DeliveryDateStr">
-						<m:Label text="Einstellungs Datum" />
+						<m:Label text="Beantrage Tage" />
 						<template>
-							<m:Text text="{
-								path: 'DeliveryDateStr',
-								type: 'sap.ui.model.type.Date',
-								formatOptions: {source: {pattern: 'dd/MM/yyyy'}, style: 'long'}
-							}" wrapping="false" />
+							<m:Text text="{oTeamModel>vacationPlaned}" wrapping="false" />
 						</template>
 					</Column>
-					<Column width="auto">
+					<!-- <Column width="auto">
 						<m:Label text="Foto" />
 						<template>
 							<m:Link text="MA Show Image" href="{ProductPicUrl}" target="_blank"/>
 						</template>
-					</Column>
+					</Column> -->
 				</columns>
 				<footer>
 					<m:OverflowToolbar id="infobar"></m:OverflowToolbar>

@@ -6,7 +6,7 @@
     xmlns:unified="sap.ui.unified">
     <PlanningCalendar
             id="TeamPC"
-            rows="{path: 'oTeamModel>/people'}"
+            rows="{path: 'oTeamModel>/peopleTeam'}"
             appointmentsVisualization="Filled"
             appointmentSelect="handleAppointmentSelect"
             showEmptyIntervalHeaders="false"

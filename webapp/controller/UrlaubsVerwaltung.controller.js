@@ -34,7 +34,7 @@ sap.ui.define([
 			// MOCK-Data Team
 			var oTeamModel = new sap.ui.model.json.JSONModel();
 			oTeamModel.setData({
-				people: [{
+				peopleTeam: [{
 					id: 1,
 					pic: "",
 					name: "Jens",
@@ -48,8 +48,8 @@ sap.ui.define([
 					appointments: [{
 						pic: "",
 						title: "Urlaub Jens",
-						start: new Date(2023, 1, 1, 11, 30),
-						end: new Date(2023, 2, 3, 11, 30),
+						start: new Date(2023, 2, 15, 11, 30),
+						end: new Date(2023, 2, 18, 11, 30),
 						type: "Type03",
 						tentative: true
 					}],
@@ -98,8 +98,23 @@ sap.ui.define([
 			});
 			
 			var aEntries = oTeamModel.getProperty("/peopleTeam");
-             oTeamModel.setProperty("/Team", aEntries);
+            oTeamModel.setProperty("/Team", aEntries);
 			this.getView().setModel(oTeamModel, "oTeamModel");
+			
+
+			/*  Datum Formatieren für Ausgabe in Urlaubsverwaltung
+			
+			var oDatumFormat = sap.ui.core.format.DateFormat.getDateInstance({
+				pattern: "dd.MM.yyyy"
+			});
+			var sDatumFormatiert = oDatumFormat.format(oTeamModel.getProperty("/people/0/appointments/0/start")); 
+			
+			console.log("Hier müsste das Datum angezeigt weerdne." + sDatumFormatiert);
+			debugger;
+			this.getView().setModel(oTeamModel, "oTeamModel");
+			*/
+		
+		
 		},
 
 

@@ -42,7 +42,7 @@ sap.ui.define([
 
                 var userId = oEvent.getParameter("arguments").userId;
                 //  console.warn(userId);
-
+                this.loadData();
                 this.loadDataIntoUser(userId);
 
                 /*
@@ -177,9 +177,18 @@ sap.ui.define([
 
                 
                 var aEntries = oTeamModel.getProperty("/peopleTeam");
-                oTeamModel.setProperty("/Team", aEntries);
+                var oTeamModel= aEntries;
+               //oTeamModel.setProperty("/Team", aEntries);
             
-                this.getView().setModel(oTeamModel, "oTeamModel");
+               // this.getView().setModel(oTeamModel, "oTeamModel");
+                // debugger;
+
+
+
+
+
+
+
                 
             },
 
@@ -338,7 +347,7 @@ sap.ui.define([
 
 
                 //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
-                //User bei ID getten? 
+            
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
@@ -394,12 +403,12 @@ sap.ui.define([
                     this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
                     this.byId("OwnPC").getModel("UserModel").getProperty("/User/vacationLeft");
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
-                            //Bekomme mehrere User vll in array laden und dann übergeben?`-----------------------------------------------------------------------------------------------
+                    //Bekomme mehrere User vll in array laden und dann übergeben?`-----------------------------------------------------------------------------------------------
                     // this.byId("TeamPC").getModel("oTeamModel").getProperty("/User/vacationLeft");
-                    // var iTest = parseInt(this.byId("TeamPC").getModel("UserModel").getProperty("/User/vacationPlaned", iUserBeantragt + iTage));
-                    // var iTest = parseInt(this.byId("TeamPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage));
-                    // console.log("Beantragete UraualbsTage AKtuell: 20 und nach dem Buchen - 2 = 18" + iTest);
-                    // debugger;
+                    //  var iTest = parseInt(this.byId("TeamPC").getModel("UserModel").getProperty("/User/vacationPlaned", iUserBeantragt + iTage));
+                    //  var iTest = parseInt(this.byId("TeamPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage));
+                    //  console.log("Beantragete UraualbsTage AKtuell: 20 und nach dem Buchen - 2 = 18" + iTest);
+                    //  debugger;
 
 
                 } else {
@@ -455,10 +464,9 @@ sap.ui.define([
                 })
 
                 this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
-                this.byId("TeamPC").getModel("oTeamModel").setProperty("/Team/appointments", aAppointments);
-                debugger;
-
-                //Damit die Jahresansicht den Beantragen Uraub auch Anzeigt
+                //this.byId("TeamPC").getModel("oTeamModel").setProperty("/Team/appointments", aAppointments);
+                
+               
                
 
                  
