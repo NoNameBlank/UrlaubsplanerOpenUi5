@@ -102,7 +102,7 @@
           ]
         },
         {
-          "name": "RouteDashboard",
+          "name": "RouteDashboard{userId}",
           "pattern": "RouteDashboard/{userId}",
           "target": [
             "TargetDashboard"
