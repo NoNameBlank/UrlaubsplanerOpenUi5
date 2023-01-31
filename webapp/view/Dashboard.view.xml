@@ -12,7 +12,7 @@
 			</headerToolbar>
 			<HBox class="container">
 				<VBox class="sapUiSmallMargin">
-					<Avatar icon="sap-icon://person-placeholder"/>
+					<!-- <Avatar icon="sap-icon://person-placeholder"/> -->
 				</VBox>
 				<VBox class="sapUiSmallMargin">
 

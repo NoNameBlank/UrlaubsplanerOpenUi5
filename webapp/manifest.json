@@ -102,7 +102,7 @@
           ]
         },
         {
-          "name": "RouteDashboard{userId}",
+          "name": "RouteDashboard",
           "pattern": "RouteDashboard/{userId}",
           "target": [
             "TargetDashboard"
@@ -117,7 +117,7 @@
         },
         {
           "name": "RouteUrlaubsVerwaltung",
-          "pattern": "RouteUrlaubsVerwaltung",
+          "pattern": "RouteUrlaubsVerwaltung/{userId}",
           "target": [
             "TargetUrlaubsVerwaltung"
           ]

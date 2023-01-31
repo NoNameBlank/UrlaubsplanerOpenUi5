@@ -26,10 +26,10 @@ sap.ui.define([
             },
             onRouteMatched: function (oEvent) {
 
-                var userId = oEvent.getParameter("arguments").userId;
+                this.userId = oEvent.getParameter("arguments").userId;
                 //  console.warn(userId);
                 this.loadData();
-                this.loadDataIntoUser(userId);
+                this.loadDataIntoUser(this.userId);
 
                
 
@@ -220,9 +220,15 @@ sap.ui.define([
 
 
             urlaubsVerwaltungHandleClick: function () {
-
-                 this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung");
+                
+               
+                 
+                this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung", {
+                    userId: this.userId,
                     
+                 });
+              
+                
                 
             },
 
@@ -315,12 +321,14 @@ sap.ui.define([
                 }
                 else if (iTage <= iUserRestTage) {
 
+                    //UrlaubsVerwaltungDaten
+                    this.sUrlaubsVerwaltungStart = sUrlaubStart;
+                    this.sUrlaubsVerwaltungEnde = sUrlaubEnde;
+
+                    
                     //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
                     
-                    //  this.urlaubPushVerwaltung(sUrlaubStart, sUrlaubEnde);
-                    //  debugger;
-
-                    console.log("Du hast genug Urlaubstage!");
+                  
                     this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage -iTage);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);

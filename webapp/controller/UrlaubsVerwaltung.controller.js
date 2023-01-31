@@ -15,6 +15,11 @@ sap.ui.define([
 
 	return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Dashboard", {
 
+		// _data : {
+		// 	"date" : new Date()
+		// },
+		
+		
 		onInit : function() {
 				
 				this.oOwnerComponent = this.getOwnerComponent();
@@ -25,17 +30,22 @@ sap.ui.define([
 		},
 
 		onRouteMatched: function (oEvent) {
-
+			//User Id der eingeloggt ist und den Urlaub beantragt hat
 			var userId = oEvent.getParameter("arguments").userId;
-			debugger;
+			this.userId; 
+			console.log("Die Eingeloggte UserId: " + userId);
+
+
 			this.loadData();
 			
-
+			
 
 		},
 		loadData: function () {
 
 			// MOCK-Data Team
+			
+			
 			var oVacationModel = new sap.ui.model.json.JSONModel();
 			oVacationModel.setData({
 				urlaubsantraege: [{
@@ -48,8 +58,8 @@ sap.ui.define([
 					vacationPlaned: 3,
 					vacationLastYear: 10,
 					title: "Urlaub Jens",
-							start: new Date(2023, 2, 1, 11, 30),
-							end: new Date(2023, 2, 3, 11, 30),
+							start:  new Date("2023/2/1").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
+							end: new Date("2023/2/5").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
 					
 					},
 				
@@ -58,13 +68,13 @@ sap.ui.define([
 					userid:2,
 					pic: "",
 					name: "Ulla",
-					vacation: 25,
+					vacation: 30,
 					vacationLeft: 10,
 					vacationPlaned: 10,
 					vacationLastYear: 15,
 					title: "Urlaub Ulla",
-							start: new Date(2023, 2, 3, 11, 30),
-							end: new Date(2023, 2, 5, 11, 30),
+					start:  new Date("2023/2/10").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
+					end: new Date("2023/2/14").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
 					
 				},
 				{
@@ -72,24 +82,31 @@ sap.ui.define([
 					userid:3,
 					pic: "",
 					name: "Albert",
-					vacation: 20,
+					vacation: 30,
 					vacationLeft: 8,
 					vacationPlaned: 15,
 					vacationLastYear: 20,
 					title: "Urlaub Albert",
-							start: new Date(2023, 2, 8, 11, 30),
-							end: new Date(2023, 2, 10, 11, 30),
+					start:  new Date("2023/2/20").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
+					end: new Date("2023/2/22").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
 					
 				},
 			]});
 			
+			// for (var i = 0; i < oVacationModel.urlaubsantraege.length; i++) {
+			// 	var oVacation = oVacationModel.urlaubsantraege[i];
+			// 	oVacation.start = this.formatDate(oVacation.start);
+			// 	oVacation.end = this.formatDate(oVacation.end);
+			// 	oVacation.push(oVacation);
+			// 	}
+
+			// debugger;
 			
 			
 			this.getView().setModel(oVacationModel, "oVacationModel");
 			
-
-			/*  Datum Formatieren für Ausgabe in Urlaubsverwaltung
-			
+			//  Datum Formatieren für Ausgabe in Urlaubsverwaltung
+			/*
 			var oDatumFormat = sap.ui.core.format.DateFormat.getDateInstance({
 				pattern: "dd.MM.yyyy"
 			});
@@ -97,14 +114,18 @@ sap.ui.define([
 			
 			console.log("Hier müsste das Datum angezeigt weerdne." + sDatumFormatiert);
 			debugger;
-			this.getView().setModel(oTeamModel, "oTeamModel");
-			*/
+			this.getView().setModel(oTeamModel, "oTeamModel");*/
+			
 		
 		
-		 }
-		// urlaubPushVerwaltung: function (sUrlaubStart, sUrlaubEnde) {
-		// 	console.log("US: " + sUrlaubStart + "UE: " + sUrlaubEnde)
+		 },
+		
+		//  formatDate: function (oDate) {
+		// 	// format the date to your desired format
+		// 	var sDate = oDate.toLocaleDateString();
+		// 	return sDate;
 		// 	}
+		
 
 
 		
