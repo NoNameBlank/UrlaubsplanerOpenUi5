@@ -58,8 +58,8 @@ sap.ui.define([
 					vacationPlaned: 3,
 					vacationLastYear: 10,
 					title: "Urlaub Jens",
-							start:  new Date("2023/2/1").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
-							end: new Date("2023/2/5").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
+					start:  new Date("2023/2/1").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
+					end: new Date("2023/2/5").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
 					
 					},
 				
@@ -102,6 +102,7 @@ sap.ui.define([
 
 			// debugger;
 			
+
 			
 			this.getView().setModel(oVacationModel, "oVacationModel");
 			
@@ -119,14 +120,24 @@ sap.ui.define([
 		
 		
 		 },
-		
-		//  formatDate: function (oDate) {
-		// 	// format the date to your desired format
-		// 	var sDate = oDate.toLocaleDateString();
-		// 	return sDate;
-		// 	}
-		
 
+		 onEdit: function(){
+
+			this.byId("editBtn").setVisible(false);
+			this.byId("buchen").setVisible(true);
+			this.byId("ablehnen").setVisible(true);
+			this.byId("zurueck").setVisible(true);
+		 },
+
+		 onBack: function(){
+			
+			this.byId("editBtn").setVisible(true);
+			this.byId("buchen").setVisible(false);
+			this.byId("ablehnen").setVisible(false);
+			this.byId("zurueck").setVisible(false);
+		 }
+		
+	
 
 		
 

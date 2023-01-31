@@ -1,19 +1,20 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.UrlaubsVerwaltung" xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns:c="sap.ui.core" xmlns:m="sap.m" height="100%">
     <m:Page showHeader="false" enableScrolling="false" class="sapUiContentPadding">
         <m:content>
-            <Table id="table" selectionMode="MultiToggle" rows="{path: 'oVacationModel>/urlaubsantraege'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title">
+            <Table id="table" selectionMode="MultiToggle" rows="{path: 'oVacationModel>/urlaubsantraege'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title" type="Transperent">
                 <extension>
                     <m:OverflowToolbar style="Clear">
                         <m:Title id="title" text="Urlaubs Verwaltung" />
                         <m:ToolbarSpacer />
-                        <m:Button icon="sap-icon://user-edit" tooltip="Benutzer bearbeiten" press="clearAllSortings" />
-
-                        <m:Button icon="sap-icon://sort" tooltip="Sort Categories in addition to current sorting" press="sortCategories" />
-                        <m:Button icon="sap-icon://decline" tooltip="Clear all sortings" press="clearAllSortings" />
+                        <m:Button id = "editBtn" icon="sap-icon://user-edit" tooltip="Benutzer bearbeiten" press="onEdit" />
+						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" visible="false" />
+						<m:Button id = "ablehnen" icon="sap-icon://cancel" tooltip="Urlaub ablehnen" visible="false" />
+						<m:Button id = "zurueck" icon="sap-icon://nav-back" tooltip="Zurück" press="onBack" visible="false" />
+						
                     </m:OverflowToolbar>
                 </extension>
-                <columns>
-                    <Column width="auto">
+                <columns >
+                    <Column width="auto" >
                         <m:Label text="Mitarbeiter" />
                         <template>
                             <m:Link text="{oVacationModel>name}" />
