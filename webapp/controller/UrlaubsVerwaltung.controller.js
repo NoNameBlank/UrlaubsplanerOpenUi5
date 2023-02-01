@@ -6,8 +6,9 @@ sap.ui.define([
 	"sap/ui/core/format/DateFormat",
 	"sap/m/ToolbarSpacer",
 	"sap/ui/table/library",
+	"sap/m/MessageToast",
 	"sap/ui/thirdparty/jquery"
-], function (Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery) {
+], function (Log, Controller, MessageToast, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery) {
 	"use strict";
 
 	// shortcut for sap.ui.table.SortOrder
@@ -114,30 +115,7 @@ sap.ui.define([
 
 
 
-			/*** Selection Auslesen ***/
-			// var oTable = this.byId("table");
-			// var aSelectedIndices = oTable.getSelectedIndices();
 
-			// console.log(aSelectedIndices);
-
-
-			// var iSelected = this.byId("table").getSelectedIndices();
-			// consloe.log(iSelected);
-			// debugger;
-
-
-
-
-			//  Datum Formatieren für Ausgabe in Urlaubsverwaltung
-			/*
-			var oDatumFormat = sap.ui.core.format.DateFormat.getDateInstance({
-				pattern: "dd.MM.yyyy"
-			});
-			var sDatumFormatiert = oDatumFormat.format(oTeamModel.getProperty("/people/0/appointments/0/start")); 
-			
-			console.log("Hier müsste das Datum angezeigt weerdne." + sDatumFormatiert);
-			debugger;
-			this.getView().setModel(oTeamModel, "oTeamModel");*/
 
 
 
@@ -182,22 +160,61 @@ sap.ui.define([
 			var aSelectedIndices = oTable.getSelectedIndices();
 			console.log(aSelectedIndices);
 			*/
+
 			var oTable = this.byId("table");
 			var aSelectedIndices = oTable.getSelectedIndices();
+			// for (var i = 0; i < aSelectedIndices.length; i++) {
+			// 	var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
+			// 	var oSelectedData = oSelectedContext.getObject();
+			// 	console.log(oSelectedData);
+			// }
+			// console.log(oSelectedData.name);
+
+
+			//wieso Funktioniert der Befehl nur wenn ich sap.m.Message davor schreibe?
+			// for(var i = 0; i < aSelectedIndices.length; i++) {
+			// 	var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
+			// 	var oSelectedData = oSelectedContext.getObject();
+			// 	console.log( " oSelectedData.name " + oSelectedData.name);
+			// 	var aUrlaubName = oSelectedData.name;
+			// 	console.log( "var aUrlaubName " + aUrlaubName)
+
+			// 	//sap.m.MessageToast.show(oSelectedData.name);
+			//   }
+
+
+			var aUrlaubName = [];
 			for (var i = 0; i < aSelectedIndices.length; i++) {
 				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
 				var oSelectedData = oSelectedContext.getObject();
-				console.log(oSelectedData);
-			}
+				
+				aUrlaubName.push(oSelectedData.name);
 
+			}
+			console.log(" Glückwunsch Urlaub für Folgende MA genehmnigt! " + aUrlaubName);
+			sap.m.MessageToast.show("Glückwunsch Urlaub für Folgende MA genehmnigt! " + aUrlaubName);
+
+			var oEmptyModel = this.getView().getModel("oVacationModel");
+			var aDataEmpty = oEmptyModel.getProperty("oVacationModel");
+			aDataEmpty = [];
+			this.getView().setModel(aDataEmpty, "oVacationModel" );
 
 		},
 
 		onDecline: function () {
 
-			console.log("Ich bin in der onDecline Funktion");
 			var oTable = this.byId("table");
 			var aSelectedIndices = oTable.getSelectedIndices();
+			var aUrlaubName = [];
+			for (var i = 0; i < aSelectedIndices.length; i++) {
+				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
+				var oSelectedData = oSelectedContext.getObject();
+
+				aUrlaubName.push(oSelectedData.name);
+
+			}
+			console.log("var aUrlaubName " + aUrlaubName);
+			sap.m.MessageToast.show("Pech gehabt...  Urlaub für Folgende MA abgelehnt! " + aUrlaubName);
 
 		}
 
