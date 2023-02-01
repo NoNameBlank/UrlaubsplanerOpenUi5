@@ -42,7 +42,7 @@ sap.ui.define([
 			
 
 			this.loadData();
-			//this.byId("editBtn").setVisible(!this._bSelectionModeActive);
+			
 			
 
 		},
@@ -170,9 +170,24 @@ sap.ui.define([
 	     onDeactivateSelectionMode: function () {
 		
 			this.byId("table").setSelectionMode("None");
-			//this._bSelectionModeActive = false;
+			
 			
 		
+		},
+
+		onBock: function(){
+			
+			var oTable = this.byId("table");
+			var aSelectedIndices = oTable.getSelectedIndices();
+			console.log(aSelectedIndices);
+			
+
+		},
+
+		onDecline: function(){
+
+			console.log("Ich bin in der onDecline Funktion");
+
 		}
 		
 

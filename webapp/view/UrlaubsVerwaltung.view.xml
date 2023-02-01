@@ -1,14 +1,14 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.UrlaubsVerwaltung" xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns:c="sap.ui.core" xmlns:m="sap.m" height="100%">
     <m:Page showHeader="false" enableScrolling="false" class="sapUiContentPadding">
         <m:content>
-            <Table id="table" selectionMode="Multi"  rows="{path: 'oVacationModel>/urlaubsantraege'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title" type="Transperent">
+            <Table id="table" selectionMode="MultiToggle"  rows="{path: 'oVacationModel>/urlaubsantraege'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title" type="Transperent">
                 <extension>
                     <m:OverflowToolbar style="Clear">
                         <m:Title id="title" text="Urlaubs Verwaltung" />
                         <m:ToolbarSpacer />
                         <m:Button id = "editBtn" icon="sap-icon://user-edit" tooltip="Benutzer bearbeiten" press="onEdit" />
-						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" visible="false" />
-						<m:Button id = "ablehnen" icon="sap-icon://cancel" tooltip="Urlaub ablehnen" visible="false" />
+						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" press="onBock" visible="false" />
+						<m:Button id = "ablehnen" icon="sap-icon://cancel" tooltip="Urlaub ablehnen" press="onDecline" visible="false" />
 						<m:Button id = "zurueck" icon="sap-icon://nav-back" tooltip="Zurück" press="onBack" visible="false" />
 						
                     </m:OverflowToolbar>
