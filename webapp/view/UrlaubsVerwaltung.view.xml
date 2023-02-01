@@ -1,7 +1,7 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.UrlaubsVerwaltung" xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns:c="sap.ui.core" xmlns:m="sap.m" height="100%">
     <m:Page showHeader="false" enableScrolling="false" class="sapUiContentPadding">
         <m:content>
-            <Table id="table" selectionMode="MultiToggle" rows="{path: 'oVacationModel>/urlaubsantraege'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title" type="Transperent">
+            <Table id="table" selectionMode="Multi"  rows="{path: 'oVacationModel>/urlaubsantraege'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title" type="Transperent">
                 <extension>
                     <m:OverflowToolbar style="Clear">
                         <m:Title id="title" text="Urlaubs Verwaltung" />

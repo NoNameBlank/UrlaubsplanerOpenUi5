@@ -25,6 +25,11 @@ sap.ui.define([
 				this.oOwnerComponent = this.getOwnerComponent();
                 this.oRouter = this.oOwnerComponent.getRouter();
                 this.oRouter.attachRouteMatched(this.onRouteMatched, this);
+
+				//Selection Modus aus
+				this.onDeactivateSelectionMode();
+				
+
 			
 
 		},
@@ -34,10 +39,10 @@ sap.ui.define([
 			var userId = oEvent.getParameter("arguments").userId;
 			this.userId; 
 			console.log("Die Eingeloggte UserId: " + userId);
-
+			
 
 			this.loadData();
-			
+			//this.byId("editBtn").setVisible(!this._bSelectionModeActive);
 			
 
 		},
@@ -106,6 +111,22 @@ sap.ui.define([
 			
 			this.getView().setModel(oVacationModel, "oVacationModel");
 			
+		
+			
+			/*** Selection Auslesen ***/
+			// var oTable = this.byId("table");
+			// var aSelectedIndices = oTable.getSelectedIndices();
+			
+			// console.log(aSelectedIndices);
+			
+			
+			// var iSelected = this.byId("table").getSelectedIndices();
+			// consloe.log(iSelected);
+			// debugger;
+			
+			
+			
+			
 			//  Datum Formatieren für Ausgabe in Urlaubsverwaltung
 			/*
 			var oDatumFormat = sap.ui.core.format.DateFormat.getDateInstance({
@@ -122,11 +143,12 @@ sap.ui.define([
 		 },
 
 		 onEdit: function(){
-
+			this.byId("table").setSelectionMode("MultiToggle");
 			this.byId("editBtn").setVisible(false);
 			this.byId("buchen").setVisible(true);
 			this.byId("ablehnen").setVisible(true);
 			this.byId("zurueck").setVisible(true);
+			
 		 },
 
 		 onBack: function(){
@@ -135,10 +157,25 @@ sap.ui.define([
 			this.byId("buchen").setVisible(false);
 			this.byId("ablehnen").setVisible(false);
 			this.byId("zurueck").setVisible(false);
-		 }
+			this.byId("table").setSelectionMode("None");
+		 },
+
+		 onActivateSelectionMode: function () {
 		
-	//Test Push
-	//Testtttt
+			this.byId("table").setSelectionMode("MultiToggle");
+			
+		
+		},
+		  
+	     onDeactivateSelectionMode: function () {
+		
+			this.byId("table").setSelectionMode("None");
+			//this._bSelectionModeActive = false;
+			
+		
+		}
+		
+
 		
 
 	})
