@@ -7,7 +7,7 @@ sap.ui.define([
 	"sap/m/ToolbarSpacer",
 	"sap/ui/table/library",
 	"sap/ui/thirdparty/jquery"
-], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery) {
+], function (Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery) {
 	"use strict";
 
 	// shortcut for sap.ui.table.SortOrder
@@ -18,44 +18,44 @@ sap.ui.define([
 		// _data : {
 		// 	"date" : new Date()
 		// },
-		
-		
-		onInit : function() {
-				
-				this.oOwnerComponent = this.getOwnerComponent();
-                this.oRouter = this.oOwnerComponent.getRouter();
-                this.oRouter.attachRouteMatched(this.onRouteMatched, this);
 
-				//Selection Modus aus
-				this.onDeactivateSelectionMode();
-				
 
-			
+		onInit: function () {
+
+			this.oOwnerComponent = this.getOwnerComponent();
+			this.oRouter = this.oOwnerComponent.getRouter();
+			this.oRouter.attachRouteMatched(this.onRouteMatched, this);
+
+			//Selection Modus aus
+			this.onDeactivateSelectionMode();
+
+
+
 
 		},
 
 		onRouteMatched: function (oEvent) {
 			//User Id der eingeloggt ist und den Urlaub beantragt hat
 			var userId = oEvent.getParameter("arguments").userId;
-			this.userId; 
+			this.userId;
 			console.log("Die Eingeloggte UserId: " + userId);
-			
+
 
 			this.loadData();
-			
-			
+
+
 
 		},
 		loadData: function () {
 
 			// MOCK-Data Team
-			
-			
+
+
 			var oVacationModel = new sap.ui.model.json.JSONModel();
 			oVacationModel.setData({
 				urlaubsantraege: [{
 					urlaubsid: 1,
-					userid:1,
+					userid: 1,
 					pic: "",
 					name: "Jens",
 					vacation: 30,
@@ -63,14 +63,14 @@ sap.ui.define([
 					vacationPlaned: 3,
 					vacationLastYear: 10,
 					title: "Urlaub Jens",
-					start:  new Date("2023/2/1").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
-					end: new Date("2023/2/5").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
-					
-					},
-				
+					start: new Date("2023/2/1").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
+					end: new Date("2023/2/5").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
+
+				},
+
 				{
 					urlaubsid: 2,
-					userid:2,
+					userid: 2,
 					pic: "",
 					name: "Ulla",
 					vacation: 30,
@@ -78,13 +78,13 @@ sap.ui.define([
 					vacationPlaned: 10,
 					vacationLastYear: 15,
 					title: "Urlaub Ulla",
-					start:  new Date("2023/2/10").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
-					end: new Date("2023/2/14").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
-					
+					start: new Date("2023/2/10").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
+					end: new Date("2023/2/14").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
+
 				},
 				{
 					urlaubsid: 3,
-					userid:3,
+					userid: 3,
 					pic: "",
 					name: "Albert",
 					vacation: 30,
@@ -92,12 +92,13 @@ sap.ui.define([
 					vacationPlaned: 15,
 					vacationLastYear: 20,
 					title: "Urlaub Albert",
-					start:  new Date("2023/2/20").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
-					end: new Date("2023/2/22").toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit", year: "numeric"}),
-					
+					start: new Date("2023/2/20").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
+					end: new Date("2023/2/22").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
+
 				},
-			]});
-			
+				]
+			});
+
 			// for (var i = 0; i < oVacationModel.urlaubsantraege.length; i++) {
 			// 	var oVacation = oVacationModel.urlaubsantraege[i];
 			// 	oVacation.start = this.formatDate(oVacation.start);
@@ -106,27 +107,27 @@ sap.ui.define([
 			// 	}
 
 			// debugger;
-			
 
-			
+
+
 			this.getView().setModel(oVacationModel, "oVacationModel");
-			
-		
-			
+
+
+
 			/*** Selection Auslesen ***/
 			// var oTable = this.byId("table");
 			// var aSelectedIndices = oTable.getSelectedIndices();
-			
+
 			// console.log(aSelectedIndices);
-			
-			
+
+
 			// var iSelected = this.byId("table").getSelectedIndices();
 			// consloe.log(iSelected);
 			// debugger;
-			
-			
-			
-			
+
+
+
+
 			//  Datum Formatieren für Ausgabe in Urlaubsverwaltung
 			/*
 			var oDatumFormat = sap.ui.core.format.DateFormat.getDateInstance({
@@ -137,61 +138,71 @@ sap.ui.define([
 			console.log("Hier müsste das Datum angezeigt weerdne." + sDatumFormatiert);
 			debugger;
 			this.getView().setModel(oTeamModel, "oTeamModel");*/
-			
-		
-		
-		 },
 
-		 onEdit: function(){
+
+
+		},
+
+		onEdit: function () {
 			this.byId("table").setSelectionMode("MultiToggle");
 			this.byId("editBtn").setVisible(false);
 			this.byId("buchen").setVisible(true);
 			this.byId("ablehnen").setVisible(true);
 			this.byId("zurueck").setVisible(true);
-			
-		 },
 
-		 onBack: function(){
-			
+		},
+
+		onBack: function () {
+
 			this.byId("editBtn").setVisible(true);
 			this.byId("buchen").setVisible(false);
 			this.byId("ablehnen").setVisible(false);
 			this.byId("zurueck").setVisible(false);
 			this.byId("table").setSelectionMode("None");
-		 },
+		},
 
-		 onActivateSelectionMode: function () {
-		
+		onActivateSelectionMode: function () {
+
 			this.byId("table").setSelectionMode("MultiToggle");
-			
-		
-		},
-		  
-	     onDeactivateSelectionMode: function () {
-		
-			this.byId("table").setSelectionMode("None");
-			
-			
-		
+
+
 		},
 
-		onBock: function(){
-			
+		onDeactivateSelectionMode: function () {
+
+			this.byId("table").setSelectionMode("None");
+
+
+
+		},
+
+		onBock: function () {
+			/*   Der Code läuft!!!
 			var oTable = this.byId("table");
 			var aSelectedIndices = oTable.getSelectedIndices();
 			console.log(aSelectedIndices);
-			
+			*/
+			var oTable = this.byId("table");
+			var aSelectedIndices = oTable.getSelectedIndices();
+			for (var i = 0; i < aSelectedIndices.length; i++) {
+				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
+				var oSelectedData = oSelectedContext.getObject();
+				console.log(oSelectedData);
+			}
+
 
 		},
 
-		onDecline: function(){
+		onDecline: function () {
 
 			console.log("Ich bin in der onDecline Funktion");
+			var oTable = this.byId("table");
+			var aSelectedIndices = oTable.getSelectedIndices();
 
 		}
-		
 
-		
+
+
 
 	})
 
