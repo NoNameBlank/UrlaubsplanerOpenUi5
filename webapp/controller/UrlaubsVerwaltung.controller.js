@@ -160,6 +160,7 @@ sap.ui.define([
 			
 
 			//wieso Funktioniert der Befehl nur wenn ich sap.m.Message davor schreibe?
+			//obwohl ich "sap/m/MessageToast", eingebunden habe?
 			
 
 			var oTable = this.byId("table");
@@ -175,16 +176,12 @@ sap.ui.define([
 
 			}
 
-			console.log(" Glückwunsch Urlaub für Folgende MA genehmnigt! " + aUrlaubName);
-			sap.m.MessageToast.show("Glückwunsch Urlaub für Folgende MA genehmnigt! " + aUrlaubName);
+			console.log(" Glückwunsch Urlaub für Folgende MA genehmigt! " + aUrlaubName);
+			sap.m.MessageToast.show("Glückwunsch Urlaub für Folgende MA genehmigt! " + aUrlaubName);
 
 			//Entfernen von Datensätzen
-			for (var i = aSelectedIndices.length - 1; i >= 0; i--) {
-				var oModel = oTable.getModel("oVacationModel");
-				var aData = oModel.getProperty("/urlaubsantraege");
-				aData.splice(aSelectedIndices[i], 1);
-				oModel.setProperty("/urlaubsantraege", aData);
-			}
+			this.deleteSelectedIndices(aSelectedIndices, oTable);
+		
 
 
 		
@@ -207,6 +204,13 @@ sap.ui.define([
 
 
 			//Entfernen von Datensätzen
+			this.deleteSelectedIndices(aSelectedIndices, oTable);
+
+
+		},
+		
+		deleteSelectedIndices: function (aSelectedIndices, oTable){
+			
 			for (var i = aSelectedIndices.length - 1; i >= 0; i--) {
 				var oModel = oTable.getModel("oVacationModel");
 				var aData = oModel.getProperty("/urlaubsantraege");
@@ -214,8 +218,8 @@ sap.ui.define([
 				oModel.setProperty("/urlaubsantraege", aData);
 			}
 
-
 		}
+
 
 
 
