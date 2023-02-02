@@ -6,7 +6,10 @@
 	xmlns:m="sap.m"
 	height="100%">
 	<m:Page
-		showHeader="false"
+		showHeader="true" 
+		showNavButton="true" 
+		title="Nutzerdaten" 
+		navButtonPress=".onNavBack"
 		enableScrolling="false"
 		class="sapUiContentPadding">
 		<m:content>
@@ -24,7 +27,7 @@
 						<m:Button
 							icon="sap-icon://user-edit"
 							tooltip="Benutzer bearbeiten"
-							press="clearAllSortings"/>
+							press="bearbeiten"/>
 						
 						
 						<m:Button
@@ -41,7 +44,7 @@
 					<Column width="auto">
 						<m:Label text="ID" />
 						<template>
-							<m:Link text="Show Image" href="{ProductPicUrl}" target="_blank"/>
+							<m:Text text="{oTeamModel>id}" wrapping="false"/>
 						</template>
 					</Column>
 					<Column
@@ -60,13 +63,13 @@
 						sortProperty="Category">
 						<m:Label text="Position" />
 						<template>
-							<m:Text text="{Category}" wrapping="false" />
+							<m:Text text="{oTeamModel>role}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column width="auto">
 						<m:Label text="Gesamt Urlaub" />
 						<template>
-							<m:Link text="Show Image" href="{ProductPicUrl}" target="_blank"/>
+							<m:Text text="{oTeamModel>vacation}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column
@@ -76,10 +79,7 @@
 						sortProperty="Quantity">
 						<m:Label text="Rest Jahr Urlaub" />
 						<template>
-							<m:Label text="{
-								path: 'Quantity',
-								type: 'sap.ui.model.type.Integer'
-							}" />
+							<m:Text text="{oTeamModel>vacationLastYear}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column
@@ -88,11 +88,7 @@
 						sortProperty="DeliveryDateStr">
 						<m:Label text="Notiz" />
 						<template>
-							<m:Text text="{
-								path: 'DeliveryDateStr',
-								type: 'sap.ui.model.type.Date',
-								formatOptions: {source: {pattern: 'dd/MM/yyyy'}, style: 'long'}
-							}" wrapping="false" />
+							<m:Text text="Keine Notiz" />
 						</template>
 					</Column>
 				</columns>

@@ -452,7 +452,17 @@ function (Controller, JSONModel, MessageBox) {
             this.getView().setModel(oModel);
 
         },
+        onNavBack: function () {
+            var oHistory = History.getInstance();
+            var sPreviousHash = oHistory.getPreviousHash();
 
+            if (sPreviousHash !== undefined) {
+                window.history.go(-1);
+            } else {
+                var oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo("overview", {}, true);
+            }
+        },
         handleAppointmentSelect: function (oEvent) {
             var oAppointment = oEvent.getParameter("appointment"),
                 sSelected;

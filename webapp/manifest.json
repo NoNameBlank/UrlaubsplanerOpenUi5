@@ -110,7 +110,7 @@
         },
         {
           "name": "RouteEmployees",
-          "pattern": "RouteEmployees",
+          "pattern": "RouteEmployees/{userId}",
           "target": [
             "TargetEmployees"
           ]

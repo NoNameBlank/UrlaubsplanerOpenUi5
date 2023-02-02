@@ -38,12 +38,23 @@ sap.ui.define([
 
 
             },
+            onNavBack: function () {
+                var oHistory = History.getInstance();
+                var sPreviousHash = oHistory.getPreviousHash();
+    
+                if (sPreviousHash !== undefined) {
+                    window.history.go(-1);
+                } else {
+                    var oRouter = this.getOwnerComponent().getRouter();
+                    oRouter.navTo("overview", {}, true);
+                }
+            },
             onRouteMatched: function (oEvent) {
 
-                var userId = oEvent.getParameter("arguments").userId;
+                this.userId = oEvent.getParameter("arguments").userId;
                 //  console.warn(userId);
 
-                this.loadDataIntoUser(userId);
+                this.loadDataIntoUser(this.userId);
 
                 /*
                 var login = oEvent.getParameter("arguments");
@@ -174,7 +185,7 @@ sap.ui.define([
                         passwort: "123",
                         role: "Teamleiter",
                         vacation: 31,
-                        vacationLeft: 4,
+                        vacationLeft: 432,
                         vacationPlaned: 3,
                         vacationLastYear: 10,
                         freeDays: [5, 6],
@@ -234,7 +245,10 @@ sap.ui.define([
                 
                                   
 
-                    this.getOwnerComponent().getRouter().navTo("RouteEmployees");                       
+                    this.getOwnerComponent().getRouter().navTo("RouteEmployees", 
+                    {
+                        userId : this.userId
+                    });                       
                     },
 
 

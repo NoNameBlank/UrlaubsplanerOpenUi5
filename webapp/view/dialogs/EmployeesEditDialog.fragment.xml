@@ -1,0 +1,75 @@
+<core:FragmentDefinition 
+    controllerName="urlaubsplaner.urlaubsplaner.controller.Employees"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+
+    <Dialog id="EmployeeEditDialog" title="Grüß Gott">
+    <VBox class="sapUiSmallMargin">
+		<f:Form id="FormChange354434"
+			editable="true">
+			<f:title>
+				<core:Title text="Mitarbeiter bearbeiten" />
+			</f:title>
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="3"
+					labelSpanL="3"
+					labelSpanM="3"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="4"
+					emptySpanL="4"
+					emptySpanM="4"
+					emptySpanS="0"
+					columnsXL="1"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer>
+					<f:formElements>
+						<f:FormElement label="Name">
+							<f:fields>
+								<Input value="{oTeamModel>name}" id="name52"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Role">
+							<f:fields>
+								<Select id="Role" selectedKey="{role}">
+									<items>
+										<core:Item text="Mitarbeiter" key="England"/>
+										<core:Item text="Teamleiter" key="Germany"/>
+										<core:Item text="Backoffice" key="USA"/>
+									</items>
+								</Select>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Gesamt Urlaub">
+							<f:fields>
+								<Input value="{oTeamModel>vacaion}">
+                                </Input>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Resturlaub">
+							<f:fields>
+								<Input value="{oTeamModel>vacation}">
+                                </Input>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Notiz">
+							<f:fields>
+								<Input value="{Note}">
+								</Input>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+	</VBox>
+    </Dialog>
+
+    </core:FragmentDefinition>
