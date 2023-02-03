@@ -21,6 +21,8 @@ sap.ui.define([
 		// },
 
 
+		//Tessst Push
+
 		onInit: function () {
 
 			this.oOwnerComponent = this.getOwnerComponent();
@@ -155,50 +157,34 @@ sap.ui.define([
 		},
 
 		onBock: function () {
-			/*   Der Code läuft!!!
-			var oTable = this.byId("table");
-			var aSelectedIndices = oTable.getSelectedIndices();
-			console.log(aSelectedIndices);
-			*/
-
-			var oTable = this.byId("table");
-			var aSelectedIndices = oTable.getSelectedIndices();
-			// for (var i = 0; i < aSelectedIndices.length; i++) {
-			// 	var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
-			// 	var oSelectedData = oSelectedContext.getObject();
-			// 	console.log(oSelectedData);
-			// }
-			// console.log(oSelectedData.name);
-
+			
 
 			//wieso Funktioniert der Befehl nur wenn ich sap.m.Message davor schreibe?
-			// for(var i = 0; i < aSelectedIndices.length; i++) {
-			// 	var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
-			// 	var oSelectedData = oSelectedContext.getObject();
-			// 	console.log( " oSelectedData.name " + oSelectedData.name);
-			// 	var aUrlaubName = oSelectedData.name;
-			// 	console.log( "var aUrlaubName " + aUrlaubName)
+			//obwohl ich "sap/m/MessageToast", eingebunden habe?
+			
 
-			// 	//sap.m.MessageToast.show(oSelectedData.name);
-			//   }
-
+			var oTable = this.byId("table");
+			var aSelectedIndices = oTable.getSelectedIndices();
 
 			var aUrlaubName = [];
 			for (var i = 0; i < aSelectedIndices.length; i++) {
 				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
 				var oSelectedData = oSelectedContext.getObject();
-				
+
 				aUrlaubName.push(oSelectedData.name);
 
+
 			}
-			console.log(" Glückwunsch Urlaub für Folgende MA genehmnigt! " + aUrlaubName);
-			sap.m.MessageToast.show("Glückwunsch Urlaub für Folgende MA genehmnigt! " + aUrlaubName);
 
-			var oEmptyModel = this.getView().getModel("oVacationModel");
-			var aDataEmpty = oEmptyModel.getProperty("oVacationModel");
-			aDataEmpty = [];
-			this.getView().setModel(aDataEmpty, "oVacationModel" );
+			console.log(" Glückwunsch Urlaub für Folgende MA genehmigt! " + aUrlaubName);
+			sap.m.MessageToast.show("Glückwunsch Urlaub für Folgende MA genehmigt! " + aUrlaubName);
 
+			//Entfernen von Datensätzen
+			this.deleteSelectedIndices(aSelectedIndices, oTable);
+		
+
+
+		
 		},
 
 		onDecline: function () {
@@ -216,7 +202,24 @@ sap.ui.define([
 			console.log("var aUrlaubName " + aUrlaubName);
 			sap.m.MessageToast.show("Pech gehabt...  Urlaub für Folgende MA abgelehnt! " + aUrlaubName);
 
+
+			//Entfernen von Datensätzen
+			this.deleteSelectedIndices(aSelectedIndices, oTable);
+
+
+		},
+		
+		deleteSelectedIndices: function (aSelectedIndices, oTable){
+			
+			for (var i = aSelectedIndices.length - 1; i >= 0; i--) {
+				var oModel = oTable.getModel("oVacationModel");
+				var aData = oModel.getProperty("/urlaubsantraege");
+				aData.splice(aSelectedIndices[i], 1);
+				oModel.setProperty("/urlaubsantraege", aData);
+			}
+
 		}
+
 
 
 
