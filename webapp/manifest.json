@@ -17,8 +17,8 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "/sap/opu/odata/",
-        "type": "OData",
+        "uri": "/api/",
+        "type": "JSON",
         "settings": {
           "annotations": [],
           "localUri": "localService/metadata.xml",
