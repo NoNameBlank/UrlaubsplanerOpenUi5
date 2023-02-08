@@ -51,7 +51,7 @@ sap.ui.define([
                 });
 
                 this.getView().setModel(oModel);
-                console.log("oModel Ausgabe nach setModel(oModel) " + oModel);
+                //console.log("oModel Ausgabe nach setModel(oModel) " + oModel);
 
                 // var userId = this.checkUserExist(sBenutzerLogin, sBenutzerPasswort);
 

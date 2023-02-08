@@ -16,7 +16,7 @@ sap.ui.define([
                 this.oRouter = this.oOwnerComponent.getRouter();
                 this.oRouter.attachRouteMatched(this.onRouteMatched, this);
 
-               
+
 
 
 
@@ -27,16 +27,68 @@ sap.ui.define([
             onRouteMatched: function (oEvent) {
 
                 this.userId = oEvent.getParameter("arguments").userId;
-                console.log( " UserId im DashboardController die durch Login übergeben wurde "  + this.userId);
+                console.log(" UserId im DashboardController die durch Login übergeben wurde " + this.userId);
                 // this.loadData();
                 // this.loadDataIntoUser(this.userId);
 
-               debugger;
 
+                 var oModel = new sap.ui.model.xml.XMLModel();
+                var that = this;
+                
+                
+                    var that = this;
+                    jQuery.ajax({
+                    type: "GET",
+                    contentType: "application/xml",
+                    url: "http://localhost:3000/api/userdetails",
+                    dataType: "json",
+                    data: $.param({ "userId": this.userId }),
+                    async: false,
+                    success: function (data, textStatus, jqXHR) {
+                    console.log(data);
+                    that.getView().setModel(new sap.ui.model.json.JSONModel(data));
+                    },
+                    error: function (oResponse) {
+                    sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
+                    }
+                    });
+                    
+
+
+
+                /*
+
+                 var oModel = new sap.ui.model.xml.XMLModel();
+                var that = this;
+                
+                var aData = jQuery.ajax({
+                    type: "GET",
+                    contentType: "application/xml",
+                    url: "http://localhost:3000/api/users",
+                    dataType: "json",
+                    data: $.param({"userId": this.userId}),
+                    async: false,
+                    success: function (data, textStatus, jqXHR) {
+        
+                        console.log(data);
+                     
+                        
+                        // oModel.setData(data);
+                    },
+                    error: function (oResponse) {
+                        
+                        sap.m.MessageToast.show("Daten konnten nicht geladen werden.");
+                    }
+
+                });
+                debugger;
+                this.getView().setModel(oModel);
+                console.log("oModel Ausgabe nach setModel(oModel) " + oModel);
+                */
 
 
                 this.setFirstDay();
-                
+
 
 
             },
@@ -216,28 +268,28 @@ sap.ui.define([
 
 
                 this.getOwnerComponent().getRouter().navTo("RouteEmployees");
-               
+
             },
 
 
             urlaubsVerwaltungHandleClick: function () {
-                
-               
-                 
+
+
+
                 this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung", {
                     userId: this.userId,
-                    
-                 });
-              
-                
-                
+
+                });
+
+
+
             },
 
 
 
 
 
-          
+
 
             getfirstDayOfWeek: function () {
 
@@ -269,7 +321,7 @@ sap.ui.define([
 
             closeDialog: function () {
                 this.byId("vacationPickerDialog").close();
-               // this.byId("datePicker").setValue(null);
+                // this.byId("datePicker").setValue(null);
                 //this.byId("datePicker2").setValue(null);
                 //this.byId("InputGrundRequired").setValue(null);
 
@@ -282,14 +334,14 @@ sap.ui.define([
 
 
                 //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
-            
+
                 var oUser = this.getView().getModel("UserModel").getProperty("/User");
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
                 var today = new Date();
                 var day = today.getDay();
 
-               
+
 
 
 
@@ -326,14 +378,14 @@ sap.ui.define([
                     this.sUrlaubsVerwaltungStart = sUrlaubStart;
                     this.sUrlaubsVerwaltungEnde = sUrlaubEnde;
 
-                    
+
                     //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
-                    
-                  
+
+
                     this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
-                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage -iTage);
+                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
                     this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
-                   
+
                 } else {
                     //Gebe Fehler Meldung mit Grund aus
                     console.log("Error zu wenig UrlaubsTage");
@@ -372,7 +424,7 @@ sap.ui.define([
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
 
                 var aAppointments = oUser.appointments;
-                
+
                 //Wichtig für Anzeige im Kalender
                 sUrlaubsEnde.setHours(23, 59);
 
@@ -388,11 +440,11 @@ sap.ui.define([
 
                 this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
                 //this.byId("TeamPC").getModel("oTeamModel").setProperty("/Team/appointments", aAppointments);
-                
-               
-               
 
-                 
+
+
+
+
 
 
             }
