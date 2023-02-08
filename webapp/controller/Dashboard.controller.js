@@ -27,11 +27,11 @@ sap.ui.define([
             onRouteMatched: function (oEvent) {
 
                 this.userId = oEvent.getParameter("arguments").userId;
-                //  console.warn(userId);
-                this.loadData();
-                this.loadDataIntoUser(this.userId);
+                console.log( " UserId im DashboardController die durch Login übergeben wurde "  + this.userId);
+                // this.loadData();
+                // this.loadDataIntoUser(this.userId);
 
-               
+               debugger;
 
 
 
@@ -40,7 +40,7 @@ sap.ui.define([
 
 
             },
-
+            /*
             loadData: function () {
                
 
@@ -126,8 +126,9 @@ sap.ui.define([
 
                 
             },
+                */
 
-
+            /*
             loadDataIntoUser: function (userId) {
 
                 var oUserModel = new sap.ui.model.json.JSONModel();
@@ -209,7 +210,7 @@ sap.ui.define([
 
 
             },
-
+            */
             employeeHandleClick: function () {
 
 

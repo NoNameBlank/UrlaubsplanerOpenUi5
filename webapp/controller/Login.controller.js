@@ -33,7 +33,7 @@ sap.ui.define([
                     data: $.param({ "userName": sBenutzerLogin, "passwort": sBenutzerPasswort }),
                     async: false,
                     success: function (data, textStatus, jqXHR) {
-                        debugger;
+        
                         console.log(data);
 
                         that.getOwnerComponent().getRouter().navTo("RouteDashboard", {
@@ -44,13 +44,14 @@ sap.ui.define([
                         // oModel.setData(data);
                     },
                     error: function (oResponse) {
-                        debugger;
+                        
                         sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
                     }
 
                 });
 
                 this.getView().setModel(oModel);
+                console.log("oModel Ausgabe nach setModel(oModel) " + oModel);
 
                 // var userId = this.checkUserExist(sBenutzerLogin, sBenutzerPasswort);
 
