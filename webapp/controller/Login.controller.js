@@ -22,6 +22,8 @@ sap.ui.define([
 
                 var oModel = new sap.ui.model.xml.XMLModel();
                 var that = this;
+                debugger;   
+                //test KOMMENTAR
 
                 var aData = jQuery.ajax({
                     type: "GET",
