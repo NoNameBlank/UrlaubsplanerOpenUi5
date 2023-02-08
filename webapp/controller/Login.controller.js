@@ -5,7 +5,7 @@ sap.ui.define([
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller,ODataModel) {
+    function (Controller, ODataModel) {
         "use strict";
 
         return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Login", {
@@ -17,27 +17,56 @@ sap.ui.define([
                 //         oRouter.navTo("RouteDashboard");
                 //Test Kommentar für Push
 
-                this.loadData();//
-                // var sBenutzerLogin = this.byId("benutzerInput").getValue();
-                // var sBenutzerPasswort = this.byId("passwordInput").getValue();
-            
+                var sBenutzerLogin = this.byId("benutzerInput").getValue();
+                var sBenutzerPasswort = this.byId("passwordInput").getValue();
+
+                var oModel = new sap.ui.model.xml.XMLModel();
+                var that = this;
+
+                var aData = jQuery.ajax({
+                    type: "GET",
+                    contentType: "application/xml",
+                    url: "http://localhost:3000/api/login",
+                    dataType: "json",
+                    data: $.param({ "userName": sBenutzerLogin, "passwort": sBenutzerPasswort }),
+                    async: false,
+                    success: function (data, textStatus, jqXHR) {
+                        debugger;
+                        console.log(data);
+
+                        that.getOwnerComponent().getRouter().navTo("RouteDashboard", {
+                            userId: data.userId
+
+                        });
+
+                        // oModel.setData(data);
+                    },
+                    error: function (oResponse) {
+                        debugger;
+                        sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
+                    }
+
+                });
+
+                this.getView().setModel(oModel);
+
                 // var userId = this.checkUserExist(sBenutzerLogin, sBenutzerPasswort);
-              
+
 
                 // if (!userId) {
                 //     sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
                 // } else {
-                                  
+
                 //     this.getOwnerComponent().getRouter().navTo("RouteDashboard", {
                 //          userId: userId 
-                         
+
                 //         });
-                        
-                        
+
+
                 // }
 
 
-        
+
 
 
 
@@ -50,24 +79,7 @@ sap.ui.define([
 
 
                 var oModel = this.getView().getModel("oUserModel");
-                var aEntries = oModel.getProperty("/people");
-                var oEntry = aEntries.find(function (oEntry) {
-                  
-                    return oEntry.name === loginName;
-                });
-                if (oEntry) {
-                    if (oEntry.passwort === loginPasswort) {
-                        return oEntry.id; //return
-                        
-                    } else {
-                        return false;
-                    }
 
-
-                } else {
-
-                    return false;
-                }
 
 
 
@@ -143,23 +155,28 @@ sap.ui.define([
                 //     },
                 //     ]
                 // });
-
-
-
-
                 // this.getView().setModel(oModel, "oUserModel");
 
-                var oDataModel = new ODataModel("/api",{
-                    type: "JSON"
-                });
-                oDataModel.read("/users", {
-                    success:  function(oResponse){
-                        console.log(oResponse);
-                    },
-                    error: function(oResponse){
-                        console.log(oResponse);
-                    }
-                })
+
+                // var oDataModel = new ODataModel("http://localhost:3000/",{
+                //     type: "JSON"
+                // });
+                // oDataModel.read("/users", {
+                //     success:  function(oResponse){
+                //         console.log(oResponse);
+                //     },
+                //     error: function(oResponse){
+                //         console.log(oResponse);
+                //     }
+                // })
+
+
+
+
+
+
+
+
             },
 
         });
