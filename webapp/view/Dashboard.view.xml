@@ -16,12 +16,13 @@
 				</VBox>
 				<VBox class="sapUiSmallMargin">
 
-					<Label text="Guten Tag {UserModel>/User/name}," />
-					<Label text="Du besitzt erweiterte Berechtigungen" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
-					<Label text = "{UserModel>/User/vacationLeft} Urlaubstage Verbleibend" />
-					<Label text = "Davon sind {UserModel>/User/vacationLastYear} Tage aus dem Vorjahr" />
-					<Label text = "Es wurden bereits {UserModel>/User/vacationPlaned} Tage beantragt" />
-					
+					<!-- <Label text="Guten Tag, {/userdetails/vorname}," /> -->
+					<Label text="Guten Tag {userDetail>/vorname} {userDetail>/nachname}!" />
+					<Label text = "Urlaubstage Verbleibend:  {userDetail>/restUrlaub} " />
+					<Label text = "Urlaubstage Verbleibend:  {userDetail>/gesUrlaub} " />
+					<Label text = "Davon sind  Tage aus dem Vorjahr" />
+					<Label text = "Es wurden bereits {userDetail>/gepUrlaubsTage} Tage beantragt" />
+					<Label text="Du besitzt erweiterte Berechtigungen" visible="{= ${/userdetails>/role} === 'Teamleiter' || ${/userdetails>/role} === 'Backoffice' ? true : false}"/>
 				</VBox>
 				<VBox>
 				</VBox>

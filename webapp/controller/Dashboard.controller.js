@@ -43,10 +43,12 @@ sap.ui.define([
                     url: "http://localhost:3000/api/userdetails",
                     dataType: "json",
                     data: $.param({ "userId": this.userId }),
-                    async: false,
+                    async: true,
                     success: function (data, textStatus, jqXHR) {
+                    console.log("Das müssten die Daten vom Eingeloggten User sein: ");
                     console.log(data);
-                    that.getView().setModel(new sap.ui.model.json.JSONModel(data));
+                    that.getView().setModel(new sap.ui.model.json.JSONModel(data),"userDetail");
+                    
                     },
                     error: function (oResponse) {
                     sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
@@ -355,8 +357,8 @@ sap.ui.define([
 
 
                 //Hole dir verbleibende und breitsgeplante Tage
-                var iUserRestTage = this.getView().getModel("UserModel").getProperty("/User/vacationLeft");
-                var iUserBeantragt = this.getView().getModel("UserModel").getProperty("/User/vacationPlaned");
+                // var iUserRestTage = this.getView().getModel("UserModel").getProperty("/User/vacationLeft");
+                // var iUserBeantragt = this.getView().getModel("UserModel").getProperty("/User/vacationPlaned");
 
 
                 //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
@@ -382,14 +384,14 @@ sap.ui.define([
                     //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
 
 
-                    this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
-                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
-                    this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
+                    // this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
+                    // this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
+                    // this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
 
                 } else {
-                    //Gebe Fehler Meldung mit Grund aus
-                    console.log("Error zu wenig UrlaubsTage");
-                    MessageToast.show(`Fehler ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast nur ${iUserRestTage} Tage zur Verfügung und hast versucht ${iTage} Tage zubeantragen. `)
+                    // //Gebe Fehler Meldung mit Grund aus
+                    // console.log("Error zu wenig UrlaubsTage");
+                    // MessageToast.show(`Fehler ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast nur ${iUserRestTage} Tage zur Verfügung und hast versucht ${iTage} Tage zubeantragen. `)
 
                 }
 
@@ -438,7 +440,7 @@ sap.ui.define([
                     tentative: true
                 })
 
-                this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
+                // this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
                 //this.byId("TeamPC").getModel("oTeamModel").setProperty("/Team/appointments", aAppointments);
 
 
