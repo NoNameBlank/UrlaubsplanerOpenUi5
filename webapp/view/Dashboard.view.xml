@@ -45,12 +45,12 @@
 					<IconTabFilter text="Urlaub" key="info">
 						<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.OwnVacationPC" type="XML"/>
 					</IconTabFilter>
-						<IconTabFilter text="Mitarbeiter" key="attachments">
-							<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.TeamVacationPC" type="XML"/>
-						</IconTabFilter>
+					<IconTabFilter text="Mitarbeiter" key="attachments">
+						<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.TeamVacationPC" type="XML"/>
+					</IconTabFilter>
 					</items>
 				</IconTabBar>
-				<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.EmployeeVacationPC" type="XML"/>
+				<!-- <core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.EmployeeVacationPC" type="XML"/> -->
 					
 				</VBox>
             

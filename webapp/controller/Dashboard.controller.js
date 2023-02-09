@@ -28,13 +28,19 @@ sap.ui.define([
 
                 this.userId = oEvent.getParameter("arguments").userId;
                 console.log(" UserId im DashboardController die durch Login übergeben wurde " + this.userId);
-                // this.loadData();
-                // this.loadDataIntoUser(this.userId);
+                this.loadData();
+                this.setFirstDay();
 
 
+
+            },
+            
+            loadData: function () {
+               
                 var oView = this.getView();
-                var oModel = new sap.ui.model.json.JSONModel("userDetail");
-
+                var oModel = new sap.ui.model.json.JSONModel();
+                var oKalenderModel = new sap.ui.model.json.JSONModel();
+                var aArray = [];
                 var that = this;
                 
                 jQuery.ajax({
@@ -44,143 +50,38 @@ sap.ui.define([
                     dataType: "json",
                     data: $.param({ "userId": this.userId }),
                     async: true,
-                    success: function (data, textStatus, jqXHR) {
+                    success: function (oResponse, textStatus, jqXHR) {
                         console.log("Das müssten die Daten vom Eingeloggten User sein: ");
-                        console.log(data);
-                        oModel.setProperty("/User", data.data);
+                        console.log(oResponse);
+                        //Durchlauf durch das Array mit allen Urlaubseinträgen des Users
+                        oResponse.data.appointments.forEach(urlaubsobjekt => {
+                            console.log(urlaubsobjekt);
+                            urlaubsobjekt.type = "Type05";
+                            var dateParts = urlaubsobjekt.startDatum.split(".");
+                            var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+                            urlaubsobjekt.startDatum = dateObject;
+                            dateParts = urlaubsobjekt.endDatum.split(".");
+                            dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+                            urlaubsobjekt.endDatum = dateObject;
+                        });
+
+
+                        oModel.setProperty("/User", oResponse.data);
                         oView.setModel(oModel, "userDetail");
+                        aArray.push(oResponse.data);
+                        
+                        oKalenderModel.setProperty("/people", aArray);
+                        oView.setModel(oKalenderModel, "urlaubKalenderModel");
+                        console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
+                        console.log(oKalenderModel);
+                        debugger;
                     },
                     error: function (oResponse) {
                         sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
                     }
-                });
-                    
-
-
-
-                /*
-
-                 var oModel = new sap.ui.model.xml.XMLModel();
-                var that = this;
-                
-                var aData = jQuery.ajax({
-                    type: "GET",
-                    contentType: "application/xml",
-                    url: "http://localhost:3000/api/users",
-                    dataType: "json",
-                    data: $.param({"userId": this.userId}),
-                    async: false,
-                    success: function (data, textStatus, jqXHR) {
-        
-                        console.log(data);
-                     
-                        
-                        // oModel.setData(data);
-                    },
-                    error: function (oResponse) {
-                        
-                        sap.m.MessageToast.show("Daten konnten nicht geladen werden.");
-                    }
-
-                });
-                debugger;
-                this.getView().setModel(oModel);
-                console.log("oModel Ausgabe nach setModel(oModel) " + oModel);
-                */
-
-
-                this.setFirstDay();
-
-
-
+                });                
             },
-            /*
-            loadData: function () {
-               
-
-
-                // MOCK-Data Team
-                var oTeamModel = new sap.ui.model.json.JSONModel();
-                oTeamModel.setData({
-                    people: [{
-                        id: 1,
-                        pic: "",
-                        name: "Jens",
-                        role: "Teamleiter",
-                        vacation: 31,
-                        vacationLeft: 4,
-                        vacationPlaned: 3,
-                        vacationLastYear: 10,
-                        freeDays: [5, 6],
-                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                        appointments: [{
-                            pic: "",
-                            title: "Urlaub",
-                            start: new Date(2023, 1, 1, 11, 30),
-                            end: new Date(2023, 2, 3, 11, 30),
-                            type: "Type03",
-                            tentative: true
-                        }],
-                    },
-                    {
-                        id: 2,
-                        pic: "",
-                        name: "Ulla",
-                        role: "Mitarbeiter",
-                        vacation: 31,
-                        vacationLeft: 4,
-                        vacationPlaned: 3,
-                        vacationLastYear: 10,
-                        freeDays: [5, 6],
-                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                        appointments: [{
-                            pic: "",
-                            title: "Urlaub",
-                            start: new Date(2023, 1, 1, 11, 30),
-                            end: new Date(2023, 2, 3, 11, 30),
-                            type: "Type03",
-                            tentative: true
-                        }],
-                    },
-                    {
-                        id: 3,
-                        pic: "",
-                        name: "Albert",
-                        role: "Mitarbeiter",
-                        vacation: 31,
-                        vacationLeft: 4,
-                        vacationPlaned: 3,
-                        vacationLastYear: 10,
-                        freeDays: [5, 6],
-                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                        appointments: [{
-                            pic: "",
-                            title: "Urlaub",
-                            start: new Date(2023, 1, 1, 11, 30),
-                            end: new Date(2023, 2, 3, 11, 30),
-                            type: "Type03",
-                            tentative: true
-                        }],
-                    },
-                    ]
-                });
                 
-
-               
-
-                
-                var aEntries = oTeamModel.getProperty("/peopleTeam");
-                var oTeamModel= aEntries;
-              
-
-
-
-
-
-
-                
-            },
-                */
 
             /*
             loadDataIntoUser: function (userId) {
@@ -266,39 +167,20 @@ sap.ui.define([
             },
             */
             employeeHandleClick: function () {
-
-
-
                 this.getOwnerComponent().getRouter().navTo("RouteEmployees");
-
             },
 
 
             urlaubsVerwaltungHandleClick: function () {
-
-
-
                 this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung", {
                     userId: this.userId,
-
                 });
-
-
-
             },
 
-
-
-
-
-
-
             getfirstDayOfWeek: function () {
-
                 var today = new Date();
                 var day = today.getDay();
                 return new Date(today.getFullYear(), today.getMonth(), today.getDate() - day + 1);
-
             },
 
             onOpenDialog: function () {
@@ -326,40 +208,22 @@ sap.ui.define([
                 // this.byId("datePicker").setValue(null);
                 //this.byId("datePicker2").setValue(null);
                 //this.byId("InputGrundRequired").setValue(null);
-
             },
 
 
             sendVacation: function () {
 
-
-
-
                 //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
 
-                // var oUser = this.getView().getModel("UserModel").getProperty("/User");
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
                 var today = new Date();
                 var day = today.getDay();
-
-
-
-
-
-
+                var iUserRestTage = this.getView().getModel("userDetail").getProperty("/User/restUrlaub");
                 //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
                 var diffTage = sUrlaubEnde.getTime() - sUrlaubStart.getTime();
                 //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
                 var iTage = Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
-
-
-
-
-                //Hole dir verbleibende und breitsgeplante Tage
-                // var iUserRestTage = this.getView().getModel("UserModel").getProperty("/User/vacationLeft");
-                // var iUserBeantragt = this.getView().getModel("UserModel").getProperty("/User/vacationPlaned");
-
 
                 //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
                 if (sUrlaubStart < today) {
@@ -381,31 +245,15 @@ sap.ui.define([
                     this.sUrlaubsVerwaltungEnde = sUrlaubEnde;
 
 
-                    //Pushe den geplante Urlaub + ändere die Models auf Aktuelle Werte    
-
-
-                    // this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
-                    // this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationLeft", iUserRestTage - iTage);
-                    // this.byId("OwnPC").getModel("UserModel").setProperty("/User/vacationPlaned", iUserBeantragt + iTage);
-
+                    //Aufruf der update funktion vom Backend  
+                    this.urlaubPush(sUrlaubStart, sUrlaubEnde);
                 } else {
-                    // //Gebe Fehler Meldung mit Grund aus
-                    // console.log("Error zu wenig UrlaubsTage");
-                    // MessageToast.show(`Fehler ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast nur ${iUserRestTage} Tage zur Verfügung und hast versucht ${iTage} Tage zubeantragen. `)
-
+                    //Gebe Fehler Meldung mit Grund aus
+                    console.log("Error zu wenig UrlaubsTage");
+                   
                 }
-
-
-
-
-                // var sUrlaubsGrund = this.byId("InputGrundRequired").getValue();
-
-
                 this.closeDialog();
-                //MessageToast.show(`Hallo ${this.getView().getModel("UserModel").getProperty("/User/name")}, du hast deinen Urlaubsantrag vom ${sUrlaubStart.toLocaleDateString()} bis zum ${sUrlaubEnde.toLocaleDateString()} abgeschickt`)
-
-                //Beantragter Urlaub wird in
-                //this.urlaubPush(sUrlaubStart, sUrlaubEnde, oUser);
+                
 
 
             },
@@ -414,7 +262,7 @@ sap.ui.define([
             setFirstDay: function () {
                 var Date = this.getfirstDayOfWeek();
                 var oKalender = [];
-                oKalender.push(this.byId("EmployeePC"));
+                // oKalender.push(this.byId("EmployeePC"));
                 oKalender.push(this.byId("OwnPC"));
                 oKalender.push(this.byId("TeamPC"));
                 oKalender.forEach(element => {
@@ -423,26 +271,42 @@ sap.ui.define([
 
             },
 
-            urlaubPush: function (sUrlaubStart, sUrlaubsEnde, oUser) {
+            urlaubPush: function (sUrlaubStart, sUrlaubsEnde) {
 
-                var aAppointments = oUser.appointments;
+                var oUser = this.getView().getModel("userDetail").getProperty("/User");
 
-                //Wichtig für Anzeige im Kalender
+                //Wichtig für Anzeige im Kalender (setzt das Ende auch auf 23:59 Uhr an dem Tag)
                 sUrlaubsEnde.setHours(23, 59);
 
-                console.log(sUrlaubsEnde);
-                aAppointments.push({
+                var oAppointment = {
                     pic: "",
+                    userId: oUser.userId,
                     title: "Urlaub",
                     start: new Date(sUrlaubStart),
                     end: new Date(sUrlaubsEnde),
-                    type: "Type05",
-                    tentative: true
-                })
+                    status: "beantragt"
+                }
 
-                // this.byId("OwnPC").getModel("UserModel").setProperty("/User/appointments", aAppointments);
-                //this.byId("TeamPC").getModel("oTeamModel").setProperty("/Team/appointments", aAppointments);
+                console.log(oAppointment);
 
+                //hier muss der Ajax Call rein mit einem push auf /Urlaub, mitgegebn wird dem Call oAppointment als data
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:3000/api/urlaub",
+                    dataType: "json",
+                    data: $.param({oAppointment}),
+                    async: true,
+                    success: function (oResponse, textStatus, jqXHR) {
+                        sap.m.MessageToast.show("Urlaub erfolgreich beantragt");
+                        console.log(oResponse);
+                        //nach dem Call muss ein erneutes laden der Daten erfolgen -> aufruf loaddata funktion
+                    },
+                    error: function (oResponse) {
+                        sap.m.MessageToast.show("Fehler beim Antrag einreichen.");
+                        console.log(oResponse);
+                    }
+                });         
+                
 
 
 

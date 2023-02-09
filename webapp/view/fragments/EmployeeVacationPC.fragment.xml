@@ -7,7 +7,7 @@
     <PlanningCalendar
             visible="{= ${userDetail>/user/role} === 'Mitarbeiter'  ? true : false }"
             id="EmployeePC"
-            rows="{path: 'userDetail>/'}"
+            rows="{path: 'userDetail>/people'}"
             appointmentsVisualization="Filled"
             appointmentSelect="handleAppointmentSelect"
             showEmptyIntervalHeaders="false"
@@ -41,7 +41,7 @@
         <rows>
             <PlanningCalendarRow
                 icon="{userDetail>pic}"
-                title="{userDetail>name}"
+                title="{userDetail>vorname}"
                 text="{userDetail>role}"
                 appointments="{path : 'userDetail>appointments', templateShareable: false}"
                 intervalHeaders="{path: 'userDetail>headers', templateShareable: false}">
