@@ -1,28 +1,28 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core">
     <Page id="page" showHeader="false">
         <content>
-            <Panel>
+            <Panel id="panel">
 			<headerToolbar>
-				<OverflowToolbar>
-					<Title text="Nutzerdaten"/>
-					<ToolbarSpacer/>
-					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsverwalten" press="urlaubsVerwaltungHandleClick" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
-					<OverflowToolbarButton icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"/>
+				<OverflowToolbar id="toolbar">
+					<Title id="titel" text="Nutzerdaten"/>
+					<ToolbarSpacer id ="deinErnst"/>
+					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsverwalten" press="urlaubsVerwaltungHandleClick" visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}"/>
+					<OverflowToolbarButton icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}"/>
 				</OverflowToolbar>
 			</headerToolbar>
-			<HBox class="container">
+			<HBox id="_IDGenHBox1" class="container">
 				<VBox class="sapUiSmallMargin">
 					<!-- <Avatar icon="sap-icon://person-placeholder"/> -->
 				</VBox>
 				<VBox class="sapUiSmallMargin">
 
 					<!-- <Label text="Guten Tag, {/userdetails/vorname}," /> -->
-					<Label text="Guten Tag {userDetail>/vorname} {userDetail>/nachname}!" />
-					<Label text = "Urlaubstage Verbleibend:  {userDetail>/restUrlaub} " />
-					<Label text = "Urlaubstage Verbleibend:  {userDetail>/gesUrlaub} " />
+					<Label text = "Guten Tag {userDetail>/User/vorname} {userDetail>/User/nachname}!" />
+					<Label text = "Urlaubstage Verbleibend:  {userDetail>/User/restUrlaub} " />
+					<Label text = "Urlaubstage Verbleibend:  {userDetail>/User/gesUrlaub} " />
 					<Label text = "Davon sind  Tage aus dem Vorjahr" />
-					<Label text = "Es wurden bereits {userDetail>/gepUrlaubsTage} Tage beantragt" />
-					<Label text="Du besitzt erweiterte Berechtigungen" visible="{= ${/userdetails>/role} === 'Teamleiter' || ${/userdetails>/role} === 'Backoffice' ? true : false}"/>
+					<Label text = "Es wurden bereits {userDetail>/User/gepUrlaubsTage} Tage beantragt" />
+					<Label text="Du besitzt erweiterte Berechtigungen" visible="{= ${/userdetails>/User/role} === 'Teamleiter' || ${/userdetails>/role} === 'Backoffice' ? true : false}"/>
 				</VBox>
 				<VBox>
 				</VBox>
@@ -38,7 +38,7 @@
             <VBox class="sapUiSmallMargin">
 			<IconTabBar
 				expandable="false"
-				visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}"
+				visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}"
 				id="idIconTabBarNoIcons"
 				class="sapUiResponsiveContentPadding">
 				<items>

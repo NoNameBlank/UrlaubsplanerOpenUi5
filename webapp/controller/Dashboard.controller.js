@@ -32,12 +32,12 @@ sap.ui.define([
                 // this.loadDataIntoUser(this.userId);
 
 
-                 var oModel = new sap.ui.model.xml.XMLModel();
+                var oView = this.getView();
+                var oModel = new sap.ui.model.json.JSONModel("userDetail");
+
                 var that = this;
                 
-                
-                    var that = this;
-                    jQuery.ajax({
+                jQuery.ajax({
                     type: "GET",
                     contentType: "application/xml",
                     url: "http://localhost:3000/api/userdetails",
@@ -45,15 +45,15 @@ sap.ui.define([
                     data: $.param({ "userId": this.userId }),
                     async: true,
                     success: function (data, textStatus, jqXHR) {
-                    console.log("Das müssten die Daten vom Eingeloggten User sein: ");
-                    console.log(data);
-                    that.getView().setModel(new sap.ui.model.json.JSONModel(data),"userDetail");
-                    
+                        console.log("Das müssten die Daten vom Eingeloggten User sein: ");
+                        console.log(data);
+                        oModel.setProperty("/User", data.data);
+                        oView.setModel(oModel, "userDetail");
                     },
                     error: function (oResponse) {
-                    sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
+                        sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
                     }
-                    });
+                });
                     
 
 
@@ -337,7 +337,7 @@ sap.ui.define([
 
                 //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
 
-                var oUser = this.getView().getModel("UserModel").getProperty("/User");
+                // var oUser = this.getView().getModel("UserModel").getProperty("/User");
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
                 var today = new Date();

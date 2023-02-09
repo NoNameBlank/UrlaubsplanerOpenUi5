@@ -5,9 +5,9 @@
     xmlns:core="sap.ui.core"
     xmlns:unified="sap.ui.unified">
     <PlanningCalendar
-            visible="{= ${UserModel>/User/role} === 'Mitarbeiter'  ? true : false }"
+            visible="{= ${userDetail>/user/role} === 'Mitarbeiter'  ? true : false }"
             id="EmployeePC"
-            rows="{path: 'UserModel>/people'}"
+            rows="{path: 'userDetail>/'}"
             appointmentsVisualization="Filled"
             appointmentSelect="handleAppointmentSelect"
             showEmptyIntervalHeaders="false"
@@ -40,32 +40,32 @@
         </views>
         <rows>
             <PlanningCalendarRow
-                icon="{UserModel>pic}"
-                title="{UserModel>name}"
-                text="{UserModel>role}"
-                appointments="{path : 'UserModel>appointments', templateShareable: false}"
-                intervalHeaders="{path: 'UserModel>headers', templateShareable: false}">
+                icon="{userDetail>pic}"
+                title="{userDetail>name}"
+                text="{userDetail>role}"
+                appointments="{path : 'userDetail>appointments', templateShareable: false}"
+                intervalHeaders="{path: 'userDetail>headers', templateShareable: false}">
                 <customData>
-                    <core:CustomData key="emp-name" value="{UserModel>name}" writeToDom="true"/>
+                    <core:CustomData key="emp-name" value="{userDetail>name}" writeToDom="true"/>
                 </customData>
                 <appointments>
                     <unified:CalendarAppointment
-                        startDate="{UserModel>start}"
-                        endDate="{UserModel>end}"
-                        icon="{UserModel>pic}"
-                        title="{UserModel>title}"
-                        text="{UserModel>info}"
-                        type="{UserModel>type}"
-                        tentative="{UserModel>tentative}">
+                        startDate="{userDetail>start}"
+                        endDate="{userDetail>end}"
+                        icon="{userDetail>pic}"
+                        title="{userDetail>title}"
+                        text="{userDetail>info}"
+                        type="{userDetail>type}"
+                        tentative="{userDetail>tentative}">
                     </unified:CalendarAppointment>
                 </appointments>
                 <intervalHeaders>
                     <unified:CalendarAppointment
-                        startDate="{UserModel>start}"
-                        endDate="{UserModel>end}"
-                        icon="{UserModel>pic}"
-                        title="{UserModel>title}"
-                        type="{UserModel>type}">
+                        startDate="{userDetail>start}"
+                        endDate="{userDetail>end}"
+                        icon="{userDetail>pic}"
+                        title="{userDetail>title}"
+                        type="{userDetail>type}">
                     </unified:CalendarAppointment>
                 </intervalHeaders>
             </PlanningCalendarRow>
