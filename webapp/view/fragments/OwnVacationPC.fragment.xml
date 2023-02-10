@@ -41,8 +41,8 @@
         <rows>
             <PlanningCalendarRow
                 icon="{urlaubKalenderModel>pic}"
-                title="{urlaubKalenderModel>vorname}"
-                text="{urlaubKalenderModel>role}"
+                title="{userDetail>/User/vorname}" 
+                text="{userDetail>/User/role}"
                 appointments="{path : 'urlaubKalenderModel>/appointments', templateShareable: false}"
                 >
                 <customData>
@@ -55,7 +55,7 @@
                         icon="{urlaubKalenderModel>pic}"
                         title="{urlaubKalenderModel>title}"
                         text="{urlaubKalenderModel>info}"
-                        type="Type03">
+                        type="Type05">
                     </unified:CalendarAppointment>
                 </appointments>
                 <!-- <intervalHeaders>

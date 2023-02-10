@@ -37,23 +37,40 @@ sap.ui.define([
             
             loadData: function () {
                
+                //in oView wird die Dashboard view geladen
                 var oView = this.getView();
+                //ein Objet vom Typ JSON Model erstellt (Für die User-Abfrage)
                 var oModel = new sap.ui.model.json.JSONModel();
+                //ein neues Model wird in JSON Format erstellt (für den Kalender)
                 var oKalenderModel = new sap.ui.model.json.JSONModel();
+                //ein Array wird deklariert (für die Appointments)
                 var aArray = [];
+                //this kann im ajax aufruf nicht verwendet werden
                 var that = this;
                 
+                //ajax ist ein Funktion von jQuery , dem man ein Object mit unten Stehen param übergeben kann
                 jQuery.ajax({
+                    //type: GET er soll nur Lesen 
                     type: "GET",
+                    //Für das Backend WIchtig, damit das Backend weiß wie die Informationen verarbeitet werden können
                     contentType: "application/xml",
+                    //die Route wo die Daten zu verfügung stehen
                     url: "http://localhost:3000/api/userdetails",
+                    //Format der Daten in data stehen
                     dataType: "json",
+                    //der Parameter userId wird mit an das Backendübergeben um mit dieser userId zugehörige werte aus dem Backend zu hohlen
                     data: $.param({ "userId": this.userId }),
+                   //async  Er wartet auf die Daten response 
                     async: true,
-                    success: function (oResponse, textStatus, jqXHR) {
-                        console.log("Das müssten die Daten vom Eingeloggten User sein: ");
-                        console.log(oResponse);
+                    
+                    //Sollte es Erfolgreich sein dann. function (oResponse, textStatus, jqXHR) ?
+                    success: function (oResponse) {
+                        // console.log("Das müssten die Daten vom Eingeloggten User sein: ");
+                        // console.log(oResponse);
                         //Durchlauf durch das Array mit allen Urlaubseinträgen des Users
+                        //oResponse: Das ist der Paramter den die Funktion erwartet
+                        //.data: im Backend wird ein  var data erstellt in dem die Angefragten Daten im Backed gespeichert werden und an das Frontend übergeben werden
+                        //.appointments: im Backend werden die User Daten in user.dataValues.appointments [] gespeichrt diese Appointments werden über die REsponse ans Frontend geschickt
                         oResponse.data.appointments.forEach(urlaubsobjekt => {
                             console.log(urlaubsobjekt);
                             urlaubsobjekt.type = "Type05";
@@ -65,12 +82,12 @@ sap.ui.define([
                             urlaubsobjekt.endDatum = dateObject;
                         });
 
-
+                        //in das oModel von Typ JSONModel wird mit dem Pramaeter "/User " das die dateb von oResonse.data erhält
                         oModel.setProperty("/User", oResponse.data);
                         oView.setModel(oModel, "userDetail");
                         aArray.push(oResponse.data);
-                        
-                        oKalenderModel.setProperty("/people", aArray);
+                        //Das ist das Model das in der Kalender geladen wird
+                        oKalenderModel.setProperty("/people", oResponse.data.appointments);
                         oView.setModel(oKalenderModel, "urlaubKalenderModel");
                         console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
                         console.log(oKalenderModel);
@@ -286,7 +303,7 @@ sap.ui.define([
                     end: new Date(sUrlaubsEnde),
                     status: "beantragt"
                 }
-
+                console.log("urlaubsPush oAppointment ausgabe!")
                 console.log(oAppointment);
 
                 //hier muss der Ajax Call rein mit einem push auf /Urlaub, mitgegebn wird dem Call oAppointment als data
