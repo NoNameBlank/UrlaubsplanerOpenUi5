@@ -77,6 +77,17 @@ sap.ui.define([
 
 
             },
+            onNavBack: function () {
+                var oHistory = History.getInstance();
+                var sPreviousHash = oHistory.getPreviousHash();
+    
+                if (sPreviousHash !== undefined) {
+                    window.history.go(-1);
+                } else {
+                    var oRouter = this.getOwnerComponent().getRouter();
+                    oRouter.navTo("overview", {}, true);
+                }
+            },
             //DIe FUnktion soll später i Backend geladen werden
             checkUserExist: function (loginName, loginPasswort) {
 

@@ -24,6 +24,17 @@ sap.ui.define([
 
 
             },
+            onNavBack: function () {
+                var oHistory = History.getInstance();
+                var sPreviousHash = oHistory.getPreviousHash();
+    
+                if (sPreviousHash !== undefined) {
+                    window.history.go(-1);
+                } else {
+                    var oRouter = this.getOwnerComponent().getRouter();
+                    oRouter.navTo("overview", {}, true);
+                }
+            },
             onRouteMatched: function (oEvent) {
 
                 this.userId = oEvent.getParameter("arguments").userId;
@@ -131,7 +142,7 @@ sap.ui.define([
                         name: "Ulla",
                         role: "Mitarbeiter",
                         vacation: 31,
-                        vacationLeft: 4,
+                        vacationLeft: 432,
                         vacationPlaned: 3,
                         vacationLastYear: 10,
                         freeDays: [5, 6],
@@ -184,7 +195,13 @@ sap.ui.define([
             },
             */
             employeeHandleClick: function () {
-                this.getOwnerComponent().getRouter().navTo("RouteEmployees");
+                
+                                  
+
+                this.getOwnerComponent().getRouter().navTo("RouteEmployees", 
+                {
+                    userId : this.userId
+                });                       
             },
 
 

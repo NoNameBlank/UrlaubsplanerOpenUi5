@@ -1,5 +1,9 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core">
-    <Page id="page" showHeader="false">
+    <Page id="page" showHeader="true" showNavButton="true" title="Nutzerdaten" navButtonPress=".onNavBack">
+	<headerContent>
+			<Button icon="sap-icon://task" tooltip="Urlaubsverwalten" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}" />
+			<Button icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}" />
+		</headerContent>
         <content>
             <Panel id="panel">
 			<headerToolbar>

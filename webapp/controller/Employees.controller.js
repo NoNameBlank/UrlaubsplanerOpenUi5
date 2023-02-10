@@ -6,8 +6,9 @@ sap.ui.define([
 	"sap/ui/core/format/DateFormat",
 	"sap/m/ToolbarSpacer",
 	"sap/ui/table/library",
-	"sap/ui/thirdparty/jquery"
-], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery) {
+	"sap/ui/thirdparty/jquery",
+    "sap/ui/core/Fragment",
+], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment) {
 	"use strict";
 
 	// shortcut for sap.ui.table.SortOrder
@@ -16,18 +17,25 @@ sap.ui.define([
 	return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Dashboard", {
 
 		onInit : function() {
-			
+			this.oOwnerComponent = this.getOwnerComponent();
+			this.oRouter = this.oOwnerComponent.getRouter();
+			this.oRouter.attachRouteMatched(this.onRouteMatched, this);
 			this.loadData();
 
 		},
 
+
 		onRouteMatched: function (oEvent) {
 
-			var userId = oEvent.getParameter("arguments").userId;
-
-			
+			this.userId = oEvent.getParameter("arguments").userId;
 
 
+		},
+		onNavBack: function () {
+			this.getOwnerComponent().getRouter().navTo("RouteDashboard", {
+				userId: this.userId 
+				
+			   });
 		},
 		loadData: function () {
 
@@ -38,11 +46,11 @@ sap.ui.define([
 					id: 1,
 					pic: "",
 					name: "Jens",
-					role: "Teamleiter",
+					role: "Backoffice",
 					vacation: 31,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
+					vacationLeft: 10,
+					vacationPlaned: 0,
+					vacationLastYear: 0,
 					freeDays: [5, 6],
 					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
 					appointments: [{
@@ -58,11 +66,11 @@ sap.ui.define([
 					id: 2,
 					pic: "",
 					name: "Ulla",
-					role: "Mitarbeiter",
+					role: "Teamleiter",
 					vacation: 31,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
+					vacationLeft: 10,
+					vacationPlaned: 0,
+					vacationLastYear: 0,
 					freeDays: [5, 6],
 					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
 					appointments: [{
@@ -125,14 +133,14 @@ sap.ui.define([
 					}],
 				},
 				{
-					id: 2,
+					id: 6,
 					pic: "",
-					name: "Ulla",
+					name: "Berthold",
 					role: "Mitarbeiter",
-					vacation: 31,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
+					vacation: 57,
+					vacationLeft: 22,
+					vacationPlaned: 35,
+					vacationLastYear: 5,
 					freeDays: [5, 6],
 					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
 					appointments: [{
@@ -145,14 +153,14 @@ sap.ui.define([
 					}],
 				},
 				{
-					id: 3,
+					id: 7,
 					pic: "",
-					name: "Albert",
+					name: "Rainer",
 					role: "Mitarbeiter",
-					vacation: 31,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
+					vacation: 57,
+					vacationLeft: 22,
+					vacationPlaned: 35,
+					vacationLastYear: 5,
 					freeDays: [5, 6],
 					freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
 					appointments: [{
@@ -175,6 +183,33 @@ sap.ui.define([
 			oTable.getBinding().sort(null);
 			this._resetSortingState();
 		},
+		
+
+		
+
+		  bearbeiten: function () {
+			var oTable = this.byId("table");
+			var aSelectedIndices = oTable.getSelectedIndices();
+			console.log(aSelectedIndices);
+			var oView = this.getView();
+			// create dialog lazily
+			
+			if (!this.byId("EmployeeEditDialog")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: oView.getId(),
+					name: "urlaubsplaner.urlaubsplaner.view.dialogs.EmployeesEditDialog",
+					controller: this
+				}).then(function (oDialog) {
+					// connect dialog to the root view 
+					//of this component (models, lifecycle)
+					oView.addDependent(oDialog);
+					oDialog.open();
+				});
+			} else {
+				this.byId("EmployeeEditDialog").open();
+			}
+		},
 
 		sortCategories : function(oEvent) {
 			var oView = this.getView();
@@ -184,6 +219,10 @@ sap.ui.define([
 			oTable.sort(oCategoriesColumn, this._bSortColumnDescending ? SortOrder.Descending : SortOrder.Ascending, /*extend existing sorting*/true);
 			this._bSortColumnDescending = !this._bSortColumnDescending;
 		},
+		
+	
+
+
 
 		sortCategoriesAndName : function(oEvent) {
 			var oView = this.getView();
