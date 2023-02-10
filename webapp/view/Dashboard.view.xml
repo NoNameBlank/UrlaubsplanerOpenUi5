@@ -6,14 +6,14 @@
 		</headerContent>
         <content>
             <Panel id="panel">
-			<headerToolbar>
+			<!-- <headerToolbar>
 				<OverflowToolbar id="toolbar">
 					<Title id="titel" text="Nutzerdaten"/>
 					<ToolbarSpacer id ="deinErnst"/>
 					<OverflowToolbarButton  icon="sap-icon://task" tooltip="Urlaubsverwalten" press="urlaubsVerwaltungHandleClick" visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}"/>
 					<OverflowToolbarButton icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}"/>
 				</OverflowToolbar>
-			</headerToolbar>
+			</headerToolbar> -->
 			<HBox id="_IDGenHBox1" class="container">
 				<VBox class="sapUiSmallMargin">
 					<!-- <Avatar icon="sap-icon://person-placeholder"/> -->
