@@ -66,7 +66,7 @@ sap.ui.define([
                     //Für das Backend WIchtig, damit das Backend weiß wie die Informationen verarbeitet werden können
                     contentType: "application/xml",
                     //die Route wo die Daten zu verfügung stehen
-                    url: "http://localhost:3000/api/userdetails",
+                    url: "http://localhost:3000/api/userById",
                     //Format der Daten in data stehen
                     dataType: "json",
                     //der Parameter userId wird mit an das Backendübergeben um mit dieser userId zugehörige werte aus dem Backend zu hohlen

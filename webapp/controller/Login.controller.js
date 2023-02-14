@@ -28,7 +28,7 @@ sap.ui.define([
                 var aData = jQuery.ajax({
                     type: "GET",
                     contentType: "application/xml",
-                    url: "http://localhost:3000/api/login",
+                    url: "http://localhost:3000/api/userDetail",
                     dataType: "json",
                     data: $.param({ "userName": sBenutzerLogin, "passwort": sBenutzerPasswort }),
                     async: false,
