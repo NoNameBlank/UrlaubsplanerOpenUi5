@@ -6,7 +6,7 @@
     xmlns:unified="sap.ui.unified">
     <PlanningCalendar
             id="TeamPC"
-            rows="{path: 'oTeamModel>/peopleTeam'}"
+            rows="{path: 'oTeamModel>/Team'}"
             appointmentsVisualization="Filled"
             appointmentSelect="handleAppointmentSelect"
             showEmptyIntervalHeaders="false"
@@ -39,7 +39,7 @@
         <rows>
             <PlanningCalendarRow
                 icon="{oTeamModel>pic}"
-                title="{oTeamModel>name}"
+                title="{oTeamModel>vorname} {oTeamModel>nachname}"
                 text="{oTeamModel>role}"
                 appointments="{path : 'oTeamModel>appointments', templateShareable: false}"
                 intervalHeaders="{path: 'oTeamModel>headers', templateShareable: false}">
@@ -48,21 +48,21 @@
                 </customData>
                 <appointments>
                     <unified:CalendarAppointment
-                        startDate="{oTeamModel>start}"
-                        endDate="{oTeamModel>end}"
+                        startDate="{oTeamModel>startDatum}"
+                        endDate="{oTeamModel>endDatum}"
                         icon="{oTeamModel>pic}"
-                        title="{oTeamModel>title}"
-                        text="{oTeamModel>info}"
+                        title="{oTeamModel>titel}"
+                        text="{oTeamModel>status}"
                         type="{oTeamModel>type}"
                         tentative="{oTeamModel>tentative}">
                     </unified:CalendarAppointment>
                 </appointments>
                 <intervalHeaders>
                     <unified:CalendarAppointment
-                        startDate="{oTeamModel>start}"
-                        endDate="{oTeamModel>end}"
+                        startDate="{oTeamModel>startDatum}"
+                        endDate="{oTeamModel>endDatum}"
                         icon="{oTeamModel>pic}"
-                        title="{oTeamModel>title}"
+                        title="{oTeamModel>titel}"
                         type="{oTeamModel>type}">
                     </unified:CalendarAppointment>
                 </intervalHeaders>

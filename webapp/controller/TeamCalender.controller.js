@@ -10,6 +10,8 @@ function (Controller, JSONModel, MessageBox) {
 
         onInit: function () {
             // create model
+
+            //GET  /api/teamUrlaub
             var oModel = new JSONModel();
             oModel.setData({
                 startDate: new Date("2017", "0", "15", "8", "0"),

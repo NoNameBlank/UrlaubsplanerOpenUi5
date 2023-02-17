@@ -25,15 +25,9 @@ sap.ui.define([
 
             },
             onNavBack: function () {
-                var oHistory = History.getInstance();
-                var sPreviousHash = oHistory.getPreviousHash();
-    
-                if (sPreviousHash !== undefined) {
-                    window.history.go(-1);
-                } else {
-                    var oRouter = this.getOwnerComponent().getRouter();
-                    oRouter.navTo("overview", {}, true);
-                }
+                
+                var oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo("RouteLogin", {}, true);
             },
             onRouteMatched: function (oEvent) {
 
@@ -48,6 +42,9 @@ sap.ui.define([
             
             loadData: function () {
                
+                //GET /api/userById
+
+
                 //in oView wird die Dashboard view geladen
                 var oView = this.getView();
                 //ein Objet vom Typ JSON Model erstellt (Für die User-Abfrage)
@@ -57,7 +54,7 @@ sap.ui.define([
                 //ein Array wird deklariert (für die Appointments)
                 var aArray = [];
                 //this kann im ajax aufruf nicht verwendet werden
-                var that = this;
+                var oController = this;
                 
                 //ajax ist ein Funktion von jQuery , dem man ein Object mit unten Stehen param übergeben kann
                 jQuery.ajax({
@@ -77,7 +74,7 @@ sap.ui.define([
                     //Sollte es Erfolgreich sein dann. function (oResponse, textStatus, jqXHR) ?
                     success: function (oResponse) {
                         // console.log("Das müssten die Daten vom Eingeloggten User sein: ");
-                        // console.log(oResponse);
+                        console.log(oResponse.data);
                         //Durchlauf durch das Array mit allen Urlaubseinträgen des Users
                         //oResponse: Das ist der Paramter den die Funktion erwartet
                         //.data: im Backend wird ein  var data erstellt in dem die Angefragten Daten im Backed gespeichert werden und an das Frontend übergeben werden
@@ -85,12 +82,14 @@ sap.ui.define([
                         oResponse.data.appointments.forEach(urlaubsobjekt => {
                             console.log(urlaubsobjekt);
                             urlaubsobjekt.type = "Type05";
-                            var dateParts = urlaubsobjekt.startDatum.split(".");
-                            var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-                            urlaubsobjekt.startDatum = dateObject;
-                            dateParts = urlaubsobjekt.endDatum.split(".");
-                            dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+                            var dateObject = new Date(urlaubsobjekt.endDatum);
+                            console.log("EndDatum:");
+                            console.log(dateObject);
                             urlaubsobjekt.endDatum = dateObject;
+                            dateObject = new Date(urlaubsobjekt.startDatum);
+                            console.log("StartDatum:");
+                            console.log(dateObject);
+                            urlaubsobjekt.startDatum = dateObject;
                         });
 
                         //in das oModel von Typ JSONModel wird mit dem Pramaeter "/User " das die dateb von oResonse.data erhält
@@ -98,18 +97,60 @@ sap.ui.define([
                         oView.setModel(oModel, "userDetail");
                         aArray.push(oResponse.data);
                         //Das ist das Model das in der Kalender geladen wird
-                        oKalenderModel.setProperty("/people", oResponse.data.appointments);
+                        oKalenderModel.setProperty("/people", aArray);
                         oView.setModel(oKalenderModel, "urlaubKalenderModel");
                         console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
                         console.log(oKalenderModel);
-                        debugger;
+                        if(oResponse.data.role === "Teamleiter"){
+                            oController.loadOwnTeamData(oResponse.data.userId);
+                        }
+                       
                     },
                     error: function (oResponse) {
                         sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
                     }
-                });                
+                }); 
+                
+                
             },
                 
+            loadOwnTeamData: function(userId) {
+                var oView = this.getView();
+                var oModel = new sap.ui.model.json.JSONModel();
+                jQuery.ajax({
+                    type: "GET",
+                    contentType: "application/xml",
+                    url: "http://localhost:3000/api/userTeam",
+                    dataType: "json",
+                    data: $.param({ "teamLeiterId": userId }),
+                    async: true,
+                    success: function (oResponse) {
+                        
+                        oModel.setProperty("/Team", oResponse.data);
+                        oResponse.data.forEach(element => {
+                            element.appointments.forEach(urlaubsobjekt => {
+                                console.log(urlaubsobjekt);
+                                urlaubsobjekt.type = "Type05";
+                                var dateObject = new Date(urlaubsobjekt.endDatum);
+                                console.log("EndDatum:");
+                                console.log(dateObject);
+                                urlaubsobjekt.endDatum = dateObject;
+                                dateObject = new Date(urlaubsobjekt.startDatum);
+                                console.log("StartDatum:");
+                                console.log(dateObject);
+                                urlaubsobjekt.startDatum = dateObject;
+                            });
+                        });
+                       
+
+                        console.log(oModel);
+                        oView.setModel(oModel, "oTeamModel");
+                    },
+                    error: function (oResponse) {
+                        sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
+                    }
+                })
+            },
 
             /*
             loadDataIntoUser: function (userId) {
@@ -205,7 +246,7 @@ sap.ui.define([
             },
 
 
-            urlaubsVerwaltungHandleClick: function () {
+            vacationHandleClick: function () {
                 this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung", {
                     userId: this.userId,
                 });
@@ -239,9 +280,9 @@ sap.ui.define([
 
             closeDialog: function () {
                 this.byId("vacationPickerDialog").close();
-                // this.byId("datePicker").setValue(null);
-                //this.byId("datePicker2").setValue(null);
-                //this.byId("InputGrundRequired").setValue(null);
+                this.byId("datePicker").setValue(null);
+                this.byId("datePicker2").setValue(null);
+                this.byId("InputGrundRequired").setValue(null);
             },
 
 
@@ -249,8 +290,11 @@ sap.ui.define([
 
                 //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
 
+                // POST - /api/urlaub 
+
                 var sUrlaubStart = this.byId("datePicker").getDateValue();
                 var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+                var sTitel = this.byId("InputGrundRequired").getValue();
                 var today = new Date();
                 var day = today.getDay();
                 var iUserRestTage = this.getView().getModel("userDetail").getProperty("/User/restUrlaub");
@@ -280,7 +324,7 @@ sap.ui.define([
 
 
                     //Aufruf der update funktion vom Backend  
-                    this.urlaubPush(sUrlaubStart, sUrlaubEnde);
+                    this.urlaubPush(sUrlaubStart, sUrlaubEnde, sTitel);
                 } else {
                     //Gebe Fehler Meldung mit Grund aus
                     console.log("Error zu wenig UrlaubsTage");
@@ -296,7 +340,7 @@ sap.ui.define([
             setFirstDay: function () {
                 var Date = this.getfirstDayOfWeek();
                 var oKalender = [];
-                // oKalender.push(this.byId("EmployeePC"));
+                oKalender.push(this.byId("EmployeePC"));
                 oKalender.push(this.byId("OwnPC"));
                 oKalender.push(this.byId("TeamPC"));
                 oKalender.forEach(element => {
@@ -305,17 +349,17 @@ sap.ui.define([
 
             },
 
-            urlaubPush: function (sUrlaubStart, sUrlaubsEnde) {
+            urlaubPush: function (sUrlaubStart, sUrlaubsEnde, sTitel) {
 
                 var oUser = this.getView().getModel("userDetail").getProperty("/User");
-
+                var oController = this;
                 //Wichtig für Anzeige im Kalender (setzt das Ende auch auf 23:59 Uhr an dem Tag)
                 sUrlaubsEnde.setHours(23, 59);
 
                 var oAppointment = {
                     pic: "",
                     userId: oUser.userId,
-                    title: "Urlaub",
+                    title: sTitel,
                     start: new Date(sUrlaubStart),
                     end: new Date(sUrlaubsEnde),
                     status: "beantragt"
@@ -333,26 +377,22 @@ sap.ui.define([
                     success: function (oResponse, textStatus, jqXHR) {
                         sap.m.MessageToast.show("Urlaub erfolgreich beantragt");
                         console.log(oResponse);
-                        //nach dem Call muss ein erneutes laden der Daten erfolgen -> aufruf loaddata funktion
+                        oController.loadData();
                     },
                     error: function (oResponse) {
-                        sap.m.MessageToast.show("Fehler beim Antrag einreichen.");
-                        console.log(oResponse);
+                        if(oResponse.status === 200){
+                            sap.m.MessageToast.show("Urlaub erfolgreich beantragt");
+                            oController.loadData();
+                        }else{
+                            sap.m.MessageToast.show("Fehler beim Antrag einreichen.");
+                            console.log(oResponse);
+                        }
+                        
+                        
                     }
-                });         
-                
-
-
-
-
-
+                });      
 
             }
-
-
-
-
-
 
         });
     });

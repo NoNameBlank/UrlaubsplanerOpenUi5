@@ -20,7 +20,6 @@
             <PlanningCalendarView
                 key="D"
                 intervalType="Day"  
-                
                 description="Wochenansicht"
                 intervalsS="1"
                 intervalsM="3"
@@ -41,10 +40,10 @@
         <rows>
             <PlanningCalendarRow
                 icon="{urlaubKalenderModel>pic}"
-                title="{userDetail>/User/vorname}" 
+                title="{userDetail>/User/vorname} {userDetail>/User/nachname}" 
                 text="{userDetail>/User/role}"
-                appointments="{path : 'urlaubKalenderModel>/appointments', templateShareable: false}"
-                >
+                appointments="{path : 'urlaubKalenderModel>appointments', templateShareable: false}"
+                 intervalHeaders="{path: 'userDetail>headers', templateShareable: false}">
                 <customData>
                     <core:CustomData key="emp-name" value="{urlaubKalenderModel>name}" writeToDom="true"/>
                 </customData>
@@ -53,20 +52,20 @@
                         startDate="{urlaubKalenderModel>startDatum}"
                         endDate="{urlaubKalenderModel>endDatum}"
                         icon="{urlaubKalenderModel>pic}"
-                        title="{urlaubKalenderModel>title}"
-                        text="{urlaubKalenderModel>info}"
-                        type="Type05">
+                        title="{urlaubKalenderModel>titel}"
+                        text="{urlaubKalenderModel>status}"
+                        type="{urlaubKalenderModel>type}">
                     </unified:CalendarAppointment>
                 </appointments>
-                <!-- <intervalHeaders>
+                <intervalHeaders>
                     <unified:CalendarAppointment
                         startDate="{urlaubKalenderModel>startDatum}"
-                        endDate="{urlaubKalenderModel>startDatum}"
+                        endDate="{urlaubKalenderModel>endDatum}"
                         icon="{urlaubKalenderModel>pic}"
                         title="{urlaubKalenderModel>title}"
-                        type="Type03">
+                        type="{urlaubKalenderModel>type}">
                     </unified:CalendarAppointment>
-                </intervalHeaders> -->
+                </intervalHeaders>
             </PlanningCalendarRow>
         </rows>
     </PlanningCalendar>

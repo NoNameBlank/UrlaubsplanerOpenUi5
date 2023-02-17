@@ -1,15 +1,15 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.UrlaubsVerwaltung" xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns:c="sap.ui.core" xmlns:m="sap.m" height="100%">
-    <m:Page showHeader="false" enableScrolling="false" class="sapUiContentPadding">
+    <m:Page enableScrolling="false" class="sapUiContentPadding" showHeader="true" showNavButton="true" title="Urlaubsverwaltung" navButtonPress=".onNavBack">
         <m:content>
-            <Table id="table" selectionMode="MultiToggle"  rows="{path: 'oVacationModel>/urlaubsantraege'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title" type="Transperent">
+            <Table id="vacationTable" selectionMode="MultiToggle"  rows="{path: 'oTeamUrlaubsModel>/Urlaube'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title">
                 <extension>
                     <m:OverflowToolbar style="Clear">
-                        <m:Title id="title" text="Urlaubs Verwaltung" />
+                        <m:Title id="title" text="Beantragte Urlaube" />
                         <m:ToolbarSpacer />
-                        <m:Button id = "editBtn" icon="sap-icon://user-edit" tooltip="Benutzer bearbeiten" press="onEdit" />
-						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" press="onBock" visible="false" />
-						<m:Button id = "ablehnen" icon="sap-icon://cancel" tooltip="Urlaub ablehnen" press="onDecline" visible="false" />
-						<m:Button id = "zurueck" icon="sap-icon://nav-back" tooltip="Zurück" press="onBack" visible="false" />
+                        <m:Button id = "editBtn" icon="sap-icon://edit" tooltip="Bearbeiten" press="onEdit" />
+						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" press="onAccept" visible="false" />
+						<m:Button id = "ablehnen" icon="sap-icon://decline" tooltip="Urlaub ablehnen" press="onDecline" visible="false" />
+						<m:Button id = "zurueck" icon="sap-icon://cancel" tooltip="Zurück" press="onBack" visible="false" />
 						
                     </m:OverflowToolbar>
                 </extension>
@@ -17,54 +17,39 @@
                     <Column width="auto" >
                         <m:Label text="Mitarbeiter" />
                         <template>
-                            <m:Link text="{oVacationModel>name}" />
+                            <m:Link text="{oTeamUrlaubsModel>vorname} {oTeamUrlaubsModel>nachname}" />
                         </template>
                     </Column>
                     <Column id="name" width="auto" sortProperty="name">
                         <m:Label text="Urlaubs Start:" />
                         <template>
-                            <!-- <m:Text text="{oTeamModel>/appointments/title}" wrapping="false" /> -->
-                            <m:Text text="{oVacationModel>start}" wrapping="false" />
-                            <!-- <m:Text text="{= ${sDatumFormatiert}}" wrapping="false"/> -->
+                            <m:Text text="{oTeamUrlaubsModel>startDatum}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="categories" width="auto" showSortMenuEntry="false" sortProperty="Category">
                         <m:Label text="Urlaub Bis:" />
                         <template>
-                            <!-- <Text text="{
-											path: '/date',
-											type: 'sap.ui.model.type.Date',
-											formatOptions: {
-					          				style: 'short'
-															}
-											}" /> -->
-                            <m:Text text="{oVacationModel>end}" wrapping="false" />
+                            <m:Text text="{oTeamUrlaubsModel>endDatum}" wrapping="false" />
                         </template>
                     </Column>
                     <Column width="auto">
                         <m:Label text="Gesamt Urlaub" />
                         <template>
-                            <m:Text text="{oVacationModel>vacation}" wrapping="false" />
+                            <m:Text text="{oTeamUrlaubsModel>vacation}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="quantity" width="auto" sortProperty="Quantity">
                         <m:Label text="Rest Jahr Urlaub" />
                         <template>
-                            <m:Text text="{oVacationModel>vacationLeft}" wrapping="false" />
+                            <m:Text text="{oTeamUrlaubsModel>restUrlaub}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="deliverydate" width="auto" sortProperty="DeliveryDateStr">
-                        <m:Label text="Beantrage Tage" />
+                        <m:Label text="Status" />
                         <template>
-                            <m:Text text="{oVacationModel>vacationPlaned}" wrapping="false" />
+                            <m:Text text="{oTeamUrlaubsModel>status}" wrapping="false" />
                         </template>
                     </Column>
-                    <!-- <Column width="auto">
-						<m:Label text="Foto" />
-						<template>
-							<m:Link text="MA Show Image" href="{ProductPicUrl}" target="_blank"/>
-						</template>
-					</Column> -->
                 </columns>
                 <footer>
                     <m:OverflowToolbar id="infobar" />

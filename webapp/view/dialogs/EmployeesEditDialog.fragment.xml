@@ -5,13 +5,10 @@
 	xmlns:f="sap.ui.layout.form"
     xmlns:core="sap.ui.core">
 
-    <Dialog id="EmployeeEditDialog" title="Grüß Gott">
+    <Dialog id="EmployeeEditDialog" title="Mitarbeiter bearbeiten">
     <VBox class="sapUiSmallMargin">
 		<f:Form id="FormChange354434"
 			editable="true">
-			<f:title>
-				<core:Title text="Mitarbeiter bearbeiten" />
-			</f:title>
 			<f:layout>
 				<f:ResponsiveGridLayout
 					labelSpanXL="3"
@@ -31,31 +28,36 @@
 			<f:formContainers>
 				<f:FormContainer>
 					<f:formElements>
-						<f:FormElement label="Name">
+						<f:FormElement label="Nachname">
 							<f:fields>
-								<Input value="{oTeamModel>name}" id="name52"/>
+								<Input value="{oEditModel>/EditUser/nachname}" id="name52"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Vorname">
+							<f:fields>
+								<Input value="{oEditModel>/EditUser/vorname}" id="name"/>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Role">
 							<f:fields>
-								<Select id="Role" selectedKey="{role}">
+								<Select id="Role" selectedKey="{oEditModel>/EditUser/rolekey}">
 									<items>
-										<core:Item text="Mitarbeiter" key="England"/>
-										<core:Item text="Teamleiter" key="Germany"/>
-										<core:Item text="Backoffice" key="USA"/>
+										<core:Item text="Mitarbeiter" key="MA"/>
+										<core:Item text="Teamleiter" key="TL"/>
+										<core:Item text="Backoffice" key="BO"/>
 									</items>
 								</Select>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Gesamt Urlaub">
 							<f:fields>
-								<Input value="{oTeamModel>vacaion}">
+								<Input value="{oEditModel>/EditUser/gesUrlaub}">
                                 </Input>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Resturlaub">
 							<f:fields>
-								<Input value="{oTeamModel>vacation}">
+								<Input value="{oEditModel>/EditUser/restUrlaub}">
                                 </Input>
 							</f:fields>
 						</f:FormElement>
@@ -70,6 +72,13 @@
 			</f:formContainers>
 		</f:Form>
 	</VBox>
+	<endButton>
+            <Button text="Ändern" press=".sendChange" tooltip="Drücke hier um deinen Urlaubsantrag abzusenden" type="Accept"/>
+        </endButton>
+
+        <beginButton>
+            <Button text="Abbrechen" press=".closeDialog" tooltip="Drücke hier um abzubrechen" type="Reject"/>
+        </beginButton>
     </Dialog>
 
     </core:FragmentDefinition>

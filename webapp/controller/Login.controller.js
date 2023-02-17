@@ -25,7 +25,7 @@ sap.ui.define([
                 debugger;   
                 //test KOMMENTAR
 
-                var aData = jQuery.ajax({
+                jQuery.ajax({
                     type: "GET",
                     contentType: "application/xml",
                     url: "http://localhost:3000/api/userDetail",

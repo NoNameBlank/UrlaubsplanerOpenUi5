@@ -16,12 +16,7 @@ sap.ui.define([
 
 	return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Dashboard", {
 
-		// _data : {
-		// 	"date" : new Date()
-		// },
-
-
-		//Tessst Push
+		
 
 		onInit: function () {
 
@@ -40,7 +35,7 @@ sap.ui.define([
 		onRouteMatched: function (oEvent) {
 			//User Id der eingeloggt ist und den Urlaub beantragt hat
 			var userId = oEvent.getParameter("arguments").userId;
-			this.userId;
+			this.userId = userId;
 			console.log("Die Eingeloggte UserId: " + userId);
 
 
@@ -49,85 +44,43 @@ sap.ui.define([
 
 
 		},
-		loadData: function () {
-/*--------------------------------------Abfrage Welche urlaube mit dem Satutus "beantrag" sind und Lade sie in die View------------------*/
 
+		onNavBack: function () {
+			this.getOwnerComponent().getRouter().navTo("RouteDashboard", {
+				userId: this.userId
 
-
-
-
-
-
-
-
-
-/*------------------------------------------------------------------------------------------------------------------------ Mock DAta
-
-			// MOCK-Data Team
-
-
-			var oVacationModel = new sap.ui.model.json.JSONModel();
-			oVacationModel.setData({
-				urlaubsantraege: [{
-					urlaubsid: 1,
-					userid: 1,
-					pic: "",
-					name: "Jens",
-					vacation: 30,
-					vacationLeft: 4,
-					vacationPlaned: 3,
-					vacationLastYear: 10,
-					title: "Urlaub Jens",
-					start: new Date("2023/2/1").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
-					end: new Date("2023/2/5").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
-
-				},
-
-				{
-					urlaubsid: 2,
-					userid: 2,
-					pic: "",
-					name: "Ulla",
-					vacation: 30,
-					vacationLeft: 10,
-					vacationPlaned: 10,
-					vacationLastYear: 15,
-					title: "Urlaub Ulla",
-					start: new Date("2023/2/10").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
-					end: new Date("2023/2/14").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
-
-				},
-				{
-					urlaubsid: 3,
-					userid: 3,
-					pic: "",
-					name: "Albert",
-					vacation: 30,
-					vacationLeft: 8,
-					vacationPlaned: 15,
-					vacationLastYear: 20,
-					title: "Urlaub Albert",
-					start: new Date("2023/2/20").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
-					end: new Date("2023/2/22").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
-
-				},
-				]
 			});
+		},
 
-			// for (var i = 0; i < oVacationModel.urlaubsantraege.length; i++) {
-			// 	var oVacation = oVacationModel.urlaubsantraege[i];
-			// 	oVacation.start = this.formatDate(oVacation.start);
-			// 	oVacation.end = this.formatDate(oVacation.end);
-			// 	oVacation.push(oVacation);
-			// 	}
+		loadData: function () {
+			//Aufruf GET /Api/urlaubTeam
+			//nur Urlaube mit Status beantragt anzeigen
 
-			// debugger;
-
-
-
-			this.getView().setModel(oVacationModel, "oVacationModel");
--------------------------------------------------------------------------------------------------------------------Mockdata Ende---------------------------------------------------------*/
-
+			var oView = this.getView();
+			var oModel = new sap.ui.model.json.JSONModel();
+			var aUrlaube = [];
+			jQuery.ajax({
+				type: "GET",
+				contentType: "application/xml",
+				url: "http://localhost:3000/api/urlaubTeam",
+				dataType: "json",
+				data: $.param({ "teamLeiterId": this.userId }),
+				async: true,
+				success: function (oResponse) {
+					console.log(oResponse);
+					for (let index = 0; index < oResponse.length; index++) {
+						let urlaub = oResponse[index];
+						if(urlaub.status === "beantragt"){
+							aUrlaube.push(oResponse[index]);
+						}
+					}
+					oModel.setProperty("/Urlaube", aUrlaube);
+					oView.setModel(oModel, "oTeamUrlaubsModel");
+				},
+				error: function (oResponse) {
+					sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
+				}
+			})
 
 
 
@@ -135,8 +88,17 @@ sap.ui.define([
 
 		},
 
+		onSave: function() {
+			//Aufruf PUT /Api/urlaub	
+		},
+
+		onDecline: function(){
+			//Filter der ausgewählten Tabellenobjekte 
+			//aufruf DELETE /Api/urlaub
+		},
+
 		onEdit: function () {
-			this.byId("table").setSelectionMode("MultiToggle");
+			this.byId("vacationTable").setSelectionMode("MultiToggle");
 			this.byId("editBtn").setVisible(false);
 			this.byId("buchen").setVisible(true);
 			this.byId("ablehnen").setVisible(true);
@@ -150,75 +112,78 @@ sap.ui.define([
 			this.byId("buchen").setVisible(false);
 			this.byId("ablehnen").setVisible(false);
 			this.byId("zurueck").setVisible(false);
-			this.byId("table").setSelectionMode("None");
+			this.byId("vacationTable").setSelectionMode("None");
 		},
 
 		onActivateSelectionMode: function () {
 
-			this.byId("table").setSelectionMode("MultiToggle");
+			this.byId("vacationTable").setSelectionMode("MultiToggle");
 
 
 		},
 
 		onDeactivateSelectionMode: function () {
 
-			this.byId("table").setSelectionMode("None");
+			this.byId("vacationTable").setSelectionMode("None");
 
 
 
 		},
 
-		onBock: function () {
+		onAccept: function () {
 			
 
-			//wieso Funktioniert der Befehl nur wenn ich sap.m.Message davor schreibe?
-			//obwohl ich "sap/m/MessageToast", eingebunden habe?
+			//Aufruf POST  /api/urlaub
+			//
 			
-
-			var oTable = this.byId("table");
+			var oTable = this.byId("vacationTable");
 			var aSelectedIndices = oTable.getSelectedIndices();
-
-			var aUrlaubName = [];
+			var aUrlaube = [];
 			for (var i = 0; i < aSelectedIndices.length; i++) {
 				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
 				var oSelectedData = oSelectedContext.getObject();
-
-				aUrlaubName.push(oSelectedData.name);
-
-
+				oSelectedData.status = "genehmigt";
+				aUrlaube.push(oSelectedData);
 			}
-
-			console.log(" Glückwunsch Urlaub für Folgende MA genehmigt! " + aUrlaubName);
-			sap.m.MessageToast.show("Glückwunsch Urlaub für Folgende MA genehmigt! " + aUrlaubName);
-
-			//Entfernen von Datensätzen
-			this.deleteSelectedIndices(aSelectedIndices, oTable);
-		
-
-
-		
+			this.pushUrlaubData(aUrlaube);
 		},
 
 		onDecline: function () {
 
-			var oTable = this.byId("table");
+			//Aufruf DELETE /api/urlaub
+
+			var oTable = this.byId("vacationTable");
 			var aSelectedIndices = oTable.getSelectedIndices();
-			var aUrlaubName = [];
+			var aUrlaube = [];
 			for (var i = 0; i < aSelectedIndices.length; i++) {
 				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
 				var oSelectedData = oSelectedContext.getObject();
-
-				aUrlaubName.push(oSelectedData.name);
+				oSelectedData.status = "abgelehnt";
+				aUrlaube.push(oSelectedData);
 
 			}
-			console.log("var aUrlaubName " + aUrlaubName);
-			sap.m.MessageToast.show("Pech gehabt...  Urlaub für Folgende MA abgelehnt! " + aUrlaubName);
+			this.pushUrlaubData(aUrlaube);
+		},
 
-
-			//Entfernen von Datensätzen
-			this.deleteSelectedIndices(aSelectedIndices, oTable);
-
-
+		pushUrlaubData: function(aUrlaubArray){
+			aUrlaubArray.forEach(urlaub => {
+				jQuery.ajax({
+					type: "PUT",
+					contentType: "application/json",
+					url: "http://localhost:3000/api/urlaub",
+					dataType: "json",
+					data: JSON.stringify(urlaub),
+					async: true,
+					success: function (oResponse) {
+						sap.m.MessageToast.show("Update erfolgreich!")
+					},
+					error: function (oResponse) {
+						console.log(oResponse);
+						sap.m.MessageToast.show("Update erfolgreich!")
+					}
+				})
+			});
+			this.loadData();
 		},
 		
 		deleteSelectedIndices: function (aSelectedIndices, oTable){

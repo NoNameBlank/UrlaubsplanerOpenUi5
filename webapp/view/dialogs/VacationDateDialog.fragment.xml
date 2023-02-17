@@ -7,8 +7,8 @@
 
         <content>
 
-        <DatePicker id="datePicker" placeholder="Erster Urlaubstag" locale="de-DE" displayFormat="dd.MM.yyyy"/>
-        <DatePicker id="datePicker2" placeholder="Letzter Urlaubstag" locale="de-DE" displayFormat="dd.MM.yyyy"/>
+        <DatePicker id="datePicker" placeholder="Erster Urlaubstag" displayFormat="dd.MM.yyyy"/>
+        <DatePicker id="datePicker2" placeholder="Letzter Urlaubstag" displayFormat="dd.MM.yyyy"/>
         <Input
 				id="InputGrundRequired"
                 placeholder="Grund"
@@ -23,7 +23,7 @@
         </endButton>
 
         <beginButton>
-        <Button text="Abbrechen" press=".closeDialog" tooltip="Drücke hier um abzubrechen" type="Reject"/>
+            <Button text="Abbrechen" press=".closeDialog" tooltip="Drücke hier um abzubrechen" type="Reject"/>
         </beginButton>
 
     </Dialog>

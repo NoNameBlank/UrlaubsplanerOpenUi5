@@ -15,8 +15,8 @@
 		<m:content>
 			<Table
 				id="table"
-				selectionMode="MultiToggle"
-				rows="{oTeamModel>/people}"
+				selectionMode="None"
+				rows="{oTeamModel>/Users}"
 				visibleRowCount="7"
 				sort="sortDeliveryDate"
 				ariaLabelledBy="title">
@@ -24,10 +24,10 @@
 					<m:OverflowToolbar style="Clear">
 						<m:Title id="title" text="Mitarbeiter Verwaltung"/>
 						<m:ToolbarSpacer/>
-						<m:Button
+						<!-- <m:Button
 							icon="sap-icon://user-edit"
 							tooltip="Benutzer bearbeiten"
-							press="bearbeiten"/>
+							press="bearbeiten"/> -->
 						
 						
 						<m:Button
@@ -44,16 +44,25 @@
 					<Column width="auto">
 						<m:Label text="ID" />
 						<template>
-							<m:Text text="{oTeamModel>id}" wrapping="false"/>
+							<m:Text text="{oTeamModel>userId}" wrapping="false"/>
 						</template>
 					</Column>
 					<Column
-						id="name"
+						id="vorname"
 						width="auto"
-						sortProperty="name">
-						<m:Label text="Mitarbeiter" />
+						sortProperty="vorname">
+						<m:Label text="Vorname" />
 						<template>
-							<m:Text text="{oTeamModel>name}" wrapping="false" />
+							<m:Text text="{oTeamModel>vorname}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						id="nachname"
+						width="auto"
+						sortProperty="nachname">
+						<m:Label text="Nachname" />
+						<template>
+							<m:Text text="{oTeamModel>nachname}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
@@ -69,7 +78,7 @@
 					<Column width="auto">
 						<m:Label text="Gesamt Urlaub" />
 						<template>
-							<m:Text text="{oTeamModel>vacation}" wrapping="false"  />
+							<m:Text text="{oTeamModel>gesUrlaub}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column
@@ -79,7 +88,7 @@
 						sortProperty="Quantity">
 						<m:Label text="Rest Jahr Urlaub" />
 						<template>
-							<m:Text text="{oTeamModel>vacationLastYear}" wrapping="false"  />
+							<m:Text text="{oTeamModel>restUrlaub}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column
@@ -89,6 +98,28 @@
 						<m:Label text="Notiz" />
 						<template>
 							<m:Text text="Keine Notiz" />
+						</template>
+					</Column>
+					<Column
+						id="edit"
+						width="3.5rem">
+						<m:Label text=""/>
+						<template>
+							<m:Button icon="sap-icon://edit"
+							tooltip="Benutzer bearbeiten"
+							press="onEditUser"/>
+							
+						</template>
+					</Column>
+					<Column
+						id="reset"
+						width="3rem">
+						<m:Label text=""/>
+						<template>
+							<m:Button icon="sap-icon://reset"
+							tooltip="Passwort zurücksetzen"
+							press="onResetUser"/>
+							
 						</template>
 					</Column>
 				</columns>

@@ -5,9 +5,9 @@
     xmlns:core="sap.ui.core"
     xmlns:unified="sap.ui.unified">
     <PlanningCalendar
-            visible="{= ${userDetail>/user/role} === 'Mitarbeiter'  ? true : false }"
+            visible="{= ${userDetail>/User/role} === 'Mitarbeiter'  ? true : false }"
             id="EmployeePC"
-            rows="{path: 'userDetail>/people'}"
+            rows="{path: 'urlaubKalenderModel>/people'}"
             appointmentsVisualization="Filled"
             appointmentSelect="handleAppointmentSelect"
             showEmptyIntervalHeaders="false"
@@ -40,32 +40,31 @@
         </views>
         <rows>
             <PlanningCalendarRow
-                icon="{userDetail>pic}"
-                title="{userDetail>vorname}"
-                text="{userDetail>role}"
-                appointments="{path : 'userDetail>appointments', templateShareable: false}"
+                icon="{urlaubKalenderModel>pic}"
+                title="{userDetail>/User/vorname} {userDetail>/User/nachname}"
+                text="{userDetail>/User/role}"
+                appointments="{path : 'urlaubKalenderModel>appointments', templateShareable: false}"
                 intervalHeaders="{path: 'userDetail>headers', templateShareable: false}">
                 <customData>
                     <core:CustomData key="emp-name" value="{userDetail>name}" writeToDom="true"/>
                 </customData>
                 <appointments>
                     <unified:CalendarAppointment
-                        startDate="{userDetail>start}"
-                        endDate="{userDetail>end}"
-                        icon="{userDetail>pic}"
-                        title="{userDetail>title}"
-                        text="{userDetail>info}"
-                        type="{userDetail>type}"
-                        tentative="{userDetail>tentative}">
+                        startDate="{urlaubKalenderModel>startDatum}"
+                        endDate="{urlaubKalenderModel>endDatum}"
+                        icon="{urlaubKalenderModel>pic}"
+                        title="{urlaubKalenderModel>titel}"
+                        text="{urlaubKalenderModel>status}"
+                        type="{urlaubKalenderModel>type}">
                     </unified:CalendarAppointment>
                 </appointments>
                 <intervalHeaders>
                     <unified:CalendarAppointment
-                        startDate="{userDetail>start}"
-                        endDate="{userDetail>end}"
-                        icon="{userDetail>pic}"
-                        title="{userDetail>title}"
-                        type="{userDetail>type}">
+                        startDate="{urlaubKalenderModel>startDatum}"
+                        endDate="{urlaubKalenderModel>endDatum}"
+                        icon="{urlaubKalenderModel>pic}"
+                        title="{urlaubKalenderModel>titel}"
+                        type="{urlaubKalenderModel>type}">
                     </unified:CalendarAppointment>
                 </intervalHeaders>
             </PlanningCalendarRow>

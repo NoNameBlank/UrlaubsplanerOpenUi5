@@ -1,8 +1,8 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core">
     <Page id="page" showHeader="true" showNavButton="true" title="Nutzerdaten" navButtonPress=".onNavBack">
 	<headerContent>
-			<Button icon="sap-icon://task" tooltip="Urlaubsverwalten" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}" />
-			<Button icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${UserModel>/User/role} === 'Teamleiter' || ${UserModel>/User/role} === 'Backoffice' ? true : false}" />
+			<Button icon="sap-icon://task" tooltip="Urlaubsverwalten"  press="vacationHandleClick" visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}" />
+			<Button icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}" />
 		</headerContent>
         <content>
             <Panel id="panel">
@@ -24,9 +24,9 @@
 					<Label text = "Guten Tag {userDetail>/User/vorname} {userDetail>/User/nachname}!" />
 					<Label text = "Urlaubstage Verbleibend:  {userDetail>/User/restUrlaub} " />
 					<Label text = "Urlaubstage Verbleibend:  {userDetail>/User/gesUrlaub} " />
-					<Label text = "Davon sind  Tage aus dem Vorjahr" />
+					<Label text = "Davon sind  Tage aus dem Vorjahr Teeeeest" />
 					<Label text = "Es wurden bereits {userDetail>/User/gepUrlaubsTage} Tage beantragt" />
-					<Label text="Du besitzt erweiterte Berechtigungen" visible="{= ${/userdetails>/User/role} === 'Teamleiter' || ${/userdetails>/role} === 'Backoffice' ? true : false}"/>
+					<Label text="Du besitzt erweiterte Berechtigungen" visible="{= ${userDetail>/User/role} === 'Teamleiter' || ${userDetail>/User/role} === 'Backoffice' ? true : false}"/>
 				</VBox>
 				<VBox>
 				</VBox>
@@ -54,7 +54,7 @@
 					</IconTabFilter>
 					</items>
 				</IconTabBar>
-				<!-- <core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.EmployeeVacationPC" type="XML"/> -->
+				<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.EmployeeVacationPC" type="XML"/>
 					
 				</VBox>
             
