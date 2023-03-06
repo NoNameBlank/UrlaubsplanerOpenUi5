@@ -6,10 +6,10 @@
                     <m:OverflowToolbar style="Clear">
                         <m:Title id="title" text="Beantragte Urlaube" />
                         <m:ToolbarSpacer />
-                        <m:Button id = "editBtn" icon="sap-icon://edit" tooltip="Bearbeiten" press="onEdit" />
-						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" press="onAccept" visible="false" />
-						<m:Button id = "ablehnen" icon="sap-icon://decline" tooltip="Urlaub ablehnen" press="onDecline" visible="false" />
-						<m:Button id = "zurueck" icon="sap-icon://cancel" tooltip="Zurück" press="onBack" visible="false" />
+                        <m:Button id = "editBtn" icon="sap-icon://edit" tooltip="Bearbeiten" press="onEdit" visible="{= ${oTeamUrlaubsModel>/bEdit} === true ? false : true}" />
+						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" press="onAccept" visible="{oTeamUrlaubsModel>/bEdit}" />
+						<m:Button id = "ablehnen" icon="sap-icon://decline" tooltip="Urlaub ablehnen" press="onDecline" visible="{oTeamUrlaubsModel>/bEdit}" />
+						<m:Button id = "zurueck" icon="sap-icon://cancel" tooltip="Zurück" press="onAbortEdit" visible="{oTeamUrlaubsModel>/bEdit}" />
 						
                     </m:OverflowToolbar>
                 </extension>
@@ -21,13 +21,13 @@
                         </template>
                     </Column>
                     <Column id="name" width="auto" sortProperty="name">
-                        <m:Label text="Urlaubs Start:" />
+                        <m:Label text="Von" />
                         <template>
                             <m:Text text="{oTeamUrlaubsModel>startDatum}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="categories" width="auto" showSortMenuEntry="false" sortProperty="Category">
-                        <m:Label text="Urlaub Bis:" />
+                        <m:Label text="Bis" />
                         <template>
                             <m:Text text="{oTeamUrlaubsModel>endDatum}" wrapping="false" />
                         </template>

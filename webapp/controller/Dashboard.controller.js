@@ -32,9 +32,17 @@ sap.ui.define([
             onRouteMatched: function (oEvent) {
 
                 this.userId = oEvent.getParameter("arguments").userId;
+                this.token = oEvent.getParameter("arguments").token;
                 console.log(" UserId im DashboardController die durch Login übergeben wurde " + this.userId);
-                this.loadData();
-                this.setFirstDay();
+                if(this.token){
+                    this.loadData();
+                    this.setFirstDay();
+                }else{
+                    MessageToast.show("Deine Sitzung ist abgelaufen");
+                    var oRouter = oController.getOwnerComponent().getRouter();
+                    oRouter.navTo("RouteLogin", {}, true);
+                }
+                
 
 
 
@@ -67,7 +75,7 @@ sap.ui.define([
                     //Format der Daten in data stehen
                     dataType: "json",
                     //der Parameter userId wird mit an das Backendübergeben um mit dieser userId zugehörige werte aus dem Backend zu hohlen
-                    data: $.param({ "userId": this.userId }),
+                    data: $.param({ "userId": this.userId, "token" : this.token }),
                    //async  Er wartet auf die Daten response 
                     async: true,
                     
@@ -107,7 +115,11 @@ sap.ui.define([
                        
                     },
                     error: function (oResponse) {
-                        sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
+                        if(oResponse.status === 401){
+                            MessageToast.show("Deine Sitzung ist abgelaufen");
+                            var oRouter = oController.getOwnerComponent().getRouter();
+                            oRouter.navTo("RouteLogin", {}, true);
+                        }
                     }
                 }); 
                 
@@ -122,7 +134,7 @@ sap.ui.define([
                     contentType: "application/xml",
                     url: "http://localhost:3000/api/userTeam",
                     dataType: "json",
-                    data: $.param({ "teamLeiterId": userId }),
+                    data: $.param({ "token" : this.token, "teamLeiterId": userId }),
                     async: true,
                     success: function (oResponse) {
                         
@@ -147,101 +159,29 @@ sap.ui.define([
                         oView.setModel(oModel, "oTeamModel");
                     },
                     error: function (oResponse) {
-                        sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
+                        if(oResponse.status === 401){
+                            MessageToast.show("Deine Sitzung ist abgelaufen");
+                            var oRouter = oController.getOwnerComponent().getRouter();
+                            oRouter.navTo("RouteLogin", {}, true);
+                        }
                     }
                 })
             },
 
-            /*
-            loadDataIntoUser: function (userId) {
-
-                var oUserModel = new sap.ui.model.json.JSONModel();
-                oUserModel.setData({
-                    people: [{
-                        id: 1,
-                        pic: "",
-                        name: "Jens",
-                        role: "Teamleiter",
-                        vacation: 20,
-                        vacationLeft: 4,
-                        vacationPlaned: 3,
-                        vacationLastYear: 10,
-                        freeDays: [5, 6],
-                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                        appointments: [{
-                            pic: "",
-                            title: "Urlaub",
-                            start: new Date(2023, 1, 1, 11, 30),
-                            end: new Date(2023, 2, 3, 11, 30),
-                            type: "Type03",
-                            tentative: true
-                        }],
-                    },
-                    {
-                        id: 2,
-                        pic: "",
-                        name: "Ulla",
-                        role: "Mitarbeiter",
-                        vacation: 31,
-                        vacationLeft: 432,
-                        vacationPlaned: 3,
-                        vacationLastYear: 10,
-                        freeDays: [5, 6],
-                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                        appointments: [{
-                            pic: "",
-                            title: "Urlaub",
-                            start: new Date(2023, 1, 1, 11, 30),
-                            end: new Date(2023, 2, 3, 11, 30),
-                            type: "Type03",
-                            tentative: true
-                        }],
-                    },
-                    {
-                        id: 3,
-                        pic: "",
-                        name: "Albert",
-                        role: "Mitarbeiter",
-                        vacation: 31,
-                        vacationLeft: 4,
-                        vacationPlaned: 3,
-                        vacationLastYear: 10,
-                        freeDays: [5, 6],
-                        freeHours: [0, 1, 2, 3, 4, 5, 6, 17, 19, 20, 21, 22, 23],
-                        appointments: [{
-                            pic: "",
-                            title: "Urlaub",
-                            start: new Date(2023, 1, 1, 11, 30),
-                            end: new Date(2023, 2, 3, 11, 30),
-                            type: "Type03",
-                            tentative: true
-                        }]
-                    },
-                    ]
-                });
-              
-                var aEntries = oUserModel.getProperty("/people");
-
-                var oUser = aEntries.find(function (oUser) {
-                    return oUser.id === parseInt(userId);
-                })
-                oUserModel.setProperty("/User", oUser);
-
-                this.getView().setModel(oUserModel, "UserModel");
-
-               
-
-
-
-            },
-            */
             employeeHandleClick: function () {
                 
-                                  
-
                 this.getOwnerComponent().getRouter().navTo("RouteEmployees", 
                 {
-                    userId : this.userId
+                    userId : this.userId,
+                    token: this.token
+                });                       
+            },
+            teamHandleClick: function () {
+                
+                this.getOwnerComponent().getRouter().navTo("RouteTeams", 
+                {
+                    userId : this.userId,
+                    token: this.token
                 });                       
             },
 
@@ -249,6 +189,7 @@ sap.ui.define([
             vacationHandleClick: function () {
                 this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung", {
                     userId: this.userId,
+                    token: this.token
                 });
             },
 
@@ -383,7 +324,13 @@ sap.ui.define([
                         if(oResponse.status === 200){
                             sap.m.MessageToast.show("Urlaub erfolgreich beantragt");
                             oController.loadData();
-                        }else{
+                        }
+                        else{
+                            if(oResponse.status === 401){
+                                MessageToast.show("Deine Sitzung ist abgelaufen");
+                                var oRouter = oController.getOwnerComponent().getRouter();
+                                oRouter.navTo("RouteLogin", {}, true);
+                            }
                             sap.m.MessageToast.show("Fehler beim Antrag einreichen.");
                             console.log(oResponse);
                         }

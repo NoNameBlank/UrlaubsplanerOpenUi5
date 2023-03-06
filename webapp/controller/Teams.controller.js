@@ -122,7 +122,7 @@ sap.ui.define([
 
 		},
 
-		deleteEmployee: function () {
+		deleteTeam: function () {
 			var oTable = this.byId("oTeamModel");
 			var aSelectedIndices = oTable.getSelectedIndices();
 			var aUrlaube = [];
@@ -139,29 +139,13 @@ sap.ui.define([
 		
 
 		
-		onEditUser: function (e) {
+		onEditTeam: function (e) {
 			var oView = this.getView();
 			var sPath = e.getSource().getBindingContext('oTeamModel').getPath();
 			var oModel = this.getView().getModel('oTeamModel');
 			var oUserData = oModel.getProperty(sPath);
 			var oEditModel = new sap.ui.model.json.JSONModel();
-			switch (oUserData.role) {
-				case "Mitarbeiter":
-					oUserData.rolekey = "MA";
-					break;
-				case "Teamleiter":
-					oUserData.rolekey = "TL";
-					break;
-				case "Backoffice":
-					oUserData.rolekey = "BO";
-					break;
-				case "Admin":
-					oUserData.rolekey = "AD";
-					break;
-				default:
-					break;
-			}
-			oEditModel.setProperty("/EditUser", oUserData);
+			oEditModel.setProperty("/EditTeam", oUserData);
 			oView.setModel(oEditModel, "oEditModel");
 			console.log(oEditModel);
 			this.openDialog();
@@ -170,8 +154,8 @@ sap.ui.define([
 
 
 
-		onCreateUser: function () {
-			this.openCreateDialog();
+		onCreateTeam: function () {
+			this.openCreateTeamDialog();
 		},
 
 
@@ -180,22 +164,24 @@ sap.ui.define([
 
 					var oTable = this.byId("TeamTable");
 					var aSelectedIndices = oTable.getSelectedIndices();
-					var aEmployeesSelected = [];
+					console.log("Wurm" +aSelectedIndices)
+					var aTeamsSelected = [];
 					for (var i = 0; i < aSelectedIndices.length; i++) {
 						var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
 						var oSelectedData = oSelectedContext.getObject();
-						aEmployeesSelected.push(oSelectedData);
+						aTeamsSelected.push(oSelectedData);
+						console.log("aTeams" +aTeamsSelected)
 		
 					}
-					console.log(aEmployeesSelected)
+					console.log("Hallo" + oSelectedData)
 					var oController = this;
-					aEmployeesSelected.forEach(User => {
+					aTeamsSelected.forEach(Team => {
 						jQuery.ajax({
 							type: "DELETE",
 							contentType: "application/json",
-							url: "http://localhost:3000/api/user",
+							url: "http://localhost:3000/api/Team",
 							dataType: "json",
-							data: JSON.stringify({ "userId": User.userId, "token" : this.token}),
+							data: JSON.stringify({"token" : this.token, "teamLeiterId" : this.teamLeiterId}),
 							async: true,
 							success: function (oResponse) {
 								sap.m.MessageToast.show("Update erfolgreich!")
@@ -227,6 +213,13 @@ sap.ui.define([
 				async: true,
 				success: function (oResponse) {
 					console.log("Team Daten geladen!");
+					var oUserArray = oModel.getProperty("/Users");
+					oResponse.forEach(oTeam => {
+						var oTeamlead = oUserArray.find(function (oUser) {
+							return oUser.userId === oTeam.teamLeiterId;
+						});
+						oTeam.teamlead = oTeamlead;
+					});
 					oModel.setProperty("/Teams", oResponse)
 				},
 				error: function (oResponse) {
@@ -245,11 +238,11 @@ sap.ui.define([
 
 		openDialog: function(){
 			var oView = this.getView();
-			if (!this.byId("EmployeeEditDialog")) {
+			if (!this.byId("TeamsEditDialog")) {
 				// load asynchronous XML fragment
 				Fragment.load({
 					id: this.getView().getId(),
-					name: "urlaubsplaner.urlaubsplaner.view.dialogs.EmployeesEditDialog",
+					name: "urlaubsplaner.urlaubsplaner.view.dialogs.TeamsEditDialog",
 					controller: this
 				}).then(function (oDialog) {
 
@@ -257,18 +250,17 @@ sap.ui.define([
 					oDialog.open();
 				});
 			} else {
-				this.byId("EmployeeEditDialog").open();
+				this.byId("TeamsEditDialog").open();
 			}
 		},
 
 
-		openCreateDialog: function(){
+		openCreateTeamDialog: function(){
 			var oView = this.getView();
-			if (!this.byId("EmployeeCreateDialog")) {
-				// load asynchronous XML fragment
+			if (!this.byId("TeamsCreateDialog")) {
 				Fragment.load({
 					id: this.getView().getId(),
-					name: "urlaubsplaner.urlaubsplaner.view.dialogs.EmployeesCreateDialog",
+					name: "urlaubsplaner.urlaubsplaner.view.dialogs.TeamsCreateDialog",
 					controller: this
 				}).then(function (oDialog) {
 
@@ -276,7 +268,7 @@ sap.ui.define([
 					oDialog.open();
 				});
 			} else {
-				this.byId("EmployeeCreateDialog").open();
+				this.byId("TeamsCreateDialog").open();
 			}
 		},
 
@@ -313,18 +305,13 @@ sap.ui.define([
 
 	
 		closeEditDialog: function(){
-			this.byId("EmployeeEditDialog").close();
+			this.byId("TeamsEditDialog").close();
 		},
-		closeCreateDialog: function(){
+		closeTeamsCreateDialog: function(){
 			var oView = this.getView();
-			this.byId("EmployeeCreateDialog").close();
-			oView.byId("EmployeeCreateFirstname").setValue("");
-			oView.byId("EmployeeCreateLastname").setValue("");
-			oView.byId("EmployeeCreateVacation").setValue(0);
-			oView.byId("EmployeeCreateNote").setValue("");
-			oView.byId("EmployeeCreateUserName").setValue("");
-			oView.byId("EmployeeCreateRole").setSelectedIndex(0)
-			oView.byId("EmployeeCreateTeam").setSelectedIndex(0)
+			this.byId("TeamsCreateDialog").close();
+			oView.byId("TeamCreateName").setValue("");
+			oView.byId("TeamCreateNote").setValue("");
 			this.onAbortEdit();
 		},
 
@@ -335,45 +322,20 @@ sap.ui.define([
 			return cap;
 		},
 
-		createEmployee: function() {
+		createTeam: function() {
 			var oView = this.getView();
 			var oController = this;
-			var sUserName = oView.byId("EmployeeCreateUserName").getValue();
-			var sFirstNameUncap = oView.byId("EmployeeCreateFirstname").getValue();
-			var sLastNameUncap = oView.byId("EmployeeCreateLastname").getValue();
-			var sRole = oView.byId("EmployeeCreateRole").getSelectedItem().getText();
-			var sGesamtUrlaub = oView.byId("EmployeeCreateVacation").getValue();
-			var sNotiz = oView.byId("EmployeeCreateNote").getValue();
-			var sTeam = oView.byId("EmployeeCreateTeam").getSelectedKey();
-			var sRestUrlaub = 0;
-
-
-			var sFirstName = this.firstUp(sFirstNameUncap);
-			var sLastName = this.firstUp(sLastNameUncap);
-
-			var Emailformat = /\S+@\S+\.\S+/;
-			if (!Emailformat.test(sUserName)) {
-				sap.m.MessageToast.show("Der Benutzername muss eine gültige E-Mail-Adresse sein.");
-				return;
-			}
-
-			if (!sGesamtUrlaub) {
-				sap.m.MessageToast.show("Bitte geben Sie den Gesamturlaub an.");
-				return;
-			  }
+			var sTeamName= oView.byId("TeamCreateName").getValue();
+			var sTeamLeader = oView.byId("TeamEditTeamLeiterId").getSelectedKey();
+			
+			
 			
 			$.ajax({
-				url: "/api/user",
+				url: "/api/Team",
 				method: "POST",
 				data: {
-					username: sUserName,
-					vorname: sFirstName,
-					nachname: sLastName,
-					role: sRole,
-					gesUrlaub: sGesamtUrlaub,
-					restUrlaub: sRestUrlaub,
-					note: sNotiz,
-					teamId: sTeam,
+					teamLeiterId: sTeamLeader,
+					teamName: sTeamName,
 					token: this.token
 
 				},
@@ -388,7 +350,7 @@ sap.ui.define([
 				}
 			});
 		
-			this.closeCreateDialog();
+			this.closeTeamsCreateDialog();
 		},
 
 
@@ -446,43 +408,23 @@ sap.ui.define([
 			this.closeEditDialog();
 		},
 
+		getUserNameById: function(userId) {
+		
+			var oModel = this.getView().getModel('oTeamModel');
+
+			console.log(oModel);
+		},
+
+
 		onResetUserPW: function(e){
+			this.getUserNameById(6);
+			console.log("lol")
 			var sPath = e.getSource().getBindingContext('oTeamModel').getPath();
 			var oModel = this.getView().getModel('oTeamModel');
 			var oUserData = oModel.getProperty(sPath);
 			console.log(oUserData);
 			var oController = this;
-			$.ajax({
-				url: "/api/user",
-				method: "PUT",
-				contentType: "application/json",
-				dataType: "json",
-				async: true,
-				data: JSON.stringify({
-					userId: oUserData.userId,
-					passwort: "ABC123",
-					token: this.token
-				}),
-				success: function() {
-					sap.m.MessageToast.show(`Passwort von User ${ oUserData.username } wurde auf das Standardpasswort zurückgesetzt.`);
-					oController.loadData();
-				},
-				error: function(oResponse) {
-					console.log(oResponse);
-					if(oResponse.status === 200){
-						sap.m.MessageToast.show(`Passwort von User ${ oUserData.username } wurde auf das Standardpasswort zurückgesetzt.`);
-					}else{
-						if(oResponse.status === 401){
-                            MessageToast.show("Deine Sitzung ist abgelaufen");
-                            var oRouter = oController.getOwnerComponent().getRouter();
-                            oRouter.navTo("RouteLogin", {}, true);
-                        }
-						sap.m.MessageToast.show(`Passwort von User ${ oUserData.username } konnte nicht zurückgesetzt werden!`);
-					}
-					
-					oController.loadData();
-				}
-			});
+			
 
 		},
 

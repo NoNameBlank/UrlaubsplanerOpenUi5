@@ -34,12 +34,19 @@ sap.ui.define([
 
 		onRouteMatched: function (oEvent) {
 			//User Id der eingeloggt ist und den Urlaub beantragt hat
-			var userId = oEvent.getParameter("arguments").userId;
-			this.userId = userId;
-			console.log("Die Eingeloggte UserId: " + userId);
+			this.token = oEvent.getParameter("arguments").token;
 
-
-			this.loadData();
+			if(this.token){
+				this.loadData();
+				//User Id der eingeloggt ist und den Urlaub beantragt hat
+				var userId = oEvent.getParameter("arguments").userId;
+				this.userId = userId;
+				console.log("Die Eingeloggte UserId: " + userId);
+			}else{
+				MessageToast.show("Deine Sitzung ist abgelaufen");
+				var oRouter = oController.getOwnerComponent().getRouter();
+				oRouter.navTo("RouteLogin", {}, true);
+			}
 
 
 
@@ -47,7 +54,8 @@ sap.ui.define([
 
 		onNavBack: function () {
 			this.getOwnerComponent().getRouter().navTo("RouteDashboard", {
-				userId: this.userId
+				userId: this.userId,
+				token: this.token
 
 			});
 		},
@@ -58,6 +66,7 @@ sap.ui.define([
 
 			var oView = this.getView();
 			var oModel = new sap.ui.model.json.JSONModel();
+			oModel.setProperty("/bEdit", false);
 			var aUrlaube = [];
 			jQuery.ajax({
 				type: "GET",
@@ -78,7 +87,11 @@ sap.ui.define([
 					oView.setModel(oModel, "oTeamUrlaubsModel");
 				},
 				error: function (oResponse) {
-					sap.m.MessageToast.show("Fehler beim Laden der Benutzerdaten");
+					if(oResponse.status === 401){
+						MessageToast.show("Deine Sitzung ist abgelaufen");
+						var oRouter = oController.getOwnerComponent().getRouter();
+						oRouter.navTo("RouteLogin", {}, true);
+					}
 				}
 			})
 
@@ -99,16 +112,20 @@ sap.ui.define([
 
 		onEdit: function () {
 			this.byId("vacationTable").setSelectionMode("MultiToggle");
-			this.byId("editBtn").setVisible(false);
-			this.byId("buchen").setVisible(true);
-			this.byId("ablehnen").setVisible(true);
-			this.byId("zurueck").setVisible(true);
+			this.getView().getModel("oTeamUrlaubsModel").setProperty("/bEdit", true);
+
+		},
+
+		onAbortEdit: function () {
+			this.byId("vacationTable").setSelectionMode("None");
+			this.getView().getModel("oTeamUrlaubsModel").setProperty("/bEdit", false);
+			
 
 		},
 
 		onBack: function () {
 
-			this.byId("editBtn").setVisible(true);
+			this.byId("editBtn").setVisible(true);d
 			this.byId("buchen").setVisible(false);
 			this.byId("ablehnen").setVisible(false);
 			this.byId("zurueck").setVisible(false);
@@ -178,6 +195,11 @@ sap.ui.define([
 						sap.m.MessageToast.show("Update erfolgreich!")
 					},
 					error: function (oResponse) {
+						if(oResponse.status === 401){
+                            MessageToast.show("Deine Sitzung ist abgelaufen");
+                            var oRouter = oController.getOwnerComponent().getRouter();
+                            oRouter.navTo("RouteLogin", {}, true);
+                        }
 						console.log(oResponse);
 						sap.m.MessageToast.show("Update erfolgreich!")
 					}

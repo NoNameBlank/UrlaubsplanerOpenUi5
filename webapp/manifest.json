@@ -103,21 +103,28 @@
         },
         {
           "name": "RouteDashboard",
-          "pattern": "RouteDashboard/{userId}",
+          "pattern": "RouteDashboard/{userId}/{token}",
           "target": [
             "TargetDashboard"
           ]
         },
         {
           "name": "RouteEmployees",
-          "pattern": "RouteEmployees/{userId}",
+          "pattern": "RouteEmployees/{userId}/{token}",
           "target": [
             "TargetEmployees"
           ]
         },
         {
+          "name": "RouteTeams",
+          "pattern": "RouteTeams/{userId}/{token}",
+          "target": [
+            "TargetTeams"
+          ]
+        },
+        {
           "name": "RouteUrlaubsVerwaltung",
-          "pattern": "RouteUrlaubsVerwaltung/{userId}",
+          "pattern": "RouteUrlaubsVerwaltung/{userId}/{token}",
           "target": [
             "TargetUrlaubsVerwaltung"
           ]
@@ -140,6 +147,11 @@
           "viewType": "XML",
           "viewId": "Employees",
           "viewName": "Employees"
+        },
+        "TargetTeams": {
+          "viewType": "XML",
+          "viewId": "Teams",
+          "viewName": "Teams"
         },
         "TargetUrlaubsVerwaltung": {
           "viewType": "XML",

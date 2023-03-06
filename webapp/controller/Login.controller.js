@@ -22,7 +22,6 @@ sap.ui.define([
 
                 var oModel = new sap.ui.model.xml.XMLModel();
                 var that = this;
-                debugger;   
                 //test KOMMENTAR
 
                 jQuery.ajax({
@@ -30,15 +29,15 @@ sap.ui.define([
                     contentType: "application/xml",
                     url: "http://localhost:3000/api/userDetail",
                     dataType: "json",
-                    data: $.param({ "userName": sBenutzerLogin, "passwort": sBenutzerPasswort }),
+                    data: $.param({ "username": sBenutzerLogin, "passwort": sBenutzerPasswort }),
                     async: false,
                     success: function (data, textStatus, jqXHR) {
         
                         console.log(data);
 
                         that.getOwnerComponent().getRouter().navTo("RouteDashboard", {
-                            userId: data.userId
-
+                            userId: data.userId,
+                            token: data.token
                         });
 
                         // oModel.setData(data);
