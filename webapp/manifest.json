@@ -81,6 +81,11 @@
         {
           "uri": "css/style.css"
         }
+      ],
+      "js":[
+        {
+          "uri": "utils/xlsx.js"
+        }
       ]
     },
     "routing": {
@@ -159,6 +164,19 @@
           "viewName": "UrlaubsVerwaltung"
         }
       }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.viewReplacements": {
+          "myapp.view.App": {
+            "viewName": "myapp.ext.view.App",
+            "type": "XML"
+          }
+        }
+      }
+    },
+    "export": {
+      "manifest": "json"
     },
     "rootView": {
       "viewName": "urlaubsplaner.urlaubsplaner.view.App",

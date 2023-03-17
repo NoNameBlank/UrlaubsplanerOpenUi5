@@ -2,12 +2,14 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
+	"./helper/DataHelper",
+    "./helper/ResponseStatusHelper"
 
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, MessageToast, Fragment) {
+    function (Controller, MessageToast, Fragment, Datahelper, ResponseStatusHelper) {
         "use strict";
 
         return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Dashboard", {
@@ -15,6 +17,7 @@ sap.ui.define([
                 this.oOwnerComponent = this.getOwnerComponent();
                 this.oRouter = this.oOwnerComponent.getRouter();
                 this.oRouter.attachRouteMatched(this.onRouteMatched, this);
+                var oController = this;
 
 
 
@@ -29,10 +32,16 @@ sap.ui.define([
                 var oRouter = this.getOwnerComponent().getRouter();
                 oRouter.navTo("RouteLogin", {}, true);
             },
+            /**
+             * 
+             * @param { } oEvent 
+             */
             onRouteMatched: function (oEvent) {
-
+                var oController = this;
                 this.userId = oEvent.getParameter("arguments").userId;
                 this.token = oEvent.getParameter("arguments").token;
+                this.teamLeiterId = oEvent.getParameter("arguments").teamLeiterId;
+                console.log("TeamleiterID!" + this.teamLeiterId)
                 console.log(" UserId im DashboardController die durch Login übergeben wurde " + this.userId);
                 if(this.token){
                     this.loadData();
@@ -47,7 +56,9 @@ sap.ui.define([
 
 
             },
-            
+            /**
+             * 
+             */
             loadData: function () {
                
                 //GET /api/userById
@@ -64,29 +75,17 @@ sap.ui.define([
                 //this kann im ajax aufruf nicht verwendet werden
                 var oController = this;
                 
-                //ajax ist ein Funktion von jQuery , dem man ein Object mit unten Stehen param übergeben kann
-                jQuery.ajax({
-                    //type: GET er soll nur Lesen 
-                    type: "GET",
-                    //Für das Backend WIchtig, damit das Backend weiß wie die Informationen verarbeitet werden können
-                    contentType: "application/xml",
-                    //die Route wo die Daten zu verfügung stehen
-                    url: "http://localhost:3000/api/userById",
-                    //Format der Daten in data stehen
-                    dataType: "json",
-                    //der Parameter userId wird mit an das Backendübergeben um mit dieser userId zugehörige werte aus dem Backend zu hohlen
-                    data: $.param({ "userId": this.userId, "token" : this.token }),
-                   //async  Er wartet auf die Daten response 
-                    async: true,
-                    
-                    //Sollte es Erfolgreich sein dann. function (oResponse, textStatus, jqXHR) ?
-                    success: function (oResponse) {
-                        // console.log("Das müssten die Daten vom Eingeloggten User sein: ");
-                        console.log(oResponse.data);
-                        //Durchlauf durch das Array mit allen Urlaubseinträgen des Users
-                        //oResponse: Das ist der Paramter den die Funktion erwartet
-                        //.data: im Backend wird ein  var data erstellt in dem die Angefragten Daten im Backed gespeichert werden und an das Frontend übergeben werden
-                        //.appointments: im Backend werden die User Daten in user.dataValues.appointments [] gespeichrt diese Appointments werden über die REsponse ans Frontend geschickt
+                console.warn("LoadData geht los")
+
+
+
+
+            var oController = this;
+            var oParams = { "userId": this.userId, "token" : this.token };
+			var sURL = "http://localhost:3000/api/userById";
+
+			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+				console.log(oResponse);
                         oResponse.data.appointments.forEach(urlaubsobjekt => {
                             console.log(urlaubsobjekt);
                             urlaubsobjekt.type = "Type05";
@@ -99,12 +98,9 @@ sap.ui.define([
                             console.log(dateObject);
                             urlaubsobjekt.startDatum = dateObject;
                         });
-
-                        //in das oModel von Typ JSONModel wird mit dem Pramaeter "/User " das die dateb von oResonse.data erhält
                         oModel.setProperty("/User", oResponse.data);
                         oView.setModel(oModel, "userDetail");
                         aArray.push(oResponse.data);
-                        //Das ist das Model das in der Kalender geladen wird
                         oKalenderModel.setProperty("/people", aArray);
                         oView.setModel(oKalenderModel, "urlaubKalenderModel");
                         console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
@@ -112,16 +108,64 @@ sap.ui.define([
                         if(oResponse.data.role === "Teamleiter"){
                             oController.loadOwnTeamData(oResponse.data.userId);
                         }
+			}.bind(this)).catch(function(oError){
+				console.log(oError);
+				if(oError.status === 401){
+				 			MessageToast.show("Deine Sitzung ist abgelaufen");
+				 			var oRouter = oController.getOwnerComponent().getRouter();
+							oRouter.navTo("RouteLogin", {}, true);
+				}
+			})
+
+
+
+
+
+
+                // jQuery.ajax({
+                //     type: "GET",
+                //     contentType: "application/xml",
+                //     url: "http://localhost:3000/api/userById",
+                //     dataType: "json",
+                //     data: $.param({ "userId": this.userId, "token" : this.token }),
+                //     async: true,
+                    
+                //     success: function (oResponse) {
+                //         console.log(oResponse.data);
+                //         oResponse.data.appointments.forEach(urlaubsobjekt => {
+                //             console.log(urlaubsobjekt);
+                //             urlaubsobjekt.type = "Type05";
+                //             var dateObject = new Date(urlaubsobjekt.endDatum);
+                //             console.log("EndDatum:");
+                //             console.log(dateObject);
+                //             urlaubsobjekt.endDatum = dateObject;
+                //             dateObject = new Date(urlaubsobjekt.startDatum);
+                //             console.log("StartDatum:");
+                //             console.log(dateObject);
+                //             urlaubsobjekt.startDatum = dateObject;
+                //         });
+
+                //         oModel.setProperty("/User", oResponse.data);
+                //         oView.setModel(oModel, "userDetail");
+                //         aArray.push(oResponse.data);
+                //         oKalenderModel.setProperty("/people", aArray);
+                //         oView.setModel(oKalenderModel, "urlaubKalenderModel");
+                //         console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
+                //         console.log(oKalenderModel);
+                //         if(oResponse.data.role === "Teamleiter"){
+                //             oController.loadOwnTeamData(oResponse.data.userId);
+                //         }
                        
-                    },
-                    error: function (oResponse) {
-                        if(oResponse.status === 401){
-                            MessageToast.show("Deine Sitzung ist abgelaufen");
-                            var oRouter = oController.getOwnerComponent().getRouter();
-                            oRouter.navTo("RouteLogin", {}, true);
-                        }
-                    }
-                }); 
+                //     },
+                //     error: function (oResponse) {
+                //         if(oResponse.status === 401 || oResponse.status === 403){
+                //             MessageToast.show("Deine Sitzung ist abgelaufen");
+                //             var oRouter = oController.getOwnerComponent().getRouter();
+                //             oRouter.navTo("RouteLogin", {}, true);
+                //         }
+
+                //     }
+                // }); 
                 
                 
             },
@@ -129,43 +173,84 @@ sap.ui.define([
             loadOwnTeamData: function(userId) {
                 var oView = this.getView();
                 var oModel = new sap.ui.model.json.JSONModel();
-                jQuery.ajax({
-                    type: "GET",
-                    contentType: "application/xml",
-                    url: "http://localhost:3000/api/userTeam",
-                    dataType: "json",
-                    data: $.param({ "token" : this.token, "teamLeiterId": userId }),
-                    async: true,
-                    success: function (oResponse) {
-                        
-                        oModel.setProperty("/Team", oResponse.data);
-                        oResponse.data.forEach(element => {
-                            element.appointments.forEach(urlaubsobjekt => {
-                                console.log(urlaubsobjekt);
-                                urlaubsobjekt.type = "Type05";
-                                var dateObject = new Date(urlaubsobjekt.endDatum);
-                                console.log("EndDatum:");
-                                console.log(dateObject);
-                                urlaubsobjekt.endDatum = dateObject;
-                                dateObject = new Date(urlaubsobjekt.startDatum);
-                                console.log("StartDatum:");
-                                console.log(dateObject);
-                                urlaubsobjekt.startDatum = dateObject;
-                            });
-                        });
-                       
 
-                        console.log(oModel);
-                        oView.setModel(oModel, "oTeamModel");
-                    },
-                    error: function (oResponse) {
-                        if(oResponse.status === 401){
-                            MessageToast.show("Deine Sitzung ist abgelaufen");
-                            var oRouter = oController.getOwnerComponent().getRouter();
-                            oRouter.navTo("RouteLogin", {}, true);
-                        }
+
+                var oController = this;
+                var oParams = { "token" : this.token, "teamLeiterId": userId };
+			    var sURL = "http://localhost:3000/api/userTeam";
+
+
+                Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+                    oModel.setProperty("/Team", oResponse.data);
+                    oResponse.data.forEach(element => {
+                        element.appointments.forEach(urlaubsobjekt => {
+                            console.log(urlaubsobjekt);
+                            urlaubsobjekt.type = "Type05";
+                            var dateObject = new Date(urlaubsobjekt.endDatum);
+                            console.log("EndDatum:");
+                            console.log(dateObject);
+                            urlaubsobjekt.endDatum = dateObject;
+                            dateObject = new Date(urlaubsobjekt.startDatum);
+                            console.log("StartDatum:");
+                            console.log(dateObject);
+                            urlaubsobjekt.startDatum = dateObject;
+                        });
+                    });
+                   
+
+                    console.log(oModel);
+                    oView.setModel(oModel, "oTeamModel");
+                }.bind(this)).catch(function(oError){
+                    console.log(oError);
+                    if(oResponse.status === 401){
+                                 MessageToast.show("Deine Sitzung ist abgelaufen");
+                                 var oRouter = oController.getOwnerComponent().getRouter();
+                                oRouter.navTo("RouteLogin", {}, true);
                     }
                 })
+
+
+
+
+
+
+                // jQuery.ajax({
+                //     type: "GET",
+                //     contentType: "application/xml",
+                //     url: "http://localhost:3000/api/userTeam",
+                //     dataType: "json",
+                //     data: $.param({ "token" : this.token, "teamLeiterId": userId }),
+                //     async: true,
+                //     success: function (oResponse) {
+                        
+                //         oModel.setProperty("/Team", oResponse.data);
+                //         oResponse.data.forEach(element => {
+                //             element.appointments.forEach(urlaubsobjekt => {
+                //                 console.log(urlaubsobjekt);
+                //                 urlaubsobjekt.type = "Type05";
+                //                 var dateObject = new Date(urlaubsobjekt.endDatum);
+                //                 console.log("EndDatum:");
+                //                 console.log(dateObject);
+                //                 urlaubsobjekt.endDatum = dateObject;
+                //                 dateObject = new Date(urlaubsobjekt.startDatum);
+                //                 console.log("StartDatum:");
+                //                 console.log(dateObject);
+                //                 urlaubsobjekt.startDatum = dateObject;
+                //             });
+                //         });
+                       
+
+                //         console.log(oModel);
+                //         oView.setModel(oModel, "oTeamModel");
+                //     },
+                //     error: function (oResponse) {
+                //         if(oResponse.status === 401){
+                //             MessageToast.show("Deine Sitzung ist abgelaufen");
+                //             var oRouter = oController.getOwnerComponent().getRouter();
+                //             oRouter.navTo("RouteLogin", {}, true);
+                //         }
+                //     }
+                // })
             },
 
             employeeHandleClick: function () {
@@ -293,7 +378,6 @@ sap.ui.define([
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, sTitel) {
 
                 var oUser = this.getView().getModel("userDetail").getProperty("/User");
-                var oController = this;
                 //Wichtig für Anzeige im Kalender (setzt das Ende auch auf 23:59 Uhr an dem Tag)
                 sUrlaubsEnde.setHours(23, 59);
 
@@ -308,12 +392,12 @@ sap.ui.define([
                 console.log("urlaubsPush oAppointment ausgabe!")
                 console.log(oAppointment);
 
-                //hier muss der Ajax Call rein mit einem push auf /Urlaub, mitgegebn wird dem Call oAppointment als data
+                var oController = this;
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:3000/api/urlaub",
                     dataType: "json",
-                    data: $.param({oAppointment}),
+                    data: $.param({oAppointment, "token" : this.token}),
                     async: true,
                     success: function (oResponse, textStatus, jqXHR) {
                         sap.m.MessageToast.show("Urlaub erfolgreich beantragt");
@@ -321,19 +405,11 @@ sap.ui.define([
                         oController.loadData();
                     },
                     error: function (oResponse) {
-                        if(oResponse.status === 200){
-                            sap.m.MessageToast.show("Urlaub erfolgreich beantragt");
-                            oController.loadData();
-                        }
-                        else{
-                            if(oResponse.status === 401){
-                                MessageToast.show("Deine Sitzung ist abgelaufen");
-                                var oRouter = oController.getOwnerComponent().getRouter();
-                                oRouter.navTo("RouteLogin", {}, true);
-                            }
-                            sap.m.MessageToast.show("Fehler beim Antrag einreichen.");
-                            console.log(oResponse);
-                        }
+                        ResponseStatusHelper.handleStatusCode(oResponse,oController);
+                        console.warn("OController:")
+                        console.log(oController)
+                        oController.loadData();
+
                         
                         
                     }

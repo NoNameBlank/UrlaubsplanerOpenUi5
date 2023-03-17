@@ -9,7 +9,9 @@ sap.ui.define([
 	"sap/ui/thirdparty/jquery",
     "sap/ui/core/Fragment",
 	"sap/m/MessageToast",
-], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast) {
+	"./helper/ResponseStatusHelper",
+	"./helper/DataHelper"
+], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast, ResponseStatusHelper, Datahelper) {
 	"use strict";
 
 	// shortcut for sap.ui.table.SortOrder
@@ -69,6 +71,29 @@ sap.ui.define([
 			var oView = this.getView();
 			var oModel = oView.getModel("oTeamModel");
 			var oController = this;
+
+
+
+
+			// var oParams = { "token" : this.token};
+			// var sURL = "http://localhost:3000/api/User";
+
+			// Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+			// 	console.log(oResponse);
+			// 	oModel.setProperty("/Users", oResponse.users)
+			// 	oView.setModel(oModel, "oTeamModel");
+			// 	oController.loadTeamData();
+			// }.bind(this)).catch(function(oError){
+			// 	console.log(oError);
+			// 	if(oResponse.status === 401){
+			// 	 			MessageToast.show("Deine Sitzung ist abgelaufen");
+			// 	 			var oRouter = oController.getOwnerComponent().getRouter();
+			// 				oRouter.navTo("RouteLogin", {}, true);
+			// 	}
+			// })
+
+
+
 			jQuery.ajax({
 				type: "GET",
 				contentType: "application/xml",
@@ -187,6 +212,7 @@ sap.ui.define([
 						aEmployeesSelected.push(oSelectedData);
 		
 					}
+					console.warn("Grungo")
 					console.log(aEmployeesSelected)
 					var oController = this;
 					aEmployeesSelected.forEach(User => {
@@ -202,14 +228,8 @@ sap.ui.define([
 								oController.loadData();
 							},
 							error: function (oResponse) {
-								console.log(oResponse);
-								sap.m.MessageToast.show("Update nicht erfolgreich!")
+								ResponseStatusHelper.handleStatusCode(oResponse,oController);
 								oController.loadData();
-								if(oResponse.status === 401){
-									MessageToast.show("Deine Sitzung ist abgelaufen");
-									var oRouter = oController.getOwnerComponent().getRouter();
-									oRouter.navTo("RouteLogin", {}, true);
-								}
 							}
 						})})
 
@@ -217,6 +237,8 @@ sap.ui.define([
 
 
 		loadTeamData: function(){
+			var oModel = this.getView().getModel("oTeamModel");
+
 			var oModel = this.getView().getModel("oTeamModel");
 			jQuery.ajax({
 				type: "GET",
@@ -240,7 +262,9 @@ sap.ui.define([
 			})
 
 
+
 		},
+
 
 
 		openDialog: function(){
@@ -423,19 +447,7 @@ sap.ui.define([
 				},
 				error: function(oResponse) {
 
-					switch (oResponse.status) {
-						case 401:
-							MessageToast.show("Deine Sitzung ist abgelaufen");
-							var oRouter = oController.getOwnerComponent().getRouter();
-							oRouter.navTo("RouteLogin", {}, true);
-							break;
-						case 200:
-							sap.m.MessageToast.show(`Daten wurden geändert!`);
-							break;
-						default:
-							sap.m.MessageToast.show(`Ein Fehler ist aufgetreten!`);
-							break;
-					}
+					ResponseStatusHelper.handleStatusCode(oResponse,oController);
 					oView.getModel("oEditModel").setProperty("/EditUser", null);
 					oController.loadData();
 					

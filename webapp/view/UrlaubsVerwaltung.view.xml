@@ -7,6 +7,11 @@
                         <m:Title id="title" text="Beantragte Urlaube" />
                         <m:ToolbarSpacer />
                         <m:Button id = "editBtn" icon="sap-icon://edit" tooltip="Bearbeiten" press="onEdit" visible="{= ${oTeamUrlaubsModel>/bEdit} === true ? false : true}" />
+                        <m:Button
+							text="Download"
+							press="onExportVacButtonPress"
+							icon="sap-icon://excel-attachment"
+							type="Emphasized"/>
 						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" press="onAccept" visible="{oTeamUrlaubsModel>/bEdit}" />
 						<m:Button id = "ablehnen" icon="sap-icon://decline" tooltip="Urlaub ablehnen" press="onDecline" visible="{oTeamUrlaubsModel>/bEdit}" />
 						<m:Button id = "zurueck" icon="sap-icon://cancel" tooltip="Zurück" press="onAbortEdit" visible="{oTeamUrlaubsModel>/bEdit}" />

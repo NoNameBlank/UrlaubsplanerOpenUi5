@@ -37,8 +37,13 @@
 							icon="sap-icon://delete"
 							tooltip="Team löschen"
 							type="Reject"
-							press="onDeleteFlumbus"
+							press="onDeleteFundus"
 							visible="{oTeamModel>/bEdit}"/>
+						<m:Button
+							text="Download"
+							press="onExportButtonPress"
+							icon="sap-icon://excel-attachment"
+							type="Emphasized"/>
 						<m:Button
 							icon="sap-icon://edit"
 							tooltip="Bearbeitungsmodus betreten"
@@ -93,7 +98,7 @@
 						<m:Label text=""/>
 						<template>
 							<m:Button icon="sap-icon://edit"
-							tooltip="Benutzer bearbeiten"
+							tooltip="Team bearbeiten"
 							press="onEditTeam"/>
 						</template>
 					</Column>
@@ -102,6 +107,9 @@
 					<m:OverflowToolbar id="infobar"></m:OverflowToolbar>
 				</footer>
 			</Table>
+			
 		</m:content>
+		
 	</m:Page>
+	
 </mvc:View>

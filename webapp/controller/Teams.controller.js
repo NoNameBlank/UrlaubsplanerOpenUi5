@@ -9,7 +9,13 @@ sap.ui.define([
 	"sap/ui/thirdparty/jquery",
     "sap/ui/core/Fragment",
 	"sap/m/MessageToast",
-], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast) {
+	"sap/ui/core/util/Export",
+	"sap/ui/core/util/ExportTypeCSV",
+	"sap/m/MessageBox",
+	"urlaubsplaner/urlaubsplaner/utils/xlsx",
+	"./helper/ResponseStatusHelper",
+	"./helper/DataHelper"
+], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast, Export, ExportTypeCSV, MessageBox, xlsx, ResponseStatusHelper, Datahelper) {
 	"use strict";
 
 	// shortcut for sap.ui.table.SortOrder
@@ -63,12 +69,25 @@ sap.ui.define([
 		},
 		loadData: function () {
 
-			// MOCK-Data Team
+			//MOCK-Data Team
 			//Aufruf GET /Api/User
 
 			var oView = this.getView();
 			var oModel = oView.getModel("oTeamModel");
 			var oController = this;
+			// var oParams = {"token" : this.token};
+			// var sURL = "http://localhost:3000/api/User";
+
+			// Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+			// 	console.log(oResponse);
+			// 	oModel.setProperty("/Users", oResponse.users)
+			// 	oView.setModel(oModel, "oTeamModel");
+			// 	oController.loadTeamData();
+			// }.bind(this)).catch(function(oError){
+			// 	console.log(oError);
+			// })
+
+
 			jQuery.ajax({
 				type: "GET",
 				contentType: "application/xml",
@@ -83,11 +102,7 @@ sap.ui.define([
 					oController.loadTeamData();
 				},
 				error: function (oResponse) {
-					if(oResponse.status === 401){
-						MessageToast.show("Deine Sitzung ist abgelaufen");
-						var oRouter = oController.getOwnerComponent().getRouter();
-						oRouter.navTo("RouteLogin", {}, true);
-					}
+					ResponseStatusHelper.handleStatusCode(oResponse,oController);
 				}
 			})
 
@@ -147,7 +162,7 @@ sap.ui.define([
 			var oEditModel = new sap.ui.model.json.JSONModel();
 			oEditModel.setProperty("/EditTeam", oUserData);
 			oView.setModel(oEditModel, "oEditModel");
-			console.log(oEditModel);
+			console.log("OEditModel:" +oEditModel);
 			this.openDialog();
 			
 		},
@@ -159,51 +174,49 @@ sap.ui.define([
 		},
 
 
-		onDeleteFlumbus: function(){
-
-
-					var oTable = this.byId("TeamTable");
-					var aSelectedIndices = oTable.getSelectedIndices();
-					console.log("Wurm" +aSelectedIndices)
-					var aTeamsSelected = [];
-					for (var i = 0; i < aSelectedIndices.length; i++) {
-						var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
-						var oSelectedData = oSelectedContext.getObject();
-						aTeamsSelected.push(oSelectedData);
-						console.log("aTeams" +aTeamsSelected)
 		
-					}
-					console.log("Hallo" + oSelectedData)
-					var oController = this;
-					aTeamsSelected.forEach(Team => {
-						jQuery.ajax({
-							type: "DELETE",
-							contentType: "application/json",
-							url: "http://localhost:3000/api/Team",
-							dataType: "json",
-							data: JSON.stringify({"token" : this.token, "teamLeiterId" : this.teamLeiterId}),
-							async: true,
-							success: function (oResponse) {
-								sap.m.MessageToast.show("Update erfolgreich!")
-								oController.loadData();
-							},
-							error: function (oResponse) {
-								console.log(oResponse);
-								sap.m.MessageToast.show("Update nicht erfolgreich!")
-								oController.loadData();
-								if(oResponse.status === 401){
-									MessageToast.show("Deine Sitzung ist abgelaufen");
-									var oRouter = oController.getOwnerComponent().getRouter();
-									oRouter.navTo("RouteLogin", {}, true);
-								}
-							}
-						})})
-
-			},
 
 
 		loadTeamData: function(){
 			var oModel = this.getView().getModel("oTeamModel");
+
+
+
+
+
+
+
+
+			// var oParams = { "token" : this.token};
+			// var sURL = "http://localhost:3000/api/Team";
+
+			// Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+			// 	console.log("Team Daten geladen!");
+            //     var oUserArray = oModel.getProperty("/Users");
+			// 		oResponse.forEach(oTeam => {
+			// 			var oTeamlead = oUserArray.find(function (oUser) {
+			// 				return oUser.userId === oTeam.teamLeiterId;
+			// 			});
+			// 			oTeam.teamlead = oTeamlead;
+			// 		});
+			// 		oModel.setProperty("/Teams", oResponse)
+			// }.bind(this)).catch(function(oError){
+			// 	console.log(oError);
+			// 	if(oResponse.status === 401){
+			// 	 			MessageToast.show("Deine Sitzung ist abgelaufen");
+			// 	 			var oRouter = oController.getOwnerComponent().getRouter();
+			// 				oRouter.navTo("RouteLogin", {}, true);
+			// 	}
+            //     sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
+			// })
+
+
+
+
+
+
+
+			
 			jQuery.ajax({
 				type: "GET",
 				contentType: "application/json",
@@ -354,52 +367,55 @@ sap.ui.define([
 		},
 
 
-		editEmployee: function() {
+		editTeam: function() {
 			var oView = this.getView();
 			var oController = this;
-			var oEditEmployee = oView.getModel("oEditModel").getProperty("/EditUser");
-			var sRole = oView.byId("EmployeeEditRole").getSelectedItem().getText();
-			console.log(oEditEmployee);
+			var oEditTeam = oView.getModel("oEditModel").getProperty("/EditTeam");
+			var sTeamName= oView.byId("TeamEditName").getValue();
+			var sTeamLeader = oView.byId("TeamEditTeamLeiterId").getSelectedKey();
+			console.log(oEditTeam);
+
+
+
+
+
+
+			// var oParams = {teamLeiterId: sTeamLeader, teamName: sTeamName, teamId:  oEditTeam.teamId, token: this.token};
+			// var sURL = "http://localhost:3000/api/Team";
+
+			// Datahelper.update(sURL, oParams, oController).then(function(oResponse){
+			// 	console.log("Erfolgreich überarbeitet");
+			// 	oView.getModel("oEditModel").setProperty("/EditTeam", null);
+			// 	oController.loadData();
+			// }.bind(this)).catch(function(oError){
+			// 	ResponseStatusHelper.handleStatusCode(oResponse,oController);
+			// })
+
+
+
+
+
+
+
 			$.ajax({
-				url: "/api/user",
+				url: "/api/Team",
 				method: "PUT",
 				contentType: "application/json",
 				dataType: "json",
 				async: true,
 				data: JSON.stringify({
-					username: oEditEmployee.username,
-					vorname: oEditEmployee.vorname,
-					nachname:  oEditEmployee.nachname,
-					role:  sRole,
-					restUrlaub: oEditEmployee.restUrlaub,
-					gesUrlaub:  oEditEmployee.gesUrlaub,
-					note:  oEditEmployee.note,
-					teamId:  oEditEmployee.teamId,
-					userId: oEditEmployee.userId,
+					teamLeiterId: sTeamLeader,
+					teamName: sTeamName,
+					teamId:  oEditTeam.teamId,
 					token: this.token
 				}),
 				success: function() {
 					console.log("Erfolgreich überarbeitet");
-					oView.getModel("oEditModel").setProperty("/EditUser", null);
+					oView.getModel("oEditModel").setProperty("/EditTeam", null);
 					oController.loadData();
 				},
 				error: function(oResponse) {
-
-					switch (oResponse.status) {
-						case 401:
-							MessageToast.show("Deine Sitzung ist abgelaufen");
-							var oRouter = oController.getOwnerComponent().getRouter();
-							oRouter.navTo("RouteLogin", {}, true);
-							break;
-						case 200:
-							sap.m.MessageToast.show(`Daten wurden geändert!`);
-							break;
-						default:
-							sap.m.MessageToast.show(`Ein Fehler ist aufgetreten!`);
-							break;
-					}
-					oView.getModel("oEditModel").setProperty("/EditUser", null);
-					oController.loadData();
+					ResponseStatusHelper.handleStatusCode(oResponse,oController);
 					
 				}
 
@@ -407,6 +423,123 @@ sap.ui.define([
 		
 			this.closeEditDialog();
 		},
+
+
+		onExportButtonPress: function (){
+			var myDataModel = this.getView().getModel("oTeamModel");
+			var myTeamArray = myDataModel.getProperty("/Teams");
+			console.log(myTeamArray);
+			var myResultsArray = [];
+			
+			myTeamArray.forEach(Team => {
+				myResultsArray.push(Team);
+			});
+			myResultsArray.forEach(Team => {
+				if(Team.teamlead){
+					Team.Teamleiter = Team.teamlead.vorname + " " + Team.teamlead.nachname;
+					delete Team.teamlead;
+				}
+				
+			});
+
+
+			var workSheet = XLSX.utils.json_to_sheet(myResultsArray);
+
+			var workBook = XLSX.utils.book_new();
+			
+			XLSX.utils.book_append_sheet(workBook, workSheet, "My Data Export");
+			var sFilename = "My Data Export.xlsx";
+			XLSX.writeFile(workBook, sFilename);
+
+
+
+
+
+
+
+
+
+		},
+
+
+
+		onExportExcel: function () {
+			var oExport = new sap.ui.core.util.Export({
+				exportType: new sap.ui.core.util.ExportTypeCSV({
+					separatorChar: ";"
+				}),
+				models: this.getView().getModel('oTeamModel'),
+				rows: {
+					path: "/Teams"
+				},
+				columns: [{
+					name: "Team ID",
+					template: {
+						content: "{oTeamModel>teamId}"
+					}
+				}, {
+					name: "Team Name",
+					
+						content: "Grützi"
+			
+				}, {
+					name: "Teamleiter",
+					template: {
+						content: "{oTeamModel>teamlead/vorname} {oTeamModel>teamlead/nachname}"
+					}
+				}, {
+					name: "Notiz",
+					template: {
+						content: "{oTeamModel>note}"
+					}
+				}]
+			});
+		
+			oExport.saveFile().catch(function (oError) {
+				MessageBox.error("Stinkig\n\n" + oError);
+			}).then(function () {
+				oExport.destroy();
+			});
+		},
+
+
+
+
+		onDeleteFundus: function(){
+
+
+			var oTable = this.byId("TeamTable");
+			var aSelectedIndices = oTable.getSelectedIndices();
+			var aTeamsSelected = [];
+			for (var i = 0; i < aSelectedIndices.length; i++) {
+				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
+				var oSelectedData = oSelectedContext.getObject();
+				aTeamsSelected.push(oSelectedData);
+
+			}
+			console.warn("Grungo")
+			console.log(aTeamsSelected)
+			var oController = this;
+			aTeamsSelected.forEach(Team => {
+				console.log("Jetzt gehts los")
+				console.log(Team.teamId)
+				jQuery.ajax({
+					type: "DELETE",
+					contentType: "application/json",
+					url: "http://localhost:3000/api/Team",
+					dataType: "json",
+					data: JSON.stringify({ teamLeiterId: Team.teamLeiterId, teamId: Team.teamId, token : this.token}),
+					async: true,
+					success: function (oResponse) {
+						sap.m.MessageToast.show("Update erfolgreich!")
+						oController.loadData();
+					},
+					error: function (oResponse) {
+						ResponseStatusHelper.handleStatusCode(oResponse,oController);
+					}
+				})})
+
+	},
 
 		getUserNameById: function(userId) {
 		
