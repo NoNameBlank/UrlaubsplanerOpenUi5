@@ -45,14 +45,29 @@
 						</f:FormElement>
                         <f:FormElement label="Role">
 							<f:fields>
-								<Select id="EmployeeCreateRole">
-									<items>
-                                        <core:Item text="Mitarbeiter" key="MA"/>
-										<core:Item text="Teamleiter" key="TL"/>
-										<core:Item text="Backoffice" key="BO"/>
-									</items>
-								</Select>
-							</f:fields>
+        						<MultiComboBox id="EmployeeCreateRole" selectionChange=".onRoleSelectionChange" >
+            						<core:Item text="Mitarbeiter" key="Employee" />
+            						<core:Item text="Vorgesetzter" key="Supervisor" />
+									<core:Item text="Personalabteilung" key="HR" />
+            						<core:Item text="Admin" key="Admin" />
+        						</MultiComboBox>
+    						</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Berechtigungsstufe">
+							<f:fields>
+        						<Select id="EmployeeCreateAccess">
+            						<core:Item text="Berechtigung Level 1" key="Access1" />
+            						<core:Item text="Berechtigung Level 2" key="Access2" />
+									<core:Item text="Berechtigung Level 3" key="Access3" />
+									<core:Item text="Berechtigung Level 4" key="Access4" />
+									<core:Item text="Berechtigung Level 5" key="Access5" />
+									<core:Item text="Berechtigung Level 6" key="Access6" />
+									<core:Item text="Berechtigung Level 7" key="Access7" />
+									<core:Item text="Berechtigung Level 8" key="Access8" />
+									<core:Item text="Berechtigung Level 9" key="Access9" />
+									<core:Item text="Berechtigung Level Max" key="Access10" />
+        						</Select>
+    						</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Team">
 							<f:fields>

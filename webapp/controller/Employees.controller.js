@@ -142,6 +142,8 @@ sap.ui.define([
 
 		onAbortEdit: function () {
 			this.byId("TeamTable").setSelectionMode("None");
+			var oMultiComboBox = this.byId("EmployeeEditRoles");
+			console.log("zu mit dem aal")
 			this.getView().getModel("oTeamModel").setProperty("/bEdit", false);
 			
 
@@ -166,30 +168,81 @@ sap.ui.define([
 		
 		onEditUser: function (e) {
 			var oView = this.getView();
+			var oController = this;
+			var oEditModel = new sap.ui.model.json.JSONModel()
+			var oView = oController.getView();
 			var sPath = e.getSource().getBindingContext('oTeamModel').getPath();
-			var oModel = this.getView().getModel('oTeamModel');
+			var oModel = oView.getModel('oTeamModel');
 			var oUserData = oModel.getProperty(sPath);
-			var oEditModel = new sap.ui.model.json.JSONModel();
-			switch (oUserData.role) {
-				case "Mitarbeiter":
-					oUserData.rolekey = "MA";
-					break;
-				case "Teamleiter":
-					oUserData.rolekey = "TL";
-					break;
-				case "Backoffice":
-					oUserData.rolekey = "BO";
-					break;
-				case "Admin":
-					oUserData.rolekey = "AD";
-					break;
-				default:
-					break;
-			}
 			oEditModel.setProperty("/EditUser", oUserData);
 			oView.setModel(oEditModel, "oEditModel");
 			console.log(oEditModel);
-			this.openDialog();
+			var oSelectedItem = e.getSource().getBindingContext("oTeamModel").getObject();
+			if (!this.byId("EmployeeEditDialog")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: this.getView().getId(),
+					name: "urlaubsplaner.urlaubsplaner.view.dialogs.EmployeesEditDialog",
+					controller: this
+				}).then(function (oDialog) {
+					
+					// MultiComboBox-Steuerelement für die Rollen abrufen
+					var oMultiComboBox = oController.byId("EmployeeEditRoles");
+					oMultiComboBox.removeSelectedKeys(["Employee","Admin","Supervisor","HR"]);
+					
+				console.log("Alle weg first")
+					if (oSelectedItem.isAdmin === "1") {
+						oMultiComboBox.addSelectedKeys(["Admin"]);
+						console.log("Admin")
+						}
+						if (oSelectedItem.isHR === "1") {
+							oMultiComboBox.addSelectedKeys(["HR"]);
+						}
+						if (oSelectedItem.isSupervisor === "1") {
+							oMultiComboBox.addSelectedKeys(["Supervisor"]);
+						}
+						if (oSelectedItem.isEmployee === "1") {
+							oMultiComboBox.addSelectedKeys(["Employee"]);
+							console.log("Employee")
+					}
+					// if (oSelectedItem.isEmployee) {
+					// 	oMultiComboBox.addSelectedKeys(["Employee"]);
+					// }
+					if (!oSelectedItem.isSupervisor === "1" && !oSelectedItem.isHR === "1" && !oSelectedItem.isEmployee === "1" && !oSelectedItem.isAdmin === "1") {
+					console.warn("Tjerk")
+						oMultiComboBox.removeSelectedKeys();
+					}
+					oView.addDependent(oDialog);
+					oDialog.open();
+				});
+			} else {
+				// MultiComboBox-Steuerelement für die Rollen abrufen
+				var oMultiComboBox = oController.byId("EmployeeEditRoles");
+				console.log("Alle weg")
+				oMultiComboBox.removeSelectedKeys(["Employee","Admin","Supervisor","HR"]);
+				if (oSelectedItem.isAdmin === "1") {
+				oMultiComboBox.addSelectedKeys(["Admin"]);
+				console.log("Admin")
+				}
+				if (oSelectedItem.isHR === "1") {
+					oMultiComboBox.addSelectedKeys(["HR"]);
+				}
+				if (oSelectedItem.isSupervisor === "1") {
+					oMultiComboBox.addSelectedKeys(["Supervisor"]);
+				}
+				if (oSelectedItem.isEmployee === "1") {
+					oMultiComboBox.addSelectedKeys(["Employee"]);
+					console.log("Employee")
+				}
+				// if (oSelectedItem.isEmployee) {
+				// 	oMultiComboBox.addSelectedKeys(["Employee"]);
+				// }
+				if (!oSelectedItem.isSupervisor === "1" && !oSelectedItem.isHR === "1" && !oSelectedItem.isEmployee === "1" && !oSelectedItem.isAdmin === "1") {
+				console.warn("Tjerk")
+					oMultiComboBox.removeSelectedKeys();
+				}
+				this.byId("EmployeeEditDialog").open();
+			}
 			
 		},
 
@@ -199,6 +252,15 @@ sap.ui.define([
 			this.openCreateDialog();
 		},
 
+
+		isRoleFormatter: function(value) {
+			if (value === "1") {
+				return "Ja";
+			} else {
+				return "Nein";
+			}
+		},
+		
 
 		onDeleteFlumbus: function(){
 
@@ -221,15 +283,20 @@ sap.ui.define([
 							contentType: "application/json",
 							url: "http://localhost:3000/api/user",
 							dataType: "json",
-							data: JSON.stringify({ "userId": User.userId, "token" : this.token}),
+							data: JSON.stringify({ "userId": User.userId, "isAdmin": User.isAdmin, "token" : this.token}),
 							async: true,
 							success: function (oResponse) {
-								sap.m.MessageToast.show("Update erfolgreich!")
+								sap.m.MessageToast.show("Update erfolgreich!8888")
+								console.warn("data")
+								console.log(data)
 								oController.loadData();
 							},
 							error: function (oResponse) {
-								ResponseStatusHelper.handleStatusCode(oResponse,oController);
+								ResponseStatusHelper.handleStatusCode(oResponse,oController)
 								oController.loadData();
+								console.warn("data")
+								console.log(data)
+								
 							}
 						})})
 
@@ -268,21 +335,7 @@ sap.ui.define([
 
 
 		openDialog: function(){
-			var oView = this.getView();
-			if (!this.byId("EmployeeEditDialog")) {
-				// load asynchronous XML fragment
-				Fragment.load({
-					id: this.getView().getId(),
-					name: "urlaubsplaner.urlaubsplaner.view.dialogs.EmployeesEditDialog",
-					controller: this
-				}).then(function (oDialog) {
-
-					oView.addDependent(oDialog);
-					oDialog.open();
-				});
-			} else {
-				this.byId("EmployeeEditDialog").open();
-			}
+			
 		},
 
 
@@ -341,13 +394,16 @@ sap.ui.define([
 		},
 		closeCreateDialog: function(){
 			var oView = this.getView();
+			var oController = this;
+			var oMultiComboBox = oController.byId("EmployeeCreateRole");
+				console.log("Alle weg")
+				oMultiComboBox.removeSelectedKeys(["Employee","Admin","Supervisor","HR"]);
 			this.byId("EmployeeCreateDialog").close();
 			oView.byId("EmployeeCreateFirstname").setValue("");
 			oView.byId("EmployeeCreateLastname").setValue("");
 			oView.byId("EmployeeCreateVacation").setValue(0);
 			oView.byId("EmployeeCreateNote").setValue("");
 			oView.byId("EmployeeCreateUserName").setValue("");
-			oView.byId("EmployeeCreateRole").setSelectedIndex(0)
 			oView.byId("EmployeeCreateTeam").setSelectedIndex(0)
 			this.onAbortEdit();
 		},
@@ -365,11 +421,84 @@ sap.ui.define([
 			var sUserName = oView.byId("EmployeeCreateUserName").getValue();
 			var sFirstNameUncap = oView.byId("EmployeeCreateFirstname").getValue();
 			var sLastNameUncap = oView.byId("EmployeeCreateLastname").getValue();
-			var sRole = oView.byId("EmployeeCreateRole").getSelectedItem().getText();
 			var sGesamtUrlaub = oView.byId("EmployeeCreateVacation").getValue();
 			var sNotiz = oView.byId("EmployeeCreateNote").getValue();
+			var aSelectedRoles = oView.byId("EmployeeCreateRole").getSelectedKeys();
+			var aSelectedAccess = oView.byId("EmployeeCreateAccess").getSelectedKey();
 			var sTeam = oView.byId("EmployeeCreateTeam").getSelectedKey();
+			
 			var sRestUrlaub = 0;
+			var isAdmin = false;
+			var isHR = false;
+			var isSupervisor = false;
+			var isEmployee = false;
+			var hasAccess = 0;
+			if (aSelectedRoles.includes("Admin")) {
+				isAdmin = true;
+			}
+			
+			if (aSelectedRoles.includes("HR")) {
+				isHR = true;
+			}
+			
+			if (aSelectedRoles.includes("Supervisor")) {
+				isSupervisor = true;
+			}
+			
+			if (aSelectedRoles.includes("Employee")) {
+				isEmployee = true;
+			}
+
+			switch(aSelectedAccess) {
+
+				case "Access1":
+					console.warn("Access1")
+					hasAccess = 1;
+					break;
+				case "Access2":
+					console.warn("Access2")
+					hasAccess = 2;
+					break;
+				case "Access3":
+					console.warn("Access3")
+					hasAccess = 3;
+					break;
+				case "Access4":
+					console.warn("Access4")
+					hasAccess = 4;
+					break;
+				case "Access5":
+					console.warn("Access5")
+					hasAccess = 5;
+					break;
+				case "Access6":
+					console.warn("Access6")
+					hasAccess = 6;
+					break;
+				case "Access7":
+					console.warn("Access7")
+					hasAccess = 7;
+					break;
+				case "Access8":
+					console.warn("Access8")
+					hasAccess = 8;
+					break;
+				case "Access9":
+					console.warn("Access9")
+					hasAccess = 9;
+					break;
+				case "Access10":
+					console.warn("Access10")
+					hasAccess = 10;
+					break;
+				default:
+					sap.m.MessageToast.show("Bitte geben Sie die Berechtigungsstufe ein");
+					return;
+					
+
+			}
+
+
 
 
 			var sFirstName = this.firstUp(sFirstNameUncap);
@@ -393,7 +522,11 @@ sap.ui.define([
 					username: sUserName,
 					vorname: sFirstName,
 					nachname: sLastName,
-					role: sRole,
+					access: hasAccess,
+					isHR: isHR,
+					isAdmin: isAdmin,
+					isEmployee: isEmployee,
+					isSupervisor: isSupervisor,
 					gesUrlaub: sGesamtUrlaub,
 					restUrlaub: sRestUrlaub,
 					note: sNotiz,
@@ -420,7 +553,38 @@ sap.ui.define([
 			var oView = this.getView();
 			var oController = this;
 			var oEditEmployee = oView.getModel("oEditModel").getProperty("/EditUser");
-			var sRole = oView.byId("EmployeeEditRole").getSelectedItem().getText();
+			var aSelectedRoles = oView.byId("EmployeeEditRoles").getSelectedKeys();
+			var Emailformat = /\S+@\S+\.\S+/;
+			var isAdmin = false;
+			var isHR = false;
+			var isSupervisor = false;
+			var isEmployee = false;
+			if (this.userId == oEditEmployee.userId) {
+				sap.m.MessageToast.show("Du darfst dich selbst nicht bearbeiten!");
+			}
+			else {
+				console.warn("Nicht gleich")
+
+			if (!Emailformat.test(oEditEmployee.username)) {
+				sap.m.MessageToast.show("Der Benutzername muss eine gültige E-Mail-Adresse sein.");
+				return;
+			}
+			if (aSelectedRoles.includes("Admin")) {
+				isAdmin = true;
+			}
+			
+			if (aSelectedRoles.includes("HR")) {
+				console.warn("HR")
+				isHR = true;
+			}
+			
+			if (aSelectedRoles.includes("Supervisor")) {
+				isSupervisor = true;
+			}
+			
+			if (aSelectedRoles.includes("Employee")) {
+				isEmployee = true;
+			}
 			console.log(oEditEmployee);
 			$.ajax({
 				url: "/api/user",
@@ -432,7 +596,10 @@ sap.ui.define([
 					username: oEditEmployee.username,
 					vorname: oEditEmployee.vorname,
 					nachname:  oEditEmployee.nachname,
-					role:  sRole,
+					isHR: isHR,
+					isAdmin: isAdmin,
+					isEmployee: isEmployee,
+					isSupervisor: isSupervisor,
 					restUrlaub: oEditEmployee.restUrlaub,
 					gesUrlaub:  oEditEmployee.gesUrlaub,
 					note:  oEditEmployee.note,
@@ -454,7 +621,10 @@ sap.ui.define([
 				}
 
 			});
-		
+			var oMultiComboBox = this.byId("EmployeeEditRoles");
+			oMultiComboBox.removeSelectedKeys();
+			console.log("zu mit dem aal")
+		}
 			this.closeEditDialog();
 		},
 

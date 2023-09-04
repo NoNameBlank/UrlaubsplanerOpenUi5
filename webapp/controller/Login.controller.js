@@ -48,60 +48,7 @@ sap.ui.define([
                 sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
 			})
 
-
-
-
-
-                // jQuery.ajax({
-                //     type: "GET",
-                //     contentType: "application/xml",
-                //     url: "http://localhost:3000/api/userDetail",
-                //     dataType: "json",
-                //     data: $.param({ "username": sBenutzerLogin, "passwort": sBenutzerPasswort }),
-                //     async: false,
-                //     success: function (data, textStatus, jqXHR) {
-        
-                //         console.log(data);
-
-                //         that.getOwnerComponent().getRouter().navTo("RouteDashboard", {
-                //             userId: data.userId,
-                //             token: data.token
-                //         });
-
-                //         // oModel.setData(data);
-                //     },
-                //     error: function (oResponse) {
-                        
-                //         sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
-                //     }
-
-                // });
-
                 this.getView().setModel(oModel);
-                //console.log("oModel Ausgabe nach setModel(oModel) " + oModel);
-
-                // var userId = this.checkUserExist(sBenutzerLogin, sBenutzerPasswort);
-
-
-                // if (!userId) {
-                //     sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
-                // } else {
-
-                //     this.getOwnerComponent().getRouter().navTo("RouteDashboard", {
-                //          userId: userId 
-
-                //         });
-
-
-                // }
-
-
-
-
-
-
-
-
 
             },
             onNavBack: function () {
@@ -116,6 +63,7 @@ sap.ui.define([
                 }
             },
             //DIe FUnktion soll später i Backend geladen werden
+            
             checkUserExist: function (loginName, loginPasswort) {
 
 
@@ -127,7 +75,7 @@ sap.ui.define([
 
             },
 
-
+            
             loadData: function () {
                 // var oModel = new sap.ui.model.json.JSONModel();
                 // oModel.setData({

@@ -105,7 +105,7 @@ sap.ui.define([
                         oView.setModel(oKalenderModel, "urlaubKalenderModel");
                         console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
                         console.log(oKalenderModel);
-                        if(oResponse.data.role === "Teamleiter"){
+                        if(oResponse.data.role === "Teamleiter" || "Admin"){
                             oController.loadOwnTeamData(oResponse.data.userId);
                         }
 			}.bind(this)).catch(function(oError){
@@ -306,60 +306,48 @@ sap.ui.define([
 
             closeDialog: function () {
                 this.byId("vacationPickerDialog").close();
-                this.byId("datePicker").setValue(null);
-                this.byId("datePicker2").setValue(null);
+                this.byId("calendar").removeAllSelectedDates();
                 this.byId("InputGrundRequired").setValue(null);
             },
 
 
-            sendVacation: function () {
-
-                //Zu Buchunder Urlaub wird ausgelesen und in Variable gespeichert
-
-                // POST - /api/urlaub 
-
-                var sUrlaubStart = this.byId("datePicker").getDateValue();
-                var sUrlaubEnde = this.byId("datePicker2").getDateValue();
+            sendVacation: function() {
+                var oCalendar = this.byId("calendar");
+                var aSelectedDates = oCalendar.getSelectedDates();
+            
+                if (aSelectedDates.length === 0) {
+                    sap.m.MessageToast.show("Bitte wähle einen Zeitraum aus.");
+                    return;
+                }
+            
+                var oSelectedDateRange = aSelectedDates[0];
+                var oStartDate = oSelectedDateRange.getStartDate();
+                var oEndDate = oSelectedDateRange.getEndDate();
+            
+                if (!oStartDate || !oEndDate) {
+                    sap.m.MessageToast.show("Bitte wähle einen gültigen Zeitraum aus.");
+                    return;
+                }
+            
                 var sTitel = this.byId("InputGrundRequired").getValue();
                 var today = new Date();
-                var day = today.getDay();
                 var iUserRestTage = this.getView().getModel("userDetail").getProperty("/User/restUrlaub");
-                //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
-                var diffTage = sUrlaubEnde.getTime() - sUrlaubStart.getTime();
-                //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
+                var diffTage = oEndDate.getTime() - oStartDate.getTime();
                 var iTage = Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
-
-                //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
-                if (sUrlaubStart < today) {
-
-                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
-                }
-                else if (sUrlaubEnde < today) {
-
-                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
-                }
-                else if (sUrlaubEnde < sUrlaubStart) {
-
-                    MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!");
-                }
-                else if (iTage <= iUserRestTage) {
-
-                    //UrlaubsVerwaltungDaten
-                    this.sUrlaubsVerwaltungStart = sUrlaubStart;
-                    this.sUrlaubsVerwaltungEnde = sUrlaubEnde;
-
-
-                    //Aufruf der update funktion vom Backend  
-                    this.urlaubPush(sUrlaubStart, sUrlaubEnde, sTitel);
+            
+                if (oStartDate < today || oEndDate < today) {
+                    sap.m.MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
+                } else if (oEndDate < oStartDate) {
+                    sap.m.MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!");
+                } else if (iTage <= iUserRestTage) {
+                    this.sUrlaubsVerwaltungStart = oStartDate;
+                    this.sUrlaubsVerwaltungEnde = oEndDate;
+                    this.urlaubPush(oStartDate, oEndDate, sTitel);
                 } else {
-                    //Gebe Fehler Meldung mit Grund aus
-                    console.log("Error zu wenig UrlaubsTage");
-                   
+                    console.log("Error: Zu wenig Urlaubstage");
                 }
+            
                 this.closeDialog();
-                
-
-
             },
 
 

@@ -181,7 +181,7 @@ sap.ui.define([
 			// 	}
 			// })
 
-
+			var controller = this;
 
 			jQuery.ajax({
 				type: "GET",
@@ -200,6 +200,11 @@ sap.ui.define([
 					}
 					oModel.setProperty("/Urlaube", aUrlaube);
 					oView.setModel(oModel, "oTeamUrlaubsModel");
+
+
+					var oTeamUrlaubsModel = controller.getView().getModel("oTeamUrlaubsModel");
+					console.warn("oTeamUrlaubsModel")
+					console.log(oTeamUrlaubsModel);
 				},
 				error: function (oResponse) {
 					if(oResponse.status === 401 || oResponse.status === 403){
@@ -211,6 +216,8 @@ sap.ui.define([
 				}
 			}); 
 
+
+			
 
 		},
 
@@ -284,7 +291,7 @@ sap.ui.define([
 					"Bis": formatDate(oUrlaub.endDatum),
 					"Gesamt Urlaub": oUrlaub.vacation,
 					"Rest Jahr Urlaub": oUrlaub.restUrlaub,
-					"Status": oUrlaub.status
+					"Fabian": oUrlaub.status
 				};
 				aExportData.push(oExportItem);
 			});

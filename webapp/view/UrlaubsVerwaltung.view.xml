@@ -38,9 +38,9 @@
                         </template>
                     </Column>
                     <Column width="auto">
-                        <m:Label text="Gesamt Urlaub" />
+                        <m:Label text="Grund" />
                         <template>
-                            <m:Text text="{oTeamUrlaubsModel>vacation}" wrapping="false" />
+                            <m:Text text="{oTeamUrlaubsModel>titel}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="quantity" width="auto" sortProperty="Quantity">

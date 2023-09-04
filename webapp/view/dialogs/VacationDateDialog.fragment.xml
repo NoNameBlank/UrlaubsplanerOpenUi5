@@ -1,23 +1,20 @@
-
 <core:FragmentDefinition xmlns="sap.m"
-    xmlns:core="sap.ui.core">
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified">
 
-    <Dialog id="vacationPickerDialog" title="Hey, {UserModel>/User/name}">
-
+    <Dialog id="vacationPickerDialog" title="Wähle deinen Urlaub aus">
 
         <content>
-
-        <DatePicker id="datePicker" placeholder="Erster Urlaubstag" displayFormat="dd.MM.yyyy"/>
-        <DatePicker id="datePicker2" placeholder="Letzter Urlaubstag" displayFormat="dd.MM.yyyy"/>
-        <Input
-				id="InputGrundRequired"
-                placeholder="Grund"
-                tooltip="Grund für Urlaub z.B. Sonderurlaub, Regulärer Urlaub, Überstundenabbau"
-				type="Text"
-				required="true"
-				ariaLabelledBy="InputRequiredLabel"/>
-
+            <unified:Calendar id="calendar" intervalSelection="true"
+                              select="onDateSelect"/>
+            <Input id="InputGrundRequired"
+                   placeholder="Grund"
+                   tooltip="Grund für Urlaub z.B. Sonderurlaub, Regulärer Urlaub, Überstundenabbau"
+                   type="Text"
+                   required="true"
+                   ariaLabelledBy="InputRequiredLabel"/>
         </content>
+
         <endButton>
             <Button text="Beantragen" press=".sendVacation" tooltip="Drücke hier um deinen Urlaubsantrag abzusenden" type="Accept"/>
         </endButton>

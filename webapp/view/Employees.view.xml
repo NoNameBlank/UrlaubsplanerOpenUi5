@@ -90,11 +90,47 @@
 					</Column>
 					<Column
 						width="auto"
+						sortProperty="access"
+						filterProperty="access">
+						<m:Label text="Automatisch Genehmigen" />
+						<template>
+							<m:Text text="{path: 'oTeamModel>isManager', formatter: '.isRoleFormatter'}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						width="auto"
 						sortProperty="role"
 						filterProperty="role">
-						<m:Label text="Position" />
+						<m:Label text="Admin" />
 						<template>
-							<m:Text text="{oTeamModel>role}" wrapping="false"  />
+							<m:Text text="{path: 'oTeamModel>isAdmin', formatter: '.isRoleFormatter'}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						sortProperty="role1"
+						filterProperty="role1">
+						<m:Label text="Vorgesetzter" />
+						<template>
+							<m:Text text="{path: 'oTeamModel>isSupervisor', formatter: '.isRoleFormatter'}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						sortProperty="role2"
+						filterProperty="role2">
+						<m:Label text="Personalabteilung" />
+						<template>
+							<m:Text text="{path: 'oTeamModel>isHR', formatter: '.isRoleFormatter'}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						sortProperty="role3"
+						filterProperty="role3">
+						<m:Label text="Mitarbeiter" />
+						<template>
+							<m:Text text="{path: 'oTeamModel>isEmployee', formatter: '.isRoleFormatter'}" wrapping="false" />
 						</template>
 					</Column>
 					<Column

@@ -5,7 +5,7 @@
     xmlns:core="sap.ui.core"
     xmlns:unified="sap.ui.unified">
     <PlanningCalendar
-            visible="{= ${userDetail>/User/role} === 'Mitarbeiter'  ? true : false }"
+            visible="{= ${userDetail>/User/isEmployee} === '1'  &amp;&amp; ${userDetail>/User/isSupervisor} === '0'}"
             id="EmployeePC"
             rows="{path: 'urlaubKalenderModel>/people'}"
             appointmentsVisualization="Filled"

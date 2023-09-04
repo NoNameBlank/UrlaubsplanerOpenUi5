@@ -17,7 +17,7 @@
 				id="TeamTable"
 				selectionMode="None"
 				rows="{oTeamModel>/Teams}"
-				visibleRowCount="7"
+				visibleRowCount="{= ${oTeamModel>/Teams} ? Math.min(${oTeamModel>/Teams}.length, 22) : 0}"
 				ariaLabelledBy="title">
 				<extension>
 					<m:OverflowToolbar style="Clear">
@@ -84,14 +84,6 @@
 						</template>
 					</Column>
 					<Column
-						width="auto"
-						filterProperty="note">
-						<m:Label text="Notiz" />
-						<template>
-							<m:Text text="{oTeamModel>note}" />
-						</template>
-					</Column>
-					<Column
 						visible="{oTeamModel>/bEdit}"
 						id="edit"
 						width="3.5rem">
@@ -103,9 +95,6 @@
 						</template>
 					</Column>
 				</columns>
-				<footer>
-					<m:OverflowToolbar id="infobar"></m:OverflowToolbar>
-				</footer>
 			</Table>
 			
 		</m:content>
